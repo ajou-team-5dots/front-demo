@@ -7,7 +7,14 @@ body:
     id: what
     attributes:
       label: 현상
-      description: 기대한 동작과 실제 동작
+      description: 실제로 일어난 일
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+      description: 원래 어떻게 되어야 하는가
     validations:
       required: true
   - type: textarea
@@ -15,16 +22,18 @@ body:
     attributes:
       label: 재현 방법
       placeholder: |
-        1. 
-        2.
+        1. /blueprints 접속
+        2. 차트 막대에 마우스 올리기
+        3. 툴팁이 화면 오른쪽 밖으로 잘림
     validations:
       required: true
   - type: input
     id: env
     attributes:
       label: 환경
-      placeholder: 브라우저, OS, 화면 크기
+      placeholder: Chrome 130, macOS, 375px
   - type: textarea
     id: evidence
     attributes:
       label: 스크린샷 / 로그
+      description: 에러 메시지는 코드 블록으로. 채팅 원문, 지갑 주소는 가릴 것

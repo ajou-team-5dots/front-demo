@@ -55,8 +55,16 @@ src/hooks/  src/lib/  src/types/
 
 - 커밋: Conventional Commits, `<type>(<scope>): <제목>`. type은 feat fix docs style refactor perf test build ci chore revert
 - 브랜치: `<type>/<이슈번호>-<설명>`, main 직접 push 금지
-- PR: `.github/PULL_REQUEST_TEMPLATE.md` 사용, `Closes #번호` 필수
-- 사람이 요청하지 않으면 커밋/푸시하지 않는다
+- 사람이 요청하지 않으면 커밋/푸시/이슈/PR 생성을 하지 않는다
+
+## 이슈와 PR (상세: `docs/ISSUE_PR_GUIDE.md`)
+
+1. **작업 시작 전에 이슈 담당자 지정**: `gh issue edit <번호> --add-assignee @me` (새 이슈는 `--assignee @me`로 생성)
+2. 이슈 본문은 `.github/agent-templates/issue-{feature,bug,task}.md`, PR 본문은 `.github/PULL_REQUEST_TEMPLATE.md`를 복사해 채운다
+3. 템플릿의 제목 구조는 유지, 안내 주석은 지우고, 모르는 것은 지어내지 말고 "확인 필요"
+4. **PR은 리뷰어를 지정해서 연다**: `gh pr create --reviewer <id> --body-file <파일>`. 본문에 `Closes #번호` 필수
+5. 체크리스트는 실제로 실행해 통과한 것만 체크
+6. 위 규칙은 CI `pr-rules`가 검사한다 (제목 형식, 이슈 연결, 이슈 담당자, 리뷰어)
 
 ## 작업 완료 기준
 

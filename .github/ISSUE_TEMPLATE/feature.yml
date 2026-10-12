@@ -3,31 +3,55 @@ description: 새 화면이나 기능
 title: '[Feat] '
 labels: ['feature']
 body:
+  - type: dropdown
+    id: role
+    attributes:
+      label: 대상 역할
+      description: 이 기능을 보고 판단하는 사람
+      multiple: true
+      options:
+        - 콘텐츠/시스템 기획
+        - 레벨 디자인
+        - 엔지니어
+        - 라이브 운영
+        - 팀 내부 (개발 편의)
+    validations:
+      required: true
   - type: textarea
     id: goal
     attributes:
       label: 목적
-      description: 누가(어떤 역할이) 이 화면으로 무엇을 판단/개선하는가
+      description: 이 역할이 이 화면으로 무엇을 판단하고 무엇을 고칠 수 있게 되는가. 한두 문장
+      placeholder: 기획자가 블루프린트별 실행 직후 수정 비율을 보고 수정이 많은 블루프린트를 찾는다.
     validations:
       required: true
   - type: textarea
     id: scope
     attributes:
       label: 작업 내용
+      description: 만들 것을 항목으로
       placeholder: |
-        -
+        - 블루프린트 목록 테이블 (shadcn Table)
+        - 실행 후 30분 내 수정 비율 막대 차트
     validations:
       required: true
   - type: textarea
     id: done
     attributes:
       label: 완료 조건
+      description: 리뷰어가 직접 확인할 수 있는 체크리스트
       placeholder: |
-        - [ ]
+        - [ ] 운영자 계정이 제외된 수치가 표시된다
+        - [ ] 모바일 폭(375px)에서 가로 스크롤이 없다
     validations:
       required: true
+  - type: textarea
+    id: out
+    attributes:
+      label: 범위 밖
+      description: 이번 이슈에서 하지 않는 것
   - type: textarea
     id: ref
     attributes:
       label: 참고 자료
-      description: 디자인, 데이터, 관련 이슈
+      description: 디자인, 데이터 파일, 관련 이슈 (#번호)

@@ -17,12 +17,13 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · shadcn/u
 
 ## 문서
 
-| 문서                                         | 내용                                                |
-| -------------------------------------------- | --------------------------------------------------- |
-| [docs/CONVENTION.md](docs/CONVENTION.md)     | 코드 컨벤션 (Airbnb 기반), 폴더 구조, shadcn 사용법 |
-| [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) | 브랜치, 커밋 메시지, 이슈, PR 규칙                  |
-| [AGENTS.md](AGENTS.md)                       | Codex 등 AI 에이전트용 규칙                         |
-| [CLAUDE.md](CLAUDE.md)                       | Claude Code용 규칙 (AGENTS.md를 불러옴)             |
+| 문서                                             | 내용                                                |
+| ------------------------------------------------ | --------------------------------------------------- |
+| [docs/CONVENTION.md](docs/CONVENTION.md)         | 코드 컨벤션 (Airbnb 기반), 폴더 구조, shadcn 사용법 |
+| [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)     | 브랜치, 커밋 메시지, 이슈, PR 규칙                  |
+| [docs/ISSUE_PR_GUIDE.md](docs/ISSUE_PR_GUIDE.md) | 이슈/PR 작성법, 예시, AI 에이전트 규칙              |
+| [AGENTS.md](AGENTS.md)                           | Codex 등 AI 에이전트용 규칙                         |
+| [CLAUDE.md](CLAUDE.md)                           | Claude Code용 규칙 (AGENTS.md를 불러옴)             |
 
 ## 주요 명령어
 

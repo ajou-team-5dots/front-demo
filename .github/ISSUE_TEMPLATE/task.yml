@@ -1,5 +1,5 @@
 name: 작업
-description: 설정, 문서, 리팩터링 등
+description: 설정, 문서, 리팩터링 등 화면 기능이 아닌 일
 title: '[Task] '
 labels: ['task']
 body:
@@ -7,6 +7,13 @@ body:
     id: what
     attributes:
       label: 할 일
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 이유
+      description: 안 하면 무엇이 불편하거나 위험한가
     validations:
       required: true
   - type: textarea
