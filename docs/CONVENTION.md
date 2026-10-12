@@ -73,11 +73,32 @@ shadcn CLI가 kebab-case 파일을 만들기 때문에 파일명은 kebab-case�
 
 - 기본은 Server Component. 상태, 이벤트, 브라우저 API가 필요할 때만 파일 맨 위에 `'use client'`
 - 컴포넌트는 함수 선언형: `export function BlueprintCard() {}`
-- props 타입은 컴포넌트 바로 위에 `type BlueprintCardProps = {...}`
+- props 타입은 컴포넌트 바로 위에 `interface BlueprintCardProps {...}`
 - 페이지 데이터 로딩은 Server Component에서, 클라이언트 fetch는 꼭 필요할 때만
 - 이미지는 `next/image`, 링크는 `next/link`
 
-## 7. 데이터 가져오기와 쓰기
+## 7. TypeScript
+
+1. **`any` 금지** (lint 에러). 모르는 값은 `unknown`으로 받고 `typeof`, `in` 등으로 좁힌다
+2. **객체 모양은 `interface`** (lint가 강제). `type`은 유니온, 교차, 유틸리티 타입에만
+
+```ts
+interface RunEvent {
+  // 객체 모양: interface
+  blueprintId: string;
+  at: Date;
+}
+type ActionKind = 'dig' | 'place' | 'none'; // 유니온: type
+type RunSummary = Pick<RunEvent, 'blueprintId'>; // 유틸리티: type
+```
+
+3. `as` 단언은 최소화. 쓰면 왜 안전한지 주석 한 줄
+4. `// @ts-ignore` 금지. 꼭 필요하면 `// @ts-expect-error 이유`
+5. **zod 같은 런타임 검증은 기본으로 쓰지 않는다.** 데이터는 우리가 만든 집계 파일이라 타입만으로 충분하다. 단, 외부 입력이 들어오는 곳이 생기면 그 입구에서만 검증한다
+   - Server Action의 폼 입력, Route Handler의 요청 본문/쿼리
+   - 그때 zod를 추가하고 이 항목을 갱신한다
+
+## 8. 데이터 가져오기와 쓰기
 
 **기본은 Server Component에서 읽기.** API route(Route Handler)는 아래 표의 경우에만 만든다.
 
@@ -102,6 +123,8 @@ shadcn CLI가 kebab-case 파일을 만들기 때문에 파일명은 kebab-case�
 
 이렇게 해 두면 저장소(JSON 파일, MongoDB 등)를 바꿀 때 `src/server/data/`만 고치면 된다.
 
+계층은 `components`(화면) → `server/actions`(쓰기 요청 처리) → `server/data`(데이터 접근) 세 단계로 충분하다. MVC/MVCS처럼 controller, service, repository를 따로 나누는 구조는 이 규모에서 파일만 늘리므로 강제하지 않는다. data 파일 하나가 300줄을 넘거나 여러 화면이 같은 계산을 반복하면 그때 `server/services/`로 분리한다.
+
 예시:
 
 ```ts
@@ -110,12 +133,12 @@ import 'server-only';
 
 import { cacheLife } from 'next/cache';
 
-export type BlueprintSummary = {
+export interface BlueprintSummary {
   id: string;
   name: string;
   runCount: number;
   editRateAfterRun: number;
-};
+}
 
 export async function getBlueprintSummaries(): Promise<BlueprintSummary[]> {
   'use cache';
@@ -142,7 +165,7 @@ export default async function BlueprintsPage() {
 }
 ```
 
-## 8. shadcn/ui 와 스타일
+## 9. shadcn/ui 와 스타일
 
 - UI 기본 부품은 직접 만들지 말고 먼저 shadcn에서 찾는다: `pnpm dlx shadcn@latest add <component>`
 - `src/components/ui/` 파일은 가능한 한 수정하지 않는다. 변형이 필요하면 감싸는 컴포넌트를 `components/<feature>/`에 만든다
@@ -150,7 +173,7 @@ export default async function BlueprintsPage() {
 - 색은 `globals.css`의 CSS 변수 토큰(`bg-background`, `text-muted-foreground` 등)만 사용. `bg-[#123456]` 같은 하드코딩 금지
 - 다크 모드는 토큰으로 처리되므로 `dark:` 를 남발하지 않는다
 
-## 9. 데이터 취급 (Akkadia 프로젝트 공통)
+## 10. 데이터 취급 (Akkadia 프로젝트 공통)
 
 - 운영자 계정(`/su` 사용 계정)은 기본 제외
 - 채팅 원문, 지갑 주소(playerId, targetAddress)는 화면과 저장소 어디에도 노출 금지

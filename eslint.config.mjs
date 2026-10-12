@@ -30,6 +30,8 @@ export default defineConfig([
       'react/jsx-props-no-spreading': 'off',
       // TypeScript types replace runtime prop-types.
       'react/require-default-props': 'off',
+      // any disables type checking from that point on. Use unknown and narrow instead.
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
   {
