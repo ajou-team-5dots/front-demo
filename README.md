@@ -11,6 +11,10 @@ git config commit.template .gitmessage   # 커밋 메시지 양식 (선택)
 pnpm dev                 # http://localhost:3000
 ```
 
+## 브랜치
+
+`dev`(기본)로 PR → 모아서 `dev` → `main` 릴리스 PR로 배포. 자세한 내용은 [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)
+
 ## 스택
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · shadcn/ui

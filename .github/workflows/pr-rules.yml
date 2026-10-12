@@ -1,6 +1,7 @@
 name: PR Rules
 
-# Enforces docs/GIT_WORKFLOW.md: conventional title, linked issue with an assignee, and a reviewer.
+# Enforces docs/GIT_WORKFLOW.md: branch direction, conventional title,
+# linked issue with an assignee, and a reviewer.
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened, review_requested, review_request_removed]
@@ -17,29 +18,48 @@ jobs:
         with:
           script: |
             const pr = context.payload.pull_request;
+            const base = pr.base.ref;
+            const head = pr.head.ref;
             const errors = [];
+
+            // Release (dev -> main) and back-merge (main -> dev) carry many issues, so no single issue link.
+            const isRelease = base === 'main' && head === 'dev';
+            const isBackMerge = base === 'dev' && head === 'main';
+            const isHotfix = base === 'main' && head.startsWith('hotfix/');
+
+            if (base === 'main' && !isRelease && !isHotfix) {
+              errors.push(`main에는 dev(릴리스) 또는 hotfix/* 브랜치만 PR할 수 있습니다. base를 dev로 바꾸세요. (현재 head: ${head})`);
+            }
+            if (base === 'dev' && !isBackMerge && !/^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\/\d+-[a-z0-9-]+$/.test(head)) {
+              errors.push(`브랜치 이름 형식 오류: "${head}" -> 예: feat/12-blueprint-card`);
+            }
+            if (isHotfix && !/^hotfix\/\d+-[a-z0-9-]+$/.test(head)) {
+              errors.push(`hotfix 브랜치 이름 형식 오류: "${head}" -> 예: hotfix/21-chart-crash`);
+            }
 
             const titleRe = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?!?: .{1,72}$/;
             if (!titleRe.test(pr.title)) {
               errors.push(`PR 제목 형식 오류: "${pr.title}" -> 예: feat(blueprint): 실행 후 행동 차트 추가`);
             }
 
-            const match = (pr.body || '').match(/(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?) #(\d+)/i);
-            if (!match) {
-              errors.push('본문에 "Closes #이슈번호"가 없습니다.');
-            } else {
-              try {
-                const { data: issue } = await github.rest.issues.get({
-                  ...context.repo,
-                  issue_number: Number(match[1]),
-                });
-                if (issue.pull_request) {
-                  errors.push(`#${match[1]}은 이슈가 아니라 PR입니다.`);
-                } else if (issue.assignees.length === 0) {
-                  errors.push(`이슈 #${match[1]}에 담당자(assignee)가 없습니다. 작업 시작 전에 지정하세요.`);
+            if (!isRelease && !isBackMerge) {
+              const match = (pr.body || '').match(/(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?) #(\d+)/i);
+              if (!match) {
+                errors.push('본문에 "Closes #이슈번호"가 없습니다.');
+              } else {
+                try {
+                  const { data: issue } = await github.rest.issues.get({
+                    ...context.repo,
+                    issue_number: Number(match[1]),
+                  });
+                  if (issue.pull_request) {
+                    errors.push(`#${match[1]}은 이슈가 아니라 PR입니다.`);
+                  } else if (issue.assignees.length === 0) {
+                    errors.push(`이슈 #${match[1]}에 담당자(assignee)가 없습니다. 작업 시작 전에 지정하세요.`);
+                  }
+                } catch {
+                  errors.push(`이슈 #${match[1]}을 찾을 수 없습니다.`);
                 }
-              } catch {
-                errors.push(`이슈 #${match[1]}을 찾을 수 없습니다.`);
               }
             }
 
@@ -51,7 +71,7 @@ jobs:
             const reviewerCount =
               pr.requested_reviewers.length + pr.requested_teams.length + reviews.length;
             if (reviewerCount === 0) {
-              errors.push('리뷰어가 지정되지 않았습니다.');
+              errors.push('리뷰어가 지정되지 않았습니다. (PR 작성자 본인은 리뷰어가 될 수 없습니다)');
             }
 
             if (errors.length > 0) {

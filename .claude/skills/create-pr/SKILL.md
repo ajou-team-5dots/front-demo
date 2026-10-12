@@ -11,5 +11,7 @@ description: 이 저장소 규칙에 맞게 PR을 작성하고 리뷰어를 지�
 4. 제목은 커밋 메시지 형식 (`feat(scope): 제목`)
 5. 리뷰어를 정한다. 사용자가 지정하지 않았으면 `gh api repos/{owner}/{repo}/collaborators --jq '.[].login'`로 후보를 보여 주고 고르게 한다. 본인은 리뷰어가 될 수 없다
 6. 제목, 리뷰어, 본문을 사용자에게 보여 주고 확인받는다
-7. `git push -u origin <브랜치>` 후 `gh pr create --title ... --body-file ... --reviewer <id> --assignee @me --label <라벨>`
+7. `git push -u origin <브랜치>` 후 `gh pr create --base dev --title ... --body-file ... --reviewer <id> --assignee @me --label <라벨>`. hotfix만 `--base main`
 8. PR URL과 `pr-rules` CI 결과를 보고한다
+
+릴리스(`dev` → `main`)를 요청받으면 `docs/ISSUE_PR_GUIDE.md` 4장 순서를 따른다. 병합은 merge commit

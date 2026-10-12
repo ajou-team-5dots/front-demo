@@ -54,7 +54,8 @@ src/hooks/  src/lib/  src/types/
 ## Git
 
 - 커밋: Conventional Commits, `<type>(<scope>): <제목>`. type은 feat fix docs style refactor perf test build ci chore revert
-- 브랜치: `<type>/<이슈번호>-<설명>`, main 직접 push 금지
+- 브랜치: `dev`(기본, 통합)에서 `<type>/<이슈번호>-<설명>`을 만들고 PR은 `dev`로. `main`은 배포 브랜치이고 `dev` → `main` 릴리스 PR 또는 `hotfix/*`만 받는다
+- `main`, `dev` 직접 push 금지
 - 사람이 요청하지 않으면 커밋/푸시/이슈/PR 생성을 하지 않는다
 
 ## 이슈와 PR (상세: `docs/ISSUE_PR_GUIDE.md`)
@@ -62,9 +63,10 @@ src/hooks/  src/lib/  src/types/
 1. **작업 시작 전에 이슈 담당자 지정**: `gh issue edit <번호> --add-assignee @me` (새 이슈는 `--assignee @me`로 생성)
 2. 이슈 본문은 `.github/agent-templates/issue-{feature,bug,task}.md`, PR 본문은 `.github/PULL_REQUEST_TEMPLATE.md`를 복사해 채운다
 3. 템플릿의 제목 구조는 유지, 안내 주석은 지우고, 모르는 것은 지어내지 말고 "확인 필요"
-4. **PR은 리뷰어를 지정해서 연다**: `gh pr create --reviewer <id> --body-file <파일>`. 본문에 `Closes #번호` 필수
+4. **PR은 `dev`로, 리뷰어를 지정해서 연다**: `gh pr create --base dev --reviewer <id> --body-file <파일>`. 본문에 `Closes #번호` 필수
 5. 체크리스트는 실제로 실행해 통과한 것만 체크
-6. 위 규칙은 CI `pr-rules`가 검사한다 (제목 형식, 이슈 연결, 이슈 담당자, 리뷰어)
+6. 위 규칙은 CI `pr-rules`가 검사한다 (제목 형식, 브랜치 방향, 이슈 연결, 이슈 담당자, 리뷰어)
+7. 릴리스(`dev` → `main`)는 사용자가 요청할 때만, `.github/agent-templates/release.md`로
 
 ## 작업 완료 기준
 
