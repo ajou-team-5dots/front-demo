@@ -42,6 +42,15 @@ export default defineConfig([
     },
   },
 
+  {
+    // Env vars (DB credentials etc.) may only be read in the server data layer. See docs/CONVENTION.md 7.
+    files: ['src/**'],
+    ignores: ['src/server/**'],
+    rules: {
+      'n/no-process-env': 'error',
+    },
+  },
+
   // Must stay last: turns off formatting rules that Prettier owns.
   prettierConfig,
 ]);

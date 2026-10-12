@@ -36,12 +36,22 @@ pnpm dlx shadcn@latest add <component>   # shadcn 컴포넌트 추가
 7. UI 부품은 먼저 shadcn/ui에서 가져온다. `src/components/ui/`는 직접 수정하지 말고 감싸서 확장
 8. 클래스 조합은 `cn()`, 색은 CSS 변수 토큰만 (`bg-[#hex]` 금지)
 
+## 데이터 가져오기 (상세: `docs/CONVENTION.md` 7장)
+
+1. **읽기는 Server Component에서 `src/server/data/` 함수를 직접 호출.** 우리 화면용 `app/api` route를 만들지 않는다
+2. **쓰기는 Server Action** (`src/server/actions/`, `'use server'`)
+3. **Route Handler(`app/api/**/route.ts`)는 외부 호출, 웹훅, 클라이언트 폴링, 파일 다운로드일 때만**
+4. DB/파일/외부 API 접근과 `process.env`는 `src/server/` 안에서만. data 파일은 `import 'server-only';`로 시작
+5. data 함수는 화면에 필요한 필드만 반환 (지갑 주소, 채팅 원문 금지)
+
 ## 폴더
 
 ```
 src/app/              라우트 파일만
 src/components/ui/    shadcn 생성 코드
 src/components/<기능>/ 기능 컴포넌트
+src/server/data/      데이터 읽기 ('server-only')
+src/server/actions/   데이터 쓰기 ('use server')
 src/hooks/  src/lib/  src/types/
 ```
 
