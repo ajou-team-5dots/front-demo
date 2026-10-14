@@ -4,9 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  // The blueprint list lives on each detail page, so the bare path opens the first featured case.
+  // The 3D blueprint view now lives inside topic T1; the dashboard is the entry point.
   redirects: async () => [
-    { source: '/blueprint-edits', destination: '/blueprint-edits/20', permanent: false },
+    { source: '/', destination: '/topics', permanent: false },
+    { source: '/blueprint-edits', destination: '/topics/postrun', permanent: false },
+    { source: '/blueprint-edits/:id', destination: '/topics/postrun/bp-:id', permanent: false },
   ],
   turbopack: {
     rules: {

@@ -18,9 +18,6 @@ import type {
 // Ops accounts are already excluded there; the files carry no player IDs, chat or wallet addresses.
 const DATA_DIR = path.join(process.cwd(), 'data', 'blueprint-edits');
 
-// Cases the analysis session flagged as worth a look, in suggested viewing order.
-export const FEATURED_BLUEPRINT_IDS = [20, 96, 28, 53, 112, 122, 137, 7, 1] as const;
-
 interface RawSummary {
   id: number;
   runs: number;
