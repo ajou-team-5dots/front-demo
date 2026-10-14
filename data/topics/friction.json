@@ -1,0 +1,3935 @@
+{
+ "opsExcluded": true,
+ "players": 91,
+ "smallN": 100,
+ "entityGroups": [
+  {
+   "id": "feature",
+   "label": "기능",
+   "entities": [
+    {
+     "id": "feature-realm_create",
+     "name": "렐름 생성",
+     "n": 106,
+     "players": 39,
+     "primary": {
+      "label": "실패·취소율",
+      "value": 0.528
+     },
+     "reactions": [
+      {
+       "label": "Transaction not found",
+       "n": 32,
+       "share": 0.571
+      },
+      {
+       "label": "Contract call failed",
+       "n": 16,
+       "share": 0.286
+      },
+      {
+       "label": "status code 400",
+       "n": 5,
+       "share": 0.089
+      },
+      {
+       "label": "Cannot GET (RPC 경로 오류)",
+       "n": 1,
+       "share": 0.018
+      },
+      {
+       "label": "Internal error: Tx already exists in cache",
+       "n": 1,
+       "share": 0.018
+      },
+      {
+       "label": "Invalid broadcast response (missing hash)",
+       "n": 1,
+       "share": 0.018
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "feature-blueprint_build",
+     "name": "설계도 실행 (블록 건너뜀 발생)",
+     "n": 5658,
+     "players": 20,
+     "primary": {
+      "label": "건너뛴 블록이 있는 실행 비율",
+      "value": 0.466
+     },
+     "reactions": [],
+     "small": false
+    },
+    {
+     "id": "feature-blueprint_create",
+     "name": "설계도 생성",
+     "n": 130,
+     "players": 24,
+     "primary": {
+      "label": "실패·취소율",
+      "value": 0.385
+     },
+     "reactions": [
+      {
+       "label": "Transaction not found",
+       "n": 31,
+       "share": 0.62
+      },
+      {
+       "label": "Contract call failed",
+       "n": 8,
+       "share": 0.16
+      },
+      {
+       "label": "status code 503",
+       "n": 6,
+       "share": 0.12
+      },
+      {
+       "label": "Cannot GET (RPC 경로 오류)",
+       "n": 2,
+       "share": 0.04
+      },
+      {
+       "label": "signature is unauthorized",
+       "n": 2,
+       "share": 0.04
+      },
+      {
+       "label": "{\"@type\":\"/abci.StringError\",\"value\":\"blueprint not found: 43\"}",
+       "n": 1,
+       "share": 0.02
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "feature-realm_expand",
+     "name": "렐름 확장",
+     "n": 40,
+     "players": 15,
+     "primary": {
+      "label": "실패·취소율",
+      "value": 0.225
+     },
+     "reactions": [
+      {
+       "label": "Transaction not found",
+       "n": 5,
+       "share": 0.556
+      },
+      {
+       "label": "status code 400",
+       "n": 2,
+       "share": 0.222
+      },
+      {
+       "label": "Contract call failed",
+       "n": 1,
+       "share": 0.111
+      },
+      {
+       "label": "Network Error",
+       "n": 1,
+       "share": 0.111
+      }
+     ],
+     "small": true
+    },
+    {
+     "id": "feature-contract_block_mint",
+     "name": "블록 민팅",
+     "n": 117,
+     "players": 15,
+     "primary": {
+      "label": "실패·취소율",
+      "value": 0.154
+     },
+     "reactions": [
+      {
+       "label": "Transaction not found",
+       "n": 15,
+       "share": 0.833
+      },
+      {
+       "label": "status code 503",
+       "n": 2,
+       "share": 0.111
+      },
+      {
+       "label": "account is not initialized",
+       "n": 1,
+       "share": 0.056
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "feature-blueprint_prepare",
+     "name": "설계도 준비 → 실행",
+     "n": 5895,
+     "players": 22,
+     "primary": {
+      "label": "실패·취소율",
+      "value": 0.039
+     },
+     "reactions": [
+      {
+       "label": "escape",
+       "n": 202,
+       "share": 0.878
+      },
+      {
+       "label": "manual",
+       "n": 18,
+       "share": 0.078
+      },
+      {
+       "label": "error",
+       "n": 9,
+       "share": 0.039
+      },
+      {
+       "label": "reselect",
+       "n": 1,
+       "share": 0.004
+      }
+     ],
+     "small": false
+    }
+   ]
+  },
+  {
+   "id": "block",
+   "label": "채굴 블록",
+   "entities": [
+    {
+     "id": "block-19",
+     "blockId": 19,
+     "name": "Bookshelf 1slot",
+     "n": 542,
+     "players": 41,
+     "primary": {
+      "label": "취소율",
+      "value": 0.961
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.332
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 96
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 439,
+       "share": 0.843
+      },
+      {
+       "label": "target_change",
+       "n": 82,
+       "share": 0.157
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-73",
+     "blockId": 73,
+     "name": "Concrete White Powder",
+     "n": 1890,
+     "players": 39,
+     "primary": {
+      "label": "취소율",
+      "value": 0.735
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.102
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 93
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 863,
+       "share": 0.621
+      },
+      {
+       "label": "mouse_up",
+       "n": 526,
+       "share": 0.379
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-141",
+     "blockId": 141,
+     "name": "Sandstone Smooth",
+     "n": 22320,
+     "players": 36,
+     "primary": {
+      "label": "취소율",
+      "value": 0.688
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.04
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 85
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 12836,
+       "share": 0.836
+      },
+      {
+       "label": "mouse_up",
+       "n": 2517,
+       "share": 0.164
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-96",
+     "blockId": 96,
+     "name": "Log Birch Stripped",
+     "n": 842,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.639
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.02
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 101
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 273,
+       "share": 0.507
+      },
+      {
+       "label": "mouse_up",
+       "n": 265,
+       "share": 0.493
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-177",
+     "blockId": 177,
+     "name": "Tuff Chiseled",
+     "n": 825,
+     "players": 24,
+     "primary": {
+      "label": "취소율",
+      "value": 0.592
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.135
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 111
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 284,
+       "share": 0.582
+      },
+      {
+       "label": "mouse_up",
+       "n": 204,
+       "share": 0.418
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-158",
+     "blockId": 158,
+     "name": "Stone Smooth",
+     "n": 2815,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.571
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.071
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 90
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 879,
+       "share": 0.547
+      },
+      {
+       "label": "target_change",
+       "n": 727,
+       "share": 0.453
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-162",
+     "blockId": 162,
+     "name": "Terracotta Brown",
+     "n": 2383,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.562
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.047
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 882,
+       "share": 0.659
+      },
+      {
+       "label": "mouse_up",
+       "n": 457,
+       "share": 0.341
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-140",
+     "blockId": 140,
+     "name": "Sandstone Red",
+     "n": 2839,
+     "players": 17,
+     "primary": {
+      "label": "취소율",
+      "value": 0.56
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.051
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 134
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 1145,
+       "share": 0.72
+      },
+      {
+       "label": "mouse_up",
+       "n": 445,
+       "share": 0.28
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-29",
+     "blockId": 29,
+     "name": "Bulb Cite Brown",
+     "n": 666,
+     "players": 22,
+     "primary": {
+      "label": "취소율",
+      "value": 0.554
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.076
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 288,
+       "share": 0.78
+      },
+      {
+       "label": "mouse_up",
+       "n": 81,
+       "share": 0.22
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-136",
+     "blockId": 136,
+     "name": "Sand",
+     "n": 45172,
+     "players": 47,
+     "primary": {
+      "label": "취소율",
+      "value": 0.532
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.052
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 111
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 18054,
+       "share": 0.751
+      },
+      {
+       "label": "mouse_up",
+       "n": 6000,
+       "share": 0.249
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-163",
+     "blockId": 163,
+     "name": "Terracotta Cyan",
+     "n": 1616,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.528
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.042
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 621,
+       "share": 0.727
+      },
+      {
+       "label": "mouse_up",
+       "n": 233,
+       "share": 0.273
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-154",
+     "blockId": 154,
+     "name": "Stone Diorite",
+     "n": 2363,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.525
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.052
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 100
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 717,
+       "share": 0.578
+      },
+      {
+       "label": "mouse_up",
+       "n": 524,
+       "share": 0.422
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-87",
+     "blockId": 87,
+     "name": "Grass",
+     "n": 95566,
+     "players": 57,
+     "primary": {
+      "label": "취소율",
+      "value": 0.516
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.073
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 94
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 33096,
+       "share": 0.671
+      },
+      {
+       "label": "mouse_up",
+       "n": 16241,
+       "share": 0.329
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-168",
+     "blockId": 168,
+     "name": "Terracotta Lime",
+     "n": 491,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.515
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.103
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 101
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 167,
+       "share": 0.66
+      },
+      {
+       "label": "target_change",
+       "n": 86,
+       "share": 0.34
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-144",
+     "blockId": 144,
+     "name": "Soul Sand",
+     "n": 1728,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.513
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.034
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 169
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 735,
+       "share": 0.829
+      },
+      {
+       "label": "mouse_up",
+       "n": 152,
+       "share": 0.171
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-151",
+     "blockId": 151,
+     "name": "Stone Brick Cracked",
+     "n": 4135,
+     "players": 14,
+     "primary": {
+      "label": "취소율",
+      "value": 0.507
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.105
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 95
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1263,
+       "share": 0.603
+      },
+      {
+       "label": "target_change",
+       "n": 832,
+       "share": 0.397
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-42",
+     "blockId": 42,
+     "name": "Chiseled Deepslate",
+     "n": 772,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.503
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.041
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 83
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 316,
+       "share": 0.814
+      },
+      {
+       "label": "mouse_up",
+       "n": 72,
+       "share": 0.186
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-230",
+     "blockId": 230,
+     "name": "Glass Shade",
+     "n": 2679,
+     "players": 35,
+     "primary": {
+      "label": "취소율",
+      "value": 0.495
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.122
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 121
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 826,
+       "share": 0.622
+      },
+      {
+       "label": "mouse_up",
+       "n": 501,
+       "share": 0.378
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-142",
+     "blockId": 142,
+     "name": "Sandstone",
+     "n": 3316,
+     "players": 19,
+     "primary": {
+      "label": "취소율",
+      "value": 0.489
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.049
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 109
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 1021,
+       "share": 0.63
+      },
+      {
+       "label": "mouse_up",
+       "n": 600,
+       "share": 0.37
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-179",
+     "blockId": 179,
+     "name": "Wool Blue",
+     "n": 863,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.481
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.051
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 71
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 295,
+       "share": 0.711
+      },
+      {
+       "label": "mouse_up",
+       "n": 120,
+       "share": 0.289
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-108",
+     "blockId": 108,
+     "name": "Log Spruce",
+     "n": 1553,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.477
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.107
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 104
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 432,
+       "share": 0.583
+      },
+      {
+       "label": "mouse_up",
+       "n": 309,
+       "share": 0.417
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-5",
+     "blockId": 5,
+     "name": "Barrel",
+     "n": 712,
+     "players": 17,
+     "primary": {
+      "label": "취소율",
+      "value": 0.475
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.118
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 144
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 232,
+       "share": 0.686
+      },
+      {
+       "label": "mouse_up",
+       "n": 106,
+       "share": 0.314
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-128",
+     "blockId": 128,
+     "name": "Polished Blackstone",
+     "n": 794,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.474
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.053
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 191
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 245,
+       "share": 0.652
+      },
+      {
+       "label": "mouse_up",
+       "n": 131,
+       "share": 0.348
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-153",
+     "blockId": 153,
+     "name": "Stone Brick",
+     "n": 16238,
+     "players": 37,
+     "primary": {
+      "label": "취소율",
+      "value": 0.468
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.115
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 109
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 3924,
+       "share": 0.516
+      },
+      {
+       "label": "mouse_up",
+       "n": 3682,
+       "share": 0.484
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-120",
+     "blockId": 120,
+     "name": "Planks Jungle",
+     "n": 2592,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.467
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.184
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 94
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 794,
+       "share": 0.656
+      },
+      {
+       "label": "target_change",
+       "n": 417,
+       "share": 0.344
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-176",
+     "blockId": 176,
+     "name": "Tuff Bricks",
+     "n": 3719,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.459
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.081
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 120
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 933,
+       "share": 0.547
+      },
+      {
+       "label": "mouse_up",
+       "n": 774,
+       "share": 0.453
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-157",
+     "blockId": 157,
+     "name": "Stone Granite",
+     "n": 1181,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.459
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.111
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 243
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 338,
+       "share": 0.624
+      },
+      {
+       "label": "mouse_up",
+       "n": 204,
+       "share": 0.376
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-8",
+     "blockId": 8,
+     "name": "Block Bone",
+     "n": 1336,
+     "players": 15,
+     "primary": {
+      "label": "취소율",
+      "value": 0.454
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.132
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 78
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 406,
+       "share": 0.669
+      },
+      {
+       "label": "target_change",
+       "n": 201,
+       "share": 0.331
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-174",
+     "blockId": 174,
+     "name": "Terracotta White",
+     "n": 6460,
+     "players": 19,
+     "primary": {
+      "label": "취소율",
+      "value": 0.447
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.142
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 79
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1908,
+       "share": 0.66
+      },
+      {
+       "label": "target_change",
+       "n": 982,
+       "share": 0.34
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-110",
+     "blockId": 110,
+     "name": "Mud Packed",
+     "n": 316,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.446
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.135
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 254
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 98,
+       "share": 0.695
+      },
+      {
+       "label": "target_change",
+       "n": 43,
+       "share": 0.305
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-97",
+     "blockId": 97,
+     "name": "Log Cherry Stripped",
+     "n": 1006,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.445
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.089
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 79
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 313,
+       "share": 0.699
+      },
+      {
+       "label": "target_change",
+       "n": 135,
+       "share": 0.301
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-106",
+     "blockId": 106,
+     "name": "Log Pale Oak Stripped",
+     "n": 3543,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.445
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.105
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 92
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 930,
+       "share": 0.59
+      },
+      {
+       "label": "target_change",
+       "n": 645,
+       "share": 0.41
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-118",
+     "blockId": 118,
+     "name": "Planks Birch",
+     "n": 1612,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.441
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.121
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 122
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 501,
+       "share": 0.705
+      },
+      {
+       "label": "target_change",
+       "n": 210,
+       "share": 0.295
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-173",
+     "blockId": 173,
+     "name": "Terracotta Red",
+     "n": 903,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.44
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.139
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 76
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 329,
+       "share": 0.829
+      },
+      {
+       "label": "target_change",
+       "n": 68,
+       "share": 0.171
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-167",
+     "blockId": 167,
+     "name": "Terracotta Lightgray",
+     "n": 428,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.435
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.145
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 87
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 106,
+       "share": 0.57
+      },
+      {
+       "label": "target_change",
+       "n": 80,
+       "share": 0.43
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-229",
+     "blockId": 229,
+     "name": "Glass Deep",
+     "n": 845,
+     "players": 25,
+     "primary": {
+      "label": "취소율",
+      "value": 0.434
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.18
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 139
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 211,
+       "share": 0.575
+      },
+      {
+       "label": "target_change",
+       "n": 156,
+       "share": 0.425
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-121",
+     "blockId": 121,
+     "name": "Planks Mangrove",
+     "n": 498,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.434
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.167
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 125
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 158,
+       "share": 0.731
+      },
+      {
+       "label": "target_change",
+       "n": 58,
+       "share": 0.269
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-6",
+     "blockId": 6,
+     "name": "Basalt",
+     "n": 3156,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.432
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.095
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 110
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 704,
+       "share": 0.516
+      },
+      {
+       "label": "mouse_up",
+       "n": 660,
+       "share": 0.484
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-26",
+     "blockId": 26,
+     "name": "Bricks Tuff",
+     "n": 1261,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.431
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.129
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 123
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 340,
+       "share": 0.626
+      },
+      {
+       "label": "target_change",
+       "n": 203,
+       "share": 0.374
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-84",
+     "blockId": 84,
+     "name": "Dirt",
+     "n": 38094,
+     "players": 31,
+     "primary": {
+      "label": "취소율",
+      "value": 0.426
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.044
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 100
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 12947,
+       "share": 0.799
+      },
+      {
+       "label": "mouse_up",
+       "n": 3266,
+       "share": 0.201
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-86",
+     "blockId": 86,
+     "name": "Granite Polished",
+     "n": 463,
+     "players": 4,
+     "primary": {
+      "label": "취소율",
+      "value": 0.425
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.371
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 144
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 107,
+       "share": 0.543
+      },
+      {
+       "label": "target_change",
+       "n": 90,
+       "share": 0.457
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-122",
+     "blockId": 122,
+     "name": "Planks Oak",
+     "n": 5693,
+     "players": 21,
+     "primary": {
+      "label": "취소율",
+      "value": 0.424
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.147
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 100
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1517,
+       "share": 0.628
+      },
+      {
+       "label": "target_change",
+       "n": 897,
+       "share": 0.372
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-31",
+     "blockId": 31,
+     "name": "Bulb Cite Gray",
+     "n": 586,
+     "players": 12,
+     "primary": {
+      "label": "취소율",
+      "value": 0.423
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.149
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 132
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 163,
+       "share": 0.657
+      },
+      {
+       "label": "mouse_up",
+       "n": 85,
+       "share": 0.343
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-166",
+     "blockId": 166,
+     "name": "Terracotta Lightblue",
+     "n": 442,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.423
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.102
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 132
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 114,
+       "share": 0.61
+      },
+      {
+       "label": "target_change",
+       "n": 73,
+       "share": 0.39
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-124",
+     "blockId": 124,
+     "name": "Planks Warped",
+     "n": 4315,
+     "players": 5,
+     "primary": {
+      "label": "취소율",
+      "value": 0.422
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.114
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 93
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 979,
+       "share": 0.538
+      },
+      {
+       "label": "target_change",
+       "n": 842,
+       "share": 0.462
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-164",
+     "blockId": 164,
+     "name": "Terracotta Gray",
+     "n": 437,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.419
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.23
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 87
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 138,
+       "share": 0.754
+      },
+      {
+       "label": "target_change",
+       "n": 45,
+       "share": 0.246
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-83",
+     "blockId": 83,
+     "name": "Deepslate",
+     "n": 3603,
+     "players": 13,
+     "primary": {
+      "label": "취소율",
+      "value": 0.418
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.108
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 183
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 780,
+       "share": 0.518
+      },
+      {
+       "label": "mouse_up",
+       "n": 727,
+       "share": 0.482
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-103",
+     "blockId": 103,
+     "name": "Log Oak Pale",
+     "n": 373,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.418
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.103
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 151
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 111,
+       "share": 0.712
+      },
+      {
+       "label": "mouse_up",
+       "n": 45,
+       "share": 0.288
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-186",
+     "blockId": 186,
+     "name": "Wool Lime",
+     "n": 958,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.415
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.116
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 122
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 243,
+       "share": 0.611
+      },
+      {
+       "label": "mouse_up",
+       "n": 155,
+       "share": 0.389
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-143",
+     "blockId": 143,
+     "name": "Snow",
+     "n": 3859,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.415
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.134
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 122
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1155,
+       "share": 0.721
+      },
+      {
+       "label": "target_change",
+       "n": 446,
+       "share": 0.279
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-180",
+     "blockId": 180,
+     "name": "Wool Brown",
+     "n": 997,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.409
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.14
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 228
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 268,
+       "share": 0.657
+      },
+      {
+       "label": "target_change",
+       "n": 140,
+       "share": 0.343
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-27",
+     "blockId": 27,
+     "name": "Bricks",
+     "n": 3094,
+     "players": 18,
+     "primary": {
+      "label": "취소율",
+      "value": 0.406
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.083
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 109
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 909,
+       "share": 0.723
+      },
+      {
+       "label": "mouse_up",
+       "n": 348,
+       "share": 0.277
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-159",
+     "blockId": 159,
+     "name": "Stone",
+     "n": 21893,
+     "players": 36,
+     "primary": {
+      "label": "취소율",
+      "value": 0.406
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.072
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 6302,
+       "share": 0.709
+      },
+      {
+       "label": "mouse_up",
+       "n": 2585,
+       "share": 0.291
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-137",
+     "blockId": 137,
+     "name": "Sandstone Carved",
+     "n": 454,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.403
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.109
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 84
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 118,
+       "share": 0.645
+      },
+      {
+       "label": "target_change",
+       "n": 65,
+       "share": 0.355
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-101",
+     "blockId": 101,
+     "name": "Log Mangrove Stripped",
+     "n": 2276,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.403
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.064
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 93
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 484,
+       "share": 0.528
+      },
+      {
+       "label": "mouse_up",
+       "n": 433,
+       "share": 0.472
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-184",
+     "blockId": 184,
+     "name": "Wool Lightblue",
+     "n": 1558,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.398
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.171
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 71
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 405,
+       "share": 0.653
+      },
+      {
+       "label": "target_change",
+       "n": 215,
+       "share": 0.347
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-107",
+     "blockId": 107,
+     "name": "Log Spruce Stripped",
+     "n": 642,
+     "players": 12,
+     "primary": {
+      "label": "취소율",
+      "value": 0.397
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.157
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 124
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 154,
+       "share": 0.604
+      },
+      {
+       "label": "target_change",
+       "n": 101,
+       "share": 0.396
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-93",
+     "blockId": 93,
+     "name": "Leaves Oak",
+     "n": 5132,
+     "players": 17,
+     "primary": {
+      "label": "취소율",
+      "value": 0.397
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.106
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 107
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 1611,
+       "share": 0.791
+      },
+      {
+       "label": "mouse_up",
+       "n": 426,
+       "share": 0.209
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-145",
+     "blockId": 145,
+     "name": "Soul Soil",
+     "n": 867,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.397
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.049
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 177
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 239,
+       "share": 0.695
+      },
+      {
+       "label": "mouse_up",
+       "n": 105,
+       "share": 0.305
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-92",
+     "blockId": 92,
+     "name": "Leaves Dark Oak",
+     "n": 736,
+     "players": 14,
+     "primary": {
+      "label": "취소율",
+      "value": 0.395
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.144
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 100
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 175,
+       "share": 0.601
+      },
+      {
+       "label": "mouse_up",
+       "n": 116,
+       "share": 0.399
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-192",
+     "blockId": 192,
+     "name": "Wool White",
+     "n": 5315,
+     "players": 23,
+     "primary": {
+      "label": "취소율",
+      "value": 0.392
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.1
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 67
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1295,
+       "share": 0.621
+      },
+      {
+       "label": "target_change",
+       "n": 789,
+       "share": 0.379
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-178",
+     "blockId": 178,
+     "name": "Wool Black",
+     "n": 435,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.391
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.141
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 148
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 99,
+       "share": 0.582
+      },
+      {
+       "label": "mouse_up",
+       "n": 71,
+       "share": 0.418
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-149",
+     "blockId": 149,
+     "name": "Stone Andesite",
+     "n": 2792,
+     "players": 15,
+     "primary": {
+      "label": "취소율",
+      "value": 0.391
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.165
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 179
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 736,
+       "share": 0.675
+      },
+      {
+       "label": "mouse_up",
+       "n": 355,
+       "share": 0.325
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-98",
+     "blockId": 98,
+     "name": "Log Dark Oak Stripped",
+     "n": 2162,
+     "players": 15,
+     "primary": {
+      "label": "취소율",
+      "value": 0.387
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.159
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 100
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 491,
+       "share": 0.587
+      },
+      {
+       "label": "target_change",
+       "n": 345,
+       "share": 0.413
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-37",
+     "blockId": 37,
+     "name": "Bulb Cite Pink",
+     "n": 458,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.386
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.073
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 105
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 139,
+       "share": 0.785
+      },
+      {
+       "label": "mouse_up",
+       "n": 38,
+       "share": 0.215
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-116",
+     "blockId": 116,
+     "name": "Planks Acacia",
+     "n": 2492,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.386
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.109
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 125
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 486,
+       "share": 0.505
+      },
+      {
+       "label": "mouse_up",
+       "n": 476,
+       "share": 0.495
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-25",
+     "blockId": 25,
+     "name": "Bricks Stone Chiseled",
+     "n": 673,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.382
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.152
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 127
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 132,
+       "share": 0.514
+      },
+      {
+       "label": "target_change",
+       "n": 125,
+       "share": 0.486
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-3",
+     "blockId": 3,
+     "name": "Bamboo Mosaic",
+     "n": 980,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.38
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.118
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 91
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 261,
+       "share": 0.702
+      },
+      {
+       "label": "mouse_up",
+       "n": 111,
+       "share": 0.298
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-126",
+     "blockId": 126,
+     "name": "Polished Andesite",
+     "n": 1599,
+     "players": 14,
+     "primary": {
+      "label": "취소율",
+      "value": 0.378
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.144
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 378,
+       "share": 0.625
+      },
+      {
+       "label": "target_change",
+       "n": 227,
+       "share": 0.375
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-127",
+     "blockId": 127,
+     "name": "Polished Blackstone Bricks",
+     "n": 4271,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.377
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.103
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 115
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 850,
+       "share": 0.527
+      },
+      {
+       "label": "mouse_up",
+       "n": 762,
+       "share": 0.473
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-85",
+     "blockId": 85,
+     "name": "Glass",
+     "n": 4170,
+     "players": 33,
+     "primary": {
+      "label": "취소율",
+      "value": 0.377
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.154
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 99
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 959,
+       "share": 0.61
+      },
+      {
+       "label": "mouse_up",
+       "n": 614,
+       "share": 0.39
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-30",
+     "blockId": 30,
+     "name": "Bulb Cite Cyan",
+     "n": 1104,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.376
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.133
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 155
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 259,
+       "share": 0.624
+      },
+      {
+       "label": "mouse_up",
+       "n": 156,
+       "share": 0.376
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-104",
+     "blockId": 104,
+     "name": "Log Oak Stripped",
+     "n": 2575,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.375
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.112
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 116
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 559,
+       "share": 0.579
+      },
+      {
+       "label": "mouse_up",
+       "n": 406,
+       "share": 0.421
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-152",
+     "blockId": 152,
+     "name": "Stone Brick Mossy",
+     "n": 2496,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.375
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.093
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 128
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 489,
+       "share": 0.523
+      },
+      {
+       "label": "target_change",
+       "n": 446,
+       "share": 0.477
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-16",
+     "blockId": 16,
+     "name": "Block Quartz",
+     "n": 3923,
+     "players": 27,
+     "primary": {
+      "label": "취소율",
+      "value": 0.374
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.143
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 137
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 794,
+       "share": 0.541
+      },
+      {
+       "label": "mouse_up",
+       "n": 674,
+       "share": 0.459
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-32",
+     "blockId": 32,
+     "name": "Bulb Cite Green",
+     "n": 387,
+     "players": 8,
+     "primary": {
+      "label": "취소율",
+      "value": 0.37
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.182
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 214
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 79,
+       "share": 0.552
+      },
+      {
+       "label": "target_change",
+       "n": 64,
+       "share": 0.448
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-123",
+     "blockId": 123,
+     "name": "Planks Spruce",
+     "n": 8871,
+     "players": 29,
+     "primary": {
+      "label": "취소율",
+      "value": 0.366
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.118
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 97
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1871,
+       "share": 0.576
+      },
+      {
+       "label": "target_change",
+       "n": 1380,
+       "share": 0.424
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-34",
+     "blockId": 34,
+     "name": "Bulb Cite Lightgray",
+     "n": 455,
+     "players": 13,
+     "primary": {
+      "label": "취소율",
+      "value": 0.365
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.157
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 196
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 100,
+       "share": 0.602
+      },
+      {
+       "label": "mouse_up",
+       "n": 66,
+       "share": 0.398
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-33",
+     "blockId": 33,
+     "name": "Bulb Cite Lightblue",
+     "n": 452,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.363
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.183
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 132
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 103,
+       "share": 0.628
+      },
+      {
+       "label": "target_change",
+       "n": 61,
+       "share": 0.372
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-99",
+     "blockId": 99,
+     "name": "Log Jungle Stripped",
+     "n": 646,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.359
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.147
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 69
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 158,
+       "share": 0.681
+      },
+      {
+       "label": "target_change",
+       "n": 74,
+       "share": 0.319
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-36",
+     "blockId": 36,
+     "name": "Bulb Cite Orange",
+     "n": 808,
+     "players": 5,
+     "primary": {
+      "label": "취소율",
+      "value": 0.359
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.09
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 214,
+       "share": 0.738
+      },
+      {
+       "label": "mouse_up",
+       "n": 76,
+       "share": 0.262
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-129",
+     "blockId": 129,
+     "name": "Polished Deepslate",
+     "n": 3299,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.354
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.158
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 110
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 638,
+       "share": 0.546
+      },
+      {
+       "label": "mouse_up",
+       "n": 530,
+       "share": 0.454
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-94",
+     "blockId": 94,
+     "name": "Log Acacia Stripped",
+     "n": 3183,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.353
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.136
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 113
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 601,
+       "share": 0.535
+      },
+      {
+       "label": "mouse_up",
+       "n": 523,
+       "share": 0.465
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-11",
+     "blockId": 11,
+     "name": "Block Deepslate",
+     "n": 8795,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.346
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.08
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 196
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 2115,
+       "share": 0.694
+      },
+      {
+       "label": "mouse_up",
+       "n": 932,
+       "share": 0.306
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-160",
+     "blockId": 160,
+     "name": "Terracotta Black",
+     "n": 406,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.342
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.302
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 106
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 86,
+       "share": 0.619
+      },
+      {
+       "label": "target_change",
+       "n": 53,
+       "share": 0.381
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-4",
+     "blockId": 4,
+     "name": "Bamboo Stripped",
+     "n": 469,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.335
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.204
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 92
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 81,
+       "share": 0.516
+      },
+      {
+       "label": "target_change",
+       "n": 76,
+       "share": 0.484
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-210",
+     "blockId": 210,
+     "name": "Bulb Log Acacia",
+     "n": 374,
+     "players": 18,
+     "primary": {
+      "label": "취소율",
+      "value": 0.332
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.282
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 130
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 72,
+       "share": 0.581
+      },
+      {
+       "label": "target_change",
+       "n": 52,
+       "share": 0.419
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-91",
+     "blockId": 91,
+     "name": "Leaves Acacia",
+     "n": 643,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.328
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.232
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 112
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 136,
+       "share": 0.645
+      },
+      {
+       "label": "target_change",
+       "n": 75,
+       "share": 0.355
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-117",
+     "blockId": 117,
+     "name": "Planks Bamboo",
+     "n": 588,
+     "players": 6,
+     "primary": {
+      "label": "취소율",
+      "value": 0.318
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.219
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 166
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 124,
+       "share": 0.663
+      },
+      {
+       "label": "target_change",
+       "n": 63,
+       "share": 0.337
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-189",
+     "blockId": 189,
+     "name": "Wool Pink",
+     "n": 3437,
+     "players": 11,
+     "primary": {
+      "label": "취소율",
+      "value": 0.315
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.06
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 98
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 771,
+       "share": 0.712
+      },
+      {
+       "label": "mouse_up",
+       "n": 312,
+       "share": 0.288
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-105",
+     "blockId": 105,
+     "name": "Log Oak",
+     "n": 5755,
+     "players": 27,
+     "primary": {
+      "label": "취소율",
+      "value": 0.309
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.094
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 133
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 996,
+       "share": 0.56
+      },
+      {
+       "label": "mouse_up",
+       "n": 783,
+       "share": 0.44
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-175",
+     "blockId": 175,
+     "name": "Terracotta Yellow",
+     "n": 1027,
+     "players": 10,
+     "primary": {
+      "label": "취소율",
+      "value": 0.309
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.155
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 155
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 163,
+       "share": 0.514
+      },
+      {
+       "label": "target_change",
+       "n": 154,
+       "share": 0.486
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-191",
+     "blockId": 191,
+     "name": "Wool Red",
+     "n": 3186,
+     "players": 13,
+     "primary": {
+      "label": "취소율",
+      "value": 0.274
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.186
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 128
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 576,
+       "share": 0.661
+      },
+      {
+       "label": "target_change",
+       "n": 296,
+       "share": 0.339
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-40",
+     "blockId": 40,
+     "name": "Bulb Cite White",
+     "n": 8253,
+     "players": 37,
+     "primary": {
+      "label": "취소율",
+      "value": 0.248
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.321
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 118
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 1200,
+       "share": 0.586
+      },
+      {
+       "label": "target_change",
+       "n": 849,
+       "share": 0.414
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-2",
+     "blockId": 2,
+     "name": "Bamboo Block",
+     "n": 2057,
+     "players": 19,
+     "primary": {
+      "label": "취소율",
+      "value": 0.243
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.108
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 158
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 316,
+       "share": 0.633
+      },
+      {
+       "label": "mouse_up",
+       "n": 183,
+       "share": 0.367
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-185",
+     "blockId": 185,
+     "name": "Wool Lightgray",
+     "n": 529,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.221
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.231
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 90
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 86,
+       "share": 0.735
+      },
+      {
+       "label": "target_change",
+       "n": 31,
+       "share": 0.265
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-193",
+     "blockId": 193,
+     "name": "Wool Yellow",
+     "n": 2448,
+     "players": 13,
+     "primary": {
+      "label": "취소율",
+      "value": 0.212
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.196
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 103
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 303,
+       "share": 0.583
+      },
+      {
+       "label": "target_change",
+       "n": 217,
+       "share": 0.417
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-181",
+     "blockId": 181,
+     "name": "Wool Cyan",
+     "n": 1911,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.21
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.072
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 79
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 255,
+       "share": 0.636
+      },
+      {
+       "label": "target_change",
+       "n": 146,
+       "share": 0.364
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-211",
+     "blockId": 211,
+     "name": "Bulb Log Jungle",
+     "n": 906,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.205
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.21
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 181
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 97,
+       "share": 0.522
+      },
+      {
+       "label": "mouse_up",
+       "n": 89,
+       "share": 0.478
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-41",
+     "blockId": 41,
+     "name": "Bulb Cite Yellow",
+     "n": 2543,
+     "players": 14,
+     "primary": {
+      "label": "취소율",
+      "value": 0.18
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.216
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 151
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 246,
+       "share": 0.536
+      },
+      {
+       "label": "mouse_up",
+       "n": 213,
+       "share": 0.464
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-214",
+     "blockId": 214,
+     "name": "Bulb Log Oak",
+     "n": 1821,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.172
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.185
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 164
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 196,
+       "share": 0.624
+      },
+      {
+       "label": "mouse_up",
+       "n": 118,
+       "share": 0.376
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-23",
+     "blockId": 23,
+     "name": "Bricks Nether",
+     "n": 675,
+     "players": 5,
+     "primary": {
+      "label": "취소율",
+      "value": 0.154
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.115
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 148
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 77,
+       "share": 0.74
+      },
+      {
+       "label": "mouse_up",
+       "n": 27,
+       "share": 0.26
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-28",
+     "blockId": 28,
+     "name": "Bulb Cite Blue",
+     "n": 1447,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.106
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.183
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 157
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 85,
+       "share": 0.556
+      },
+      {
+       "label": "mouse_up",
+       "n": 68,
+       "share": 0.444
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-187",
+     "blockId": 187,
+     "name": "Wool Magenta",
+     "n": 1440,
+     "players": 7,
+     "primary": {
+      "label": "취소율",
+      "value": 0.105
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.046
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 150
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 78,
+       "share": 0.517
+      },
+      {
+       "label": "mouse_up",
+       "n": 73,
+       "share": 0.483
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-188",
+     "blockId": 188,
+     "name": "Wool Orange",
+     "n": 1323,
+     "players": 9,
+     "primary": {
+      "label": "취소율",
+      "value": 0.07
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.174
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 141
+      }
+     ],
+     "reactions": [
+      {
+       "label": "target_change",
+       "n": 50,
+       "share": 0.543
+      },
+      {
+       "label": "mouse_up",
+       "n": 42,
+       "share": 0.457
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-39",
+     "blockId": 39,
+     "name": "Bulb Cite Red",
+     "n": 1409,
+     "players": 16,
+     "primary": {
+      "label": "취소율",
+      "value": 0.065
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.286
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 183
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 56,
+       "share": 0.615
+      },
+      {
+       "label": "target_change",
+       "n": 35,
+       "share": 0.385
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-190",
+     "blockId": 190,
+     "name": "Wool Purple",
+     "n": 1421,
+     "players": 4,
+     "primary": {
+      "label": "취소율",
+      "value": 0.037
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": 0.245
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": 144
+      }
+     ],
+     "reactions": [
+      {
+       "label": "mouse_up",
+       "n": 33,
+       "share": 0.623
+      },
+      {
+       "label": "target_change",
+       "n": 20,
+       "share": 0.377
+      }
+     ],
+     "small": false
+    },
+    {
+     "id": "block-227",
+     "blockId": 227,
+     "name": "Plant Tulip Pink",
+     "n": 1920,
+     "players": 19,
+     "primary": {
+      "label": "취소율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": null
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": null
+      }
+     ],
+     "reactions": [],
+     "small": false
+    },
+    {
+     "id": "block-217",
+     "blockId": 217,
+     "name": "Plant Daisy",
+     "n": 1312,
+     "players": 21,
+     "primary": {
+      "label": "취소율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": null
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": null
+      }
+     ],
+     "reactions": [],
+     "small": false
+    },
+    {
+     "id": "block-224",
+     "blockId": 224,
+     "name": "Plant Short Grass",
+     "n": 10802,
+     "players": 28,
+     "primary": {
+      "label": "취소율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "취소 후 10초 안에 같은 칸 재시도",
+       "value": null
+      },
+      {
+       "label": "취소까지 누른 시간 중앙값(ms)",
+       "value": null
+      }
+     ],
+     "reactions": [],
+     "small": false
+    }
+   ]
+  }
+ ],
+ "overallReactions": [
+  {
+   "label": "다른 칸으로 이동",
+   "n": 167669,
+   "share": 0.823
+  },
+  {
+   "label": "10초 안에 다시 안 함",
+   "n": 18442,
+   "share": 0.091
+  },
+  {
+   "label": "같은 칸 재시도",
+   "n": 17605,
+   "share": 0.086
+  }
+ ]
+}

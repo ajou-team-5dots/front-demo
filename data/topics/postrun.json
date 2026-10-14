@@ -1,0 +1,1666 @@
+{
+ "opsExcluded": true,
+ "players": 91,
+ "smallN": 100,
+ "entityGroups": [
+  {
+   "id": "blueprint",
+   "label": "설계도",
+   "entities": [
+    {
+     "id": "bp-108",
+     "blueprintId": 108,
+     "name": "설계도 #108",
+     "n": 1739,
+     "players": 2,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.005
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 1
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 27
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0236
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 3
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설계도 준비",
+       "n": 1129,
+       "share": 0.646
+      },
+      {
+       "label": "UI 열기",
+       "n": 445,
+       "share": 0.255
+      },
+      {
+       "label": "채굴",
+       "n": 123,
+       "share": 0.07
+      },
+      {
+       "label": "설치",
+       "n": 25,
+       "share": 0.014
+      },
+      {
+       "label": "채굴 취소",
+       "n": 17,
+       "share": 0.01
+      },
+      {
+       "label": "30분 안에 행동 없음",
+       "n": 4,
+       "share": 0.002
+      }
+     ],
+     "small": false,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-108.json"
+     }
+    },
+    {
+     "id": "bp-48",
+     "blueprintId": 48,
+     "name": "설계도 #48",
+     "n": 562,
+     "players": 2,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.048
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 11
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 95
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0346
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 2
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설계도 준비",
+       "n": 349,
+       "share": 0.621
+      },
+      {
+       "label": "UI 열기",
+       "n": 103,
+       "share": 0.183
+      },
+      {
+       "label": "설치",
+       "n": 75,
+       "share": 0.133
+      },
+      {
+       "label": "채굴",
+       "n": 29,
+       "share": 0.052
+      },
+      {
+       "label": "채굴 취소",
+       "n": 4,
+       "share": 0.007
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 2,
+       "share": 0.004
+      }
+     ],
+     "small": false,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-48.json"
+     }
+    },
+    {
+     "id": "bp-27",
+     "blueprintId": 27,
+     "name": "설계도 #27",
+     "n": 147,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.02
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 19
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 56
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0063
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 3
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 53,
+       "share": 0.379
+      },
+      {
+       "label": "설치",
+       "n": 51,
+       "share": 0.364
+      },
+      {
+       "label": "채굴",
+       "n": 24,
+       "share": 0.171
+      },
+      {
+       "label": "채굴 취소",
+       "n": 5,
+       "share": 0.036
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 4,
+       "share": 0.029
+      },
+      {
+       "label": "설계도 준비",
+       "n": 2,
+       "share": 0.014
+      }
+     ],
+     "small": false,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-27.json"
+     }
+    },
+    {
+     "id": "bp-20",
+     "blueprintId": 20,
+     "name": "설계도 #20",
+     "n": 62,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.339
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 867
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 158
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.3345
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 4
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 29,
+       "share": 0.475
+      },
+      {
+       "label": "설치",
+       "n": 14,
+       "share": 0.23
+      },
+      {
+       "label": "채굴",
+       "n": 11,
+       "share": 0.18
+      },
+      {
+       "label": "설계도 준비",
+       "n": 4,
+       "share": 0.066
+      },
+      {
+       "label": "채굴 취소",
+       "n": 2,
+       "share": 0.033
+      },
+      {
+       "label": "30분 안에 행동 없음",
+       "n": 1,
+       "share": 0.016
+      }
+     ],
+     "small": false,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-20.json"
+     }
+    },
+    {
+     "id": "bp-96",
+     "blueprintId": 96,
+     "name": "설계도 #96",
+     "n": 46,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.348
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 322
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 187
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0014
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 25,
+       "share": 0.543
+      },
+      {
+       "label": "설치",
+       "n": 13,
+       "share": 0.283
+      },
+      {
+       "label": "채굴",
+       "n": 8,
+       "share": 0.174
+      }
+     ],
+     "small": false,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-96.json"
+     }
+    },
+    {
+     "id": "bp-3",
+     "blueprintId": 3,
+     "name": "설계도 #3",
+     "n": 29,
+     "players": 7,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.103
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 23
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 34
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0421
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 7
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 8,
+       "share": 0.333
+      },
+      {
+       "label": "채굴 취소",
+       "n": 5,
+       "share": 0.208
+      },
+      {
+       "label": "30분 안에 행동 없음",
+       "n": 4,
+       "share": 0.167
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 3,
+       "share": 0.125
+      },
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.083
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.042
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-3.json"
+     }
+    },
+    {
+     "id": "bp-60",
+     "blueprintId": 60,
+     "name": "설계도 #60",
+     "n": 26,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.154
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 7
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 52
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0016
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 5
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 15,
+       "share": 0.714
+      },
+      {
+       "label": "설치",
+       "n": 3,
+       "share": 0.143
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.048
+      },
+      {
+       "label": "30분 안에 행동 없음",
+       "n": 1,
+       "share": 0.048
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.048
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-60.json"
+     }
+    },
+    {
+     "id": "bp-4",
+     "blueprintId": 4,
+     "name": "설계도 #4",
+     "n": 18,
+     "players": 5,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.056
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 2
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.1275
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 5
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 16,
+       "share": 0.889
+      },
+      {
+       "label": "설치",
+       "n": 1,
+       "share": 0.056
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.056
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-4.json"
+     }
+    },
+    {
+     "id": "bp-5",
+     "blueprintId": 5,
+     "name": "설계도 #5",
+     "n": 17,
+     "players": 7,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0144
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 8
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 14,
+       "share": 0.824
+      },
+      {
+       "label": "채굴 취소",
+       "n": 1,
+       "share": 0.059
+      },
+      {
+       "label": "설치",
+       "n": 1,
+       "share": 0.059
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.059
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-5.json"
+     }
+    },
+    {
+     "id": "bp-98",
+     "blueprintId": 98,
+     "name": "설계도 #98",
+     "n": 16,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.062
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 15
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.1619
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 13,
+       "share": 0.812
+      },
+      {
+       "label": "채굴 취소",
+       "n": 2,
+       "share": 0.125
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.062
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-98.json"
+     }
+    },
+    {
+     "id": "bp-28",
+     "blueprintId": 28,
+     "name": "설계도 #28",
+     "n": 15,
+     "players": 4,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.2
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 348
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 58
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0452
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 5
+      }
+     ],
+     "reactions": [
+      {
+       "label": "채굴",
+       "n": 4,
+       "share": 0.333
+      },
+      {
+       "label": "UI 열기",
+       "n": 3,
+       "share": 0.25
+      },
+      {
+       "label": "설치",
+       "n": 3,
+       "share": 0.25
+      },
+      {
+       "label": "채팅",
+       "n": 1,
+       "share": 0.083
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 1,
+       "share": 0.083
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-28.json"
+     }
+    },
+    {
+     "id": "bp-118",
+     "blueprintId": 118,
+     "name": "설계도 #118",
+     "n": 12,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.25
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 17
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.1374
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 9,
+       "share": 0.75
+      },
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.167
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 1,
+       "share": 0.083
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-118.json"
+     }
+    },
+    {
+     "id": "bp-2",
+     "blueprintId": 2,
+     "name": "설계도 #2",
+     "n": 9,
+     "players": 4,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0115
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 4
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 7,
+       "share": 0.778
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.111
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.111
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-2.json"
+     }
+    },
+    {
+     "id": "bp-22",
+     "blueprintId": 22,
+     "name": "설계도 #22",
+     "n": 9,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.222
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 15
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 47
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0277
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 3
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 5,
+       "share": 0.556
+      },
+      {
+       "label": "채굴",
+       "n": 2,
+       "share": 0.222
+      },
+      {
+       "label": "퀘스트 보상",
+       "n": 1,
+       "share": 0.111
+      },
+      {
+       "label": "채팅",
+       "n": 1,
+       "share": 0.111
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-22.json"
+     }
+    },
+    {
+     "id": "bp-44",
+     "blueprintId": 44,
+     "name": "설계도 #44",
+     "n": 9,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.111
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 1
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0486
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 6,
+       "share": 0.667
+      },
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.222
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.111
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-44.json"
+     }
+    },
+    {
+     "id": "bp-7",
+     "blueprintId": 7,
+     "name": "설계도 #7",
+     "n": 8,
+     "players": 6,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.25
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 88
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 27
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0066
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 8
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 3,
+       "share": 0.429
+      },
+      {
+       "label": "UI 열기",
+       "n": 2,
+       "share": 0.286
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.143
+      },
+      {
+       "label": "채굴 취소",
+       "n": 1,
+       "share": 0.143
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-7.json"
+     }
+    },
+    {
+     "id": "bp-42",
+     "blueprintId": 42,
+     "name": "설계도 #42",
+     "n": 8,
+     "players": 4,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.25
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 20
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.1783
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 4
+      }
+     ],
+     "reactions": [
+      {
+       "label": "채굴",
+       "n": 2,
+       "share": 0.286
+      },
+      {
+       "label": "UI 열기",
+       "n": 2,
+       "share": 0.286
+      },
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.286
+      },
+      {
+       "label": "30분 안에 행동 없음",
+       "n": 1,
+       "share": 0.143
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-42.json"
+     }
+    },
+    {
+     "id": "bp-53",
+     "blueprintId": 53,
+     "name": "설계도 #53",
+     "n": 8,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.625
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 281
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 4
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0339
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "채굴",
+       "n": 4,
+       "share": 0.5
+      },
+      {
+       "label": "UI 열기",
+       "n": 3,
+       "share": 0.375
+      },
+      {
+       "label": "채굴 취소",
+       "n": 1,
+       "share": 0.125
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-53.json"
+     }
+    },
+    {
+     "id": "bp-99",
+     "blueprintId": 99,
+     "name": "설계도 #99",
+     "n": 8,
+     "players": 2,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.25
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 113
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0518
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 2
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 5,
+       "share": 0.625
+      },
+      {
+       "label": "채굴",
+       "n": 2,
+       "share": 0.25
+      },
+      {
+       "label": "UI 열기",
+       "n": 1,
+       "share": 0.125
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-99.json"
+     }
+    },
+    {
+     "id": "bp-52",
+     "blueprintId": 52,
+     "name": "설계도 #52",
+     "n": 7,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0033
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 3
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 2,
+       "share": 0.5
+      },
+      {
+       "label": "채굴 취소",
+       "n": 1,
+       "share": 0.25
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.25
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-52.json"
+     }
+    },
+    {
+     "id": "bp-63",
+     "blueprintId": 63,
+     "name": "설계도 #63",
+     "n": 7,
+     "players": 2,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.0
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 0
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 0
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.1294
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 3
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 3,
+       "share": 0.429
+      },
+      {
+       "label": "UI 열기",
+       "n": 3,
+       "share": 0.429
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.143
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-63.json"
+     }
+    },
+    {
+     "id": "bp-49",
+     "blueprintId": 49,
+     "name": "설계도 #49",
+     "n": 6,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.5
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 12
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 15
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0242
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "채굴",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "채팅",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "UI 열기",
+       "n": 1,
+       "share": 0.2
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-49.json"
+     }
+    },
+    {
+     "id": "bp-1",
+     "blueprintId": 1,
+     "name": "설계도 #1",
+     "n": 5,
+     "players": 5,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.6
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 3
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 81
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0223
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 4
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.2
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-1.json"
+     }
+    },
+    {
+     "id": "bp-68",
+     "blueprintId": 68,
+     "name": "설계도 #68",
+     "n": 5,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.4
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 6
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 13
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0606
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 3,
+       "share": 0.6
+      },
+      {
+       "label": "UI 열기",
+       "n": 1,
+       "share": 0.2
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.2
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-68.json"
+     }
+    },
+    {
+     "id": "bp-86",
+     "blueprintId": 86,
+     "name": "설계도 #86",
+     "n": 5,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.6
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 459
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 21
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 1
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "채굴",
+       "n": 2,
+       "share": 0.4
+      },
+      {
+       "label": "UI 열기",
+       "n": 1,
+       "share": 0.2
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-86.json"
+     }
+    },
+    {
+     "id": "bp-112",
+     "blueprintId": 112,
+     "name": "설계도 #112",
+     "n": 5,
+     "players": 3,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.4
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 122
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 211
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0199
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 4
+      }
+     ],
+     "reactions": [
+      {
+       "label": "UI 열기",
+       "n": 2,
+       "share": 0.5
+      },
+      {
+       "label": "설계도 준비",
+       "n": 1,
+       "share": 0.25
+      },
+      {
+       "label": "설치",
+       "n": 1,
+       "share": 0.25
+      }
+     ],
+     "small": true,
+     "flags": [],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-112.json"
+     }
+    },
+    {
+     "id": "bp-122",
+     "blueprintId": 122,
+     "name": "설계도 #122",
+     "n": 5,
+     "players": 2,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.8
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 57
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 155
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.0032
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 2
+      }
+     ],
+     "reactions": [
+      {
+       "label": "설치",
+       "n": 1,
+       "share": 0.333
+      },
+      {
+       "label": "채팅",
+       "n": 1,
+       "share": 0.333
+      },
+      {
+       "label": "채굴",
+       "n": 1,
+       "share": 0.333
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-122.json"
+     }
+    },
+    {
+     "id": "bp-137",
+     "blueprintId": 137,
+     "name": "설계도 #137",
+     "n": 5,
+     "players": 1,
+     "primary": {
+      "label": "실행 후 30분 안에 결과물을 고친 비율",
+      "value": 0.6
+     },
+     "secondary": [
+      {
+       "label": "캔 칸 수",
+       "value": 141
+      },
+      {
+       "label": "추가 설치 칸 수",
+       "value": 118
+      },
+      {
+       "label": "건너뛴 블록 비율",
+       "value": 0.2762
+      },
+      {
+       "label": "설치된 월드 수",
+       "value": 2
+      }
+     ],
+     "reactions": [
+      {
+       "label": "채굴",
+       "n": 3,
+       "share": 0.6
+      },
+      {
+       "label": "UI 열기",
+       "n": 1,
+       "share": 0.2
+      },
+      {
+       "label": "채굴 취소",
+       "n": 1,
+       "share": 0.2
+      }
+     ],
+     "small": true,
+     "flags": [
+      "한 사람이 실행의 80% 이상"
+     ],
+     "detail": {
+      "kind": "voxel3d",
+      "file": "blueprint_edits/bp-137.json"
+     }
+    }
+   ]
+  }
+ ],
+ "overallReactions": [
+  {
+   "label": "UI 열기",
+   "n": 2816,
+   "share": 0.498
+  },
+  {
+   "label": "설계도 준비",
+   "n": 2087,
+   "share": 0.369
+  },
+  {
+   "label": "채굴",
+   "n": 348,
+   "share": 0.062
+  },
+  {
+   "label": "설치",
+   "n": 295,
+   "share": 0.052
+  },
+  {
+   "label": "채굴 취소",
+   "n": 68,
+   "share": 0.012
+  },
+  {
+   "label": "30분 안에 행동 없음",
+   "n": 16,
+   "share": 0.003
+  },
+  {
+   "label": "퀘스트 보상",
+   "n": 15,
+   "share": 0.003
+  },
+  {
+   "label": "채팅",
+   "n": 11,
+   "share": 0.002
+  },
+  {
+   "label": "종료",
+   "n": 1,
+   "share": 0.0
+  },
+  {
+   "label": "설계도 실행",
+   "n": 1,
+   "share": 0.0
+  }
+ ]
+}
