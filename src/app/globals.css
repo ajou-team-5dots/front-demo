@@ -7,9 +7,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Pretendard (src/lib/fonts.ts). The design system names Roboto, which has no Hangul. */
+  --font-sans: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-heading: var(--font-sans);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-data-bar: var(--data-bar);
+  --color-reason-release: var(--reason-release);
+  --color-flow-next: var(--flow-next);
+  --color-flow-prev: var(--flow-prev);
+  --shadow-card: 0 18px 44px rgb(15 23 42 / 0.08);
+  --container-page: 1180px;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -52,43 +63,55 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* UI tokens: "Realsee as your service" design system (.design/DESIGN.md) */
+  --background: #f6f8fb;
+  --foreground: #172033;
+  --card: #ffffff;
+  --card-foreground: #172033;
+  --popover: #ffffff;
+  --popover-foreground: #172033;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-strong: #1d4ed8;
+  --primary-soft: #eaf2ff;
+  --secondary: #eaf2ff;
+  --secondary-foreground: #1d4ed8;
+  /* Not in the design system: a neutral between background and outline for tracks and fills. */
+  --muted: #eef2f8;
+  --muted-foreground: #5b6b84;
+  --accent: #eaf2ff;
+  --accent-foreground: #1d4ed8;
+  --destructive: #dc2626;
+  --success: #16a34a;
+  --success-soft: #e9f8ef;
+  --border: #dbe4f0;
+  --input: #dbe4f0;
+  --ring: #2563eb;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* card 20px; derived: sm 12, md 16, xl 28 (panel) */
+  --radius: 1.25rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #172033;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf2ff;
+  --sidebar-accent-foreground: #1d4ed8;
+  --sidebar-border: #dbe4f0;
+  --sidebar-ring: #2563eb;
 
-  /* Data tokens for the blueprint edit heatmap: untouched / dug / added cells. */
+  /* Data tokens: kept apart from UI blue so a color always means the same data. */
+  --data-bar: #475569;
   --edit-none: oklch(0.88 0.005 255);
   --edit-dig: oklch(0.58 0.22 27);
   --edit-add: oklch(0.56 0.2 300);
+  --flow-next: oklch(0.6 0.2 35);
+  --flow-prev: oklch(0.56 0.2 300);
+  /* Mining cancelled by letting go of the button: a 'real block' candidate. */
+  --reason-release: oklch(0.6 0.11 195);
 }
 
 .dark {
@@ -123,9 +146,17 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --primary-strong: oklch(0.8 0 0);
+  --primary-soft: oklch(0.269 0 0);
+  --success: oklch(0.72 0.17 150);
+  --success-soft: oklch(0.3 0.05 150);
+  --data-bar: oklch(0.75 0.02 255);
   --edit-none: oklch(0.45 0 0);
   --edit-dig: oklch(0.7 0.19 25);
   --edit-add: oklch(0.72 0.15 300);
+  --flow-next: oklch(0.72 0.17 40);
+  --flow-prev: oklch(0.72 0.15 300);
+  --reason-release: oklch(0.72 0.11 195);
 }
 
 @layer base {
@@ -133,7 +164,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background leading-relaxed text-foreground;
   }
   html {
     @apply font-sans;

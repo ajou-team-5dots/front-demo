@@ -7,3 +7,5 @@ next-env.d.ts
 
 # Data copied from the analysis repo (minified JSON)
 data/
+# Design system source, kept verbatim
+.design/
