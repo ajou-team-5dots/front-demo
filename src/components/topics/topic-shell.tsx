@@ -1,4 +1,11 @@
-import { ChartColumn, Crosshair, GitBranch, LayoutDashboard, Wrench } from 'lucide-react';
+import {
+  ChartColumn,
+  FlaskConical,
+  Crosshair,
+  GitBranch,
+  LayoutDashboard,
+  Wrench,
+} from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
@@ -8,7 +15,7 @@ import type { TopicId } from '@/types/topics';
 
 import { RoleSwitcher } from './role-lens';
 
-type NavId = 'overview' | TopicId;
+type NavId = 'overview' | TopicId | 'viz-test';
 
 const NAV: { id: NavId; href: string; label: string; icon: typeof ChartColumn }[] = [
   { id: 'overview', href: '/topics', label: '개요', icon: LayoutDashboard },
@@ -20,6 +27,7 @@ const NAV: { id: NavId; href: string; label: string; icon: typeof ChartColumn }[
     icon: Crosshair,
   },
   { id: 'loop', href: '/topics/loop', label: `T3 ${TOPIC_META.loop.ask}`, icon: GitBranch },
+  { id: 'viz-test', href: '/visualization-test', label: '시각화 실험', icon: FlaskConical },
 ];
 
 interface TopicShellProps {
