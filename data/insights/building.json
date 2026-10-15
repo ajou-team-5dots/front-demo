@@ -1,0 +1,3505 @@
+{
+ "meta": {
+  "rows": 17110000,
+  "players": 93,
+  "opsExcluded": 2,
+  "editWindowMin": 30,
+  "marginCells": 2,
+  "source": "DataSet/akkadia_insight_metrics.py"
+ },
+ "draft": {
+  "runs": 5621,
+  "players": 20,
+  "edited": 827,
+  "firstRun": {
+   "n": 146,
+   "edited": 75
+  },
+  "repeatRun": {
+   "n": 5475,
+   "edited": 752
+  },
+  "skipped": {
+   "withN": 2605,
+   "withEdited": 487,
+   "withoutN": 3016,
+   "withoutEdited": 340
+  },
+  "place": 7484,
+  "placeNewBlock": 4793,
+  "digOwn": 3642,
+  "digOther": 4697,
+  "placeLoc": {
+   "inside": 1349,
+   "bottom": 758,
+   "below": 1949,
+   "side": 2753,
+   "above": 675
+  },
+  "digLoc": {
+   "inside": 3190,
+   "bottom": 1985,
+   "below": 1288,
+   "side": 1400,
+   "above": 476
+  },
+  "undoRuns": 43,
+  "firstEditMin": {
+   "p10": 0.04,
+   "p25": 0.18,
+   "p50": 1.09,
+   "p75": 4.51,
+   "p90": 10.05
+  },
+  "editsPerEditedRun": {
+   "p10": 2,
+   "p25": 3,
+   "p50": 9,
+   "p75": 32,
+   "p90": 103
+  },
+  "blueprints": [
+   {
+    "bid": 116,
+    "runs": 2061,
+    "players": 2,
+    "topShare": 0.9995,
+    "edited": 191,
+    "place": 299,
+    "placeNewBlock": 299,
+    "digOwn": 1,
+    "digOther": 47,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 3,
+     "below": 112,
+     "side": 184,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 1,
+     "bottom": 2,
+     "below": 0,
+     "side": 45,
+     "above": 0
+    }
+   },
+   {
+    "bid": 108,
+    "runs": 1739,
+    "players": 2,
+    "topShare": 0.8913,
+    "edited": 134,
+    "place": 139,
+    "placeNewBlock": 100,
+    "digOwn": 0,
+    "digOther": 308,
+    "placeLoc": {
+     "inside": 4,
+     "bottom": 17,
+     "below": 95,
+     "side": 23,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 2,
+     "below": 98,
+     "side": 208,
+     "above": 0
+    }
+   },
+   {
+    "bid": 130,
+    "runs": 589,
+    "players": 2,
+    "topShare": 0.657,
+    "edited": 50,
+    "place": 22,
+    "placeNewBlock": 22,
+    "digOwn": 44,
+    "digOther": 70,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 14,
+     "side": 8,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 40,
+     "bottom": 6,
+     "below": 16,
+     "side": 48,
+     "above": 4
+    }
+   },
+   {
+    "bid": 48,
+    "runs": 562,
+    "players": 2,
+    "topShare": 0.9911,
+    "edited": 159,
+    "place": 1198,
+    "placeNewBlock": 1125,
+    "digOwn": 14,
+    "digOther": 79,
+    "placeLoc": {
+     "inside": 169,
+     "bottom": 89,
+     "below": 202,
+     "side": 732,
+     "above": 6
+    },
+    "digLoc": {
+     "inside": 8,
+     "bottom": 11,
+     "below": 14,
+     "side": 57,
+     "above": 3
+    }
+   },
+   {
+    "bid": 27,
+    "runs": 140,
+    "players": 3,
+    "topShare": 0.9786,
+    "edited": 11,
+    "place": 225,
+    "placeNewBlock": 223,
+    "digOwn": 19,
+    "digOther": 46,
+    "placeLoc": {
+     "inside": 2,
+     "bottom": 1,
+     "below": 146,
+     "side": 76,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 16,
+     "bottom": 5,
+     "below": 35,
+     "side": 9,
+     "above": 0
+    }
+   },
+   {
+    "bid": 111,
+    "runs": 77,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 48,
+    "place": 240,
+    "placeNewBlock": 172,
+    "digOwn": 314,
+    "digOther": 304,
+    "placeLoc": {
+     "inside": 6,
+     "bottom": 20,
+     "below": 46,
+     "side": 111,
+     "above": 57
+    },
+    "digLoc": {
+     "inside": 124,
+     "bottom": 198,
+     "below": 109,
+     "side": 98,
+     "above": 89
+    }
+   },
+   {
+    "bid": 20,
+    "runs": 61,
+    "players": 3,
+    "topShare": 0.4918,
+    "edited": 40,
+    "place": 536,
+    "placeNewBlock": 191,
+    "digOwn": 984,
+    "digOther": 447,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 54,
+     "below": 4,
+     "side": 291,
+     "above": 187
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 1080,
+     "below": 146,
+     "side": 75,
+     "above": 130
+    }
+   },
+   {
+    "bid": 96,
+    "runs": 46,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 42,
+    "place": 685,
+    "placeNewBlock": 476,
+    "digOwn": 407,
+    "digOther": 121,
+    "placeLoc": {
+     "inside": 62,
+     "bottom": 4,
+     "below": 447,
+     "side": 172,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 380,
+     "bottom": 46,
+     "below": 46,
+     "side": 56,
+     "above": 0
+    }
+   },
+   {
+    "bid": 95,
+    "runs": 27,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 4,
+    "place": 47,
+    "placeNewBlock": 35,
+    "digOwn": 1,
+    "digOther": 32,
+    "placeLoc": {
+     "inside": 11,
+     "bottom": 15,
+     "below": 16,
+     "side": 1,
+     "above": 4
+    },
+    "digLoc": {
+     "inside": 9,
+     "bottom": 14,
+     "below": 6,
+     "side": 3,
+     "above": 1
+    }
+   },
+   {
+    "bid": 3,
+    "runs": 24,
+    "players": 7,
+    "topShare": 0.4583,
+    "edited": 4,
+    "place": 131,
+    "placeNewBlock": 86,
+    "digOwn": 40,
+    "digOther": 130,
+    "placeLoc": {
+     "inside": 16,
+     "bottom": 3,
+     "below": 73,
+     "side": 39,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 86,
+     "bottom": 2,
+     "below": 20,
+     "side": 62,
+     "above": 0
+    }
+   },
+   {
+    "bid": 60,
+    "runs": 22,
+    "players": 3,
+    "topShare": 0.8636,
+    "edited": 7,
+    "place": 120,
+    "placeNewBlock": 63,
+    "digOwn": 13,
+    "digOther": 109,
+    "placeLoc": {
+     "inside": 58,
+     "bottom": 17,
+     "below": 15,
+     "side": 19,
+     "above": 11
+    },
+    "digLoc": {
+     "inside": 52,
+     "bottom": 10,
+     "below": 43,
+     "side": 10,
+     "above": 7
+    }
+   },
+   {
+    "bid": 4,
+    "runs": 18,
+    "players": 5,
+    "topShare": 0.7778,
+    "edited": 1,
+    "place": 2,
+    "placeNewBlock": 0,
+    "digOwn": 1,
+    "digOther": 1,
+    "placeLoc": {
+     "inside": 1,
+     "bottom": 1,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 1,
+     "bottom": 1,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    }
+   },
+   {
+    "bid": 5,
+    "runs": 17,
+    "players": 7,
+    "topShare": 0.4706,
+    "edited": 0,
+    "place": 0,
+    "placeNewBlock": 0,
+    "digOwn": 0,
+    "digOther": 0,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    }
+   },
+   {
+    "bid": 98,
+    "runs": 16,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 12,
+    "place": 203,
+    "placeNewBlock": 5,
+    "digOwn": 73,
+    "digOther": 85,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 115,
+     "below": 41,
+     "side": 39,
+     "above": 8
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 109,
+     "below": 2,
+     "side": 38,
+     "above": 9
+    }
+   },
+   {
+    "bid": 28,
+    "runs": 12,
+    "players": 4,
+    "topShare": 0.5833,
+    "edited": 6,
+    "place": 102,
+    "placeNewBlock": 80,
+    "digOwn": 41,
+    "digOther": 50,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 12,
+     "below": 86,
+     "side": 4,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 34,
+     "bottom": 7,
+     "below": 21,
+     "side": 29,
+     "above": 0
+    }
+   },
+   {
+    "bid": 118,
+    "runs": 12,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 8,
+    "place": 37,
+    "placeNewBlock": 13,
+    "digOwn": 1,
+    "digOther": 8,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 2,
+     "side": 21,
+     "above": 14
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 2,
+     "below": 5,
+     "side": 0,
+     "above": 2
+    }
+   },
+   {
+    "bid": 2,
+    "runs": 9,
+    "players": 4,
+    "topShare": 0.4444,
+    "edited": 1,
+    "place": 2,
+    "placeNewBlock": 2,
+    "digOwn": 30,
+    "digOther": 1,
+    "placeLoc": {
+     "inside": 1,
+     "bottom": 1,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 21,
+     "bottom": 10,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    }
+   },
+   {
+    "bid": 22,
+    "runs": 9,
+    "players": 3,
+    "topShare": 0.6667,
+    "edited": 6,
+    "place": 165,
+    "placeNewBlock": 107,
+    "digOwn": 25,
+    "digOther": 63,
+    "placeLoc": {
+     "inside": 12,
+     "bottom": 0,
+     "below": 8,
+     "side": 141,
+     "above": 4
+    },
+    "digLoc": {
+     "inside": 22,
+     "bottom": 6,
+     "below": 2,
+     "side": 58,
+     "above": 0
+    }
+   },
+   {
+    "bid": 44,
+    "runs": 8,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 5,
+    "place": 200,
+    "placeNewBlock": 197,
+    "digOwn": 2,
+    "digOther": 65,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 2,
+     "below": 0,
+     "side": 0,
+     "above": 198
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 2,
+     "below": 0,
+     "side": 0,
+     "above": 65
+    }
+   },
+   {
+    "bid": 53,
+    "runs": 8,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 8,
+    "place": 135,
+    "placeNewBlock": 0,
+    "digOwn": 303,
+    "digOther": 24,
+    "placeLoc": {
+     "inside": 89,
+     "bottom": 1,
+     "below": 0,
+     "side": 45,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 287,
+     "bottom": 20,
+     "below": 0,
+     "side": 20,
+     "above": 0
+    }
+   },
+   {
+    "bid": 9,
+    "runs": 8,
+    "players": 5,
+    "topShare": 0.5,
+    "edited": 4,
+    "place": 29,
+    "placeNewBlock": 20,
+    "digOwn": 13,
+    "digOther": 37,
+    "placeLoc": {
+     "inside": 1,
+     "bottom": 0,
+     "below": 9,
+     "side": 19,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 12,
+     "bottom": 2,
+     "below": 9,
+     "side": 27,
+     "above": 0
+    }
+   },
+   {
+    "bid": 99,
+    "runs": 8,
+    "players": 2,
+    "topShare": 0.875,
+    "edited": 4,
+    "place": 333,
+    "placeNewBlock": 222,
+    "digOwn": 0,
+    "digOther": 61,
+    "placeLoc": {
+     "inside": 20,
+     "bottom": 0,
+     "below": 6,
+     "side": 298,
+     "above": 9
+    },
+    "digLoc": {
+     "inside": 14,
+     "bottom": 0,
+     "below": 0,
+     "side": 47,
+     "above": 0
+    }
+   },
+   {
+    "bid": 115,
+    "runs": 8,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 8,
+    "place": 144,
+    "placeNewBlock": 144,
+    "digOwn": 0,
+    "digOther": 109,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 97,
+     "side": 47,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 99,
+     "side": 10,
+     "above": 0
+    }
+   },
+   {
+    "bid": 42,
+    "runs": 7,
+    "players": 3,
+    "topShare": 0.4286,
+    "edited": 2,
+    "place": 9,
+    "placeNewBlock": 2,
+    "digOwn": 17,
+    "digOther": 105,
+    "placeLoc": {
+     "inside": 4,
+     "bottom": 5,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 16,
+     "bottom": 4,
+     "below": 0,
+     "side": 102,
+     "above": 0
+    }
+   },
+   {
+    "bid": 7,
+    "runs": 7,
+    "players": 5,
+    "topShare": 0.2857,
+    "edited": 2,
+    "place": 49,
+    "placeNewBlock": 48,
+    "digOwn": 1,
+    "digOther": 16,
+    "placeLoc": {
+     "inside": 23,
+     "bottom": 6,
+     "below": 20,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 5,
+     "bottom": 8,
+     "below": 2,
+     "side": 2,
+     "above": 0
+    }
+   },
+   {
+    "bid": 63,
+    "runs": 7,
+    "players": 2,
+    "topShare": 0.5714,
+    "edited": 0,
+    "place": 0,
+    "placeNewBlock": 0,
+    "digOwn": 0,
+    "digOther": 0,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 0,
+     "bottom": 0,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    }
+   },
+   {
+    "bid": 1,
+    "runs": 5,
+    "players": 5,
+    "topShare": 0.2,
+    "edited": 2,
+    "place": 58,
+    "placeNewBlock": 58,
+    "digOwn": 3,
+    "digOther": 2,
+    "placeLoc": {
+     "inside": 10,
+     "bottom": 39,
+     "below": 4,
+     "side": 5,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 3,
+     "bottom": 0,
+     "below": 2,
+     "side": 0,
+     "above": 0
+    }
+   },
+   {
+    "bid": 86,
+    "runs": 5,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 5,
+    "place": 22,
+    "placeNewBlock": 16,
+    "digOwn": 478,
+    "digOther": 885,
+    "placeLoc": {
+     "inside": 21,
+     "bottom": 1,
+     "below": 0,
+     "side": 0,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 1024,
+     "bottom": 111,
+     "below": 13,
+     "side": 113,
+     "above": 102
+    }
+   },
+   {
+    "bid": 81,
+    "runs": 5,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 4,
+    "place": 7,
+    "placeNewBlock": 7,
+    "digOwn": 26,
+    "digOther": 8,
+    "placeLoc": {
+     "inside": 0,
+     "bottom": 3,
+     "below": 1,
+     "side": 3,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 19,
+     "bottom": 7,
+     "below": 7,
+     "side": 1,
+     "above": 0
+    }
+   },
+   {
+    "bid": 49,
+    "runs": 5,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 4,
+    "place": 40,
+    "placeNewBlock": 2,
+    "digOwn": 3,
+    "digOther": 37,
+    "placeLoc": {
+     "inside": 1,
+     "bottom": 2,
+     "below": 0,
+     "side": 36,
+     "above": 1
+    },
+    "digLoc": {
+     "inside": 4,
+     "bottom": 3,
+     "below": 0,
+     "side": 32,
+     "above": 1
+    }
+   },
+   {
+    "bid": 137,
+    "runs": 5,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 5,
+    "place": 245,
+    "placeNewBlock": 55,
+    "digOwn": 146,
+    "digOther": 128,
+    "placeLoc": {
+     "inside": 62,
+     "bottom": 103,
+     "below": 1,
+     "side": 79,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 159,
+     "bottom": 105,
+     "below": 1,
+     "side": 9,
+     "above": 0
+    }
+   },
+   {
+    "bid": 68,
+    "runs": 5,
+    "players": 1,
+    "topShare": 1.0,
+    "edited": 3,
+    "place": 39,
+    "placeNewBlock": 39,
+    "digOwn": 3,
+    "digOther": 11,
+    "placeLoc": {
+     "inside": 1,
+     "bottom": 6,
+     "below": 24,
+     "side": 8,
+     "above": 0
+    },
+    "digLoc": {
+     "inside": 2,
+     "bottom": 6,
+     "below": 0,
+     "side": 0,
+     "above": 6
+    }
+   }
+  ]
+ },
+ "prepare": {
+  "episodes": 5895,
+  "players": 22,
+  "outcomes": {
+   "build": 5691,
+   "cancel": 199,
+   "reprep_same": 0,
+   "reprep_other": 0,
+   "none": 5
+  },
+  "cancelReasons": {
+   "escape": 198,
+   "reselect": 1
+  },
+  "dtBuild": {
+   "p10": 1.4,
+   "p25": 1.8,
+   "p50": 2.6,
+   "p75": 4.5,
+   "p90": 9.1
+  },
+  "dtCancel": {
+   "p10": 2.0,
+   "p25": 4.9,
+   "p50": 11.6,
+   "p75": 25.3,
+   "p90": 46.8
+  },
+  "dtDist": [
+   {
+    "label": "1초 미만",
+    "build": 115,
+    "cancel": 6
+   },
+   {
+    "label": "1~2초",
+    "build": 1675,
+    "cancel": 13
+   },
+   {
+    "label": "2~3초",
+    "build": 1468,
+    "cancel": 7
+   },
+   {
+    "label": "3~5초",
+    "build": 1134,
+    "cancel": 24
+   },
+   {
+    "label": "5~10초",
+    "build": 796,
+    "cancel": 41
+   },
+   {
+    "label": "10~30초",
+    "build": 394,
+    "cancel": 66
+   },
+   {
+    "label": "30~60초",
+    "build": 79,
+    "cancel": 26
+   },
+   {
+    "label": "60초 이상",
+    "build": 30,
+    "cancel": 16
+   }
+  ],
+  "pickToPrepare": {
+   "p10": 1.4,
+   "p25": 1.6,
+   "p50": 2.2,
+   "p75": 4.5,
+   "p90": 7.0
+  },
+  "pickN": 5893,
+  "movedOver3": 51,
+  "digDuring": 0,
+  "placeDuring": 0,
+  "afterCancel": {
+   "prep_same": {
+    "n": 137,
+    "dig": 28,
+    "place": 26,
+    "moveMedian": 3.4
+   },
+   "prep_other": {
+    "n": 31,
+    "dig": 3,
+    "place": 1,
+    "moveMedian": 0.0
+   },
+   "none": {
+    "n": 31,
+    "dig": 23,
+    "place": 14,
+    "moveMedian": 12.0
+   }
+  },
+  "learning": [
+   {
+    "player": "P08",
+    "n": 2782,
+    "first10": 14.6,
+    "last10": 2.0
+   },
+   {
+    "player": "P10",
+    "n": 1770,
+    "first10": 6.0,
+    "last10": 2.4
+   },
+   {
+    "player": "P15",
+    "n": 585,
+    "first10": 3.6,
+    "last10": 3.0
+   },
+   {
+    "player": "P07",
+    "n": 190,
+    "first10": 39.3,
+    "last10": 25.1
+   },
+   {
+    "player": "P14",
+    "n": 95,
+    "first10": 17.6,
+    "last10": 9.2
+   },
+   {
+    "player": "P04",
+    "n": 69,
+    "first10": 26.7,
+    "last10": 15.8
+   },
+   {
+    "player": "P03",
+    "n": 61,
+    "first10": 7.3,
+    "last10": 4.1
+   },
+   {
+    "player": "P06",
+    "n": 36,
+    "first10": 10.4,
+    "last10": 28.4
+   },
+   {
+    "player": "P24",
+    "n": 23,
+    "first10": 3.8,
+    "last10": 3.2
+   },
+   {
+    "player": "P13",
+    "n": 20,
+    "first10": 4.3,
+    "last10": 3.4
+   }
+  ],
+  "ops": {
+   "players": 2,
+   "prep": 3364,
+   "build": 2725,
+   "cancel": 630
+  },
+  "detailModalOpens": 1200
+ },
+ "manual": {
+  "cancels": 203724,
+  "players": 74,
+  "byReason": {
+   "target_change": {
+    "n": 129575,
+    "held": {
+     "p10": 18,
+     "p25": 40,
+     "p50": 100,
+     "p75": 209,
+     "p90": 369
+    },
+    "heldBins": [
+     {
+      "label": "0~99",
+      "n": 62122
+     },
+     {
+      "label": "100~199",
+      "n": 32536
+     },
+     {
+      "label": "200~299",
+      "n": 15134
+     },
+     {
+      "label": "300~399",
+      "n": 8571
+     },
+     {
+      "label": "400~499",
+      "n": 5009
+     },
+     {
+      "label": "500+",
+      "n": 6203
+     }
+    ],
+    "next": {
+     "adjacent": 109319,
+     "near": 15403,
+     "none": 644,
+     "far": 1919,
+     "same": 2290
+    },
+    "chargeRatio": {
+     "p10": 0.03,
+     "p25": 0.08,
+     "p50": 0.19,
+     "p75": 0.4,
+     "p90": 0.66
+    }
+   },
+   "mouse_up": {
+    "n": 74149,
+    "held": {
+     "p10": 31,
+     "p25": 61,
+     "p50": 108,
+     "p75": 197,
+     "p90": 331
+    },
+    "heldBins": [
+     {
+      "label": "0~99",
+      "n": 34709
+     },
+     {
+      "label": "100~199",
+      "n": 21174
+     },
+     {
+      "label": "200~299",
+      "n": 8970
+     },
+     {
+      "label": "300~399",
+      "n": 4462
+     },
+     {
+      "label": "400~499",
+      "n": 1861
+     },
+     {
+      "label": "500+",
+      "n": 2973
+     }
+    ],
+    "next": {
+     "none": 17705,
+     "near": 14639,
+     "same": 15811,
+     "adjacent": 18006,
+     "far": 7988
+    },
+    "chargeRatio": {
+     "p10": 0.06,
+     "p25": 0.12,
+     "p50": 0.23,
+     "p75": 0.4,
+     "p90": 0.6
+    }
+   }
+  },
+  "placeContext": {
+   "free": 574429,
+   "bpworld": 48380,
+   "nearbp": 24776,
+   "postrun": 7484
+  },
+  "digContext": {
+   "free": 218495,
+   "bpworld": 20949,
+   "nearbp": 13629,
+   "postrun": 8339
+  },
+  "placeContextPlayers": [
+   {
+    "player": "P03",
+    "total": 151625,
+    "postrun": 378,
+    "nearbp": 1491,
+    "bpworld": 1081,
+    "free": 148675
+   },
+   {
+    "player": "P08",
+    "total": 108995,
+    "postrun": 1625,
+    "nearbp": 9158,
+    "bpworld": 992,
+    "free": 97220
+   },
+   {
+    "player": "P05",
+    "total": 107821,
+    "postrun": 676,
+    "nearbp": 524,
+    "bpworld": 2657,
+    "free": 103964
+   },
+   {
+    "player": "P06",
+    "total": 102555,
+    "postrun": 527,
+    "nearbp": 271,
+    "bpworld": 673,
+    "free": 101084
+   },
+   {
+    "player": "P04",
+    "total": 46075,
+    "postrun": 913,
+    "nearbp": 6593,
+    "bpworld": 10617,
+    "free": 27952
+   },
+   {
+    "player": "P09",
+    "total": 39240,
+    "postrun": 856,
+    "nearbp": 547,
+    "bpworld": 2353,
+    "free": 35484
+   },
+   {
+    "player": "P07",
+    "total": 30268,
+    "postrun": 1208,
+    "nearbp": 5622,
+    "bpworld": 7982,
+    "free": 15456
+   },
+   {
+    "player": "P10",
+    "total": 27096,
+    "postrun": 127,
+    "nearbp": 214,
+    "bpworld": 1489,
+    "free": 25266
+   },
+   {
+    "player": "P11",
+    "total": 12076,
+    "postrun": 6,
+    "nearbp": 10,
+    "bpworld": 10205,
+    "free": 1855
+   },
+   {
+    "player": "P18",
+    "total": 6080,
+    "postrun": 61,
+    "nearbp": 0,
+    "bpworld": 5514,
+    "free": 505
+   },
+   {
+    "player": "P14",
+    "total": 4852,
+    "postrun": 935,
+    "nearbp": 169,
+    "bpworld": 562,
+    "free": 3186
+   },
+   {
+    "player": "P15",
+    "total": 4579,
+    "postrun": 39,
+    "nearbp": 2,
+    "bpworld": 1389,
+    "free": 3149
+   },
+   {
+    "player": "P23",
+    "total": 2634,
+    "postrun": 0,
+    "nearbp": 0,
+    "bpworld": 2024,
+    "free": 610
+   },
+   {
+    "player": "P29",
+    "total": 2503,
+    "postrun": 96,
+    "nearbp": 6,
+    "bpworld": 0,
+    "free": 2401
+   },
+   {
+    "player": "P27",
+    "total": 1744,
+    "postrun": 0,
+    "nearbp": 0,
+    "bpworld": 2,
+    "free": 1742
+   },
+   {
+    "player": "P20",
+    "total": 1464,
+    "postrun": 11,
+    "nearbp": 163,
+    "bpworld": 0,
+    "free": 1290
+   },
+   {
+    "player": "P31",
+    "total": 1440,
+    "postrun": 0,
+    "nearbp": 0,
+    "bpworld": 0,
+    "free": 1440
+   },
+   {
+    "player": "P17",
+    "total": 1088,
+    "postrun": 0,
+    "nearbp": 0,
+    "bpworld": 0,
+    "free": 1088
+   },
+   {
+    "player": "P24",
+    "total": 546,
+    "postrun": 4,
+    "nearbp": 1,
+    "bpworld": 222,
+    "free": 319
+   }
+  ],
+  "blocks": [
+   {
+    "id": "block-87",
+    "cancels": 49337,
+    "targetChange": 33096,
+    "mouseUp": 16241,
+    "tcNext": {
+     "same": 637,
+     "adjacent": 27978,
+     "near": 3890,
+     "far": 446,
+     "none": 145
+    },
+    "muNext": {
+     "same": 3413,
+     "adjacent": 4382,
+     "near": 3872,
+     "far": 1999,
+     "none": 2575
+    }
+   },
+   {
+    "id": "block-136",
+    "cancels": 24054,
+    "targetChange": 18054,
+    "mouseUp": 6000,
+    "tcNext": {
+     "same": 105,
+     "adjacent": 15704,
+     "near": 2020,
+     "far": 169,
+     "none": 56
+    },
+    "muNext": {
+     "same": 1154,
+     "adjacent": 1377,
+     "near": 1182,
+     "far": 719,
+     "none": 1568
+    }
+   },
+   {
+    "id": "block-84",
+    "cancels": 16213,
+    "targetChange": 12947,
+    "mouseUp": 3266,
+    "tcNext": {
+     "same": 100,
+     "adjacent": 10647,
+     "near": 1960,
+     "far": 220,
+     "none": 20
+    },
+    "muNext": {
+     "same": 607,
+     "adjacent": 869,
+     "near": 759,
+     "far": 287,
+     "none": 744
+    }
+   },
+   {
+    "id": "block-141",
+    "cancels": 15353,
+    "targetChange": 12836,
+    "mouseUp": 2517,
+    "tcNext": {
+     "same": 165,
+     "adjacent": 10435,
+     "near": 1736,
+     "far": 440,
+     "none": 60
+    },
+    "muNext": {
+     "same": 460,
+     "adjacent": 497,
+     "near": 494,
+     "far": 309,
+     "none": 757
+    }
+   },
+   {
+    "id": "block-159",
+    "cancels": 8889,
+    "targetChange": 6302,
+    "mouseUp": 2587,
+    "tcNext": {
+     "same": 101,
+     "adjacent": 5621,
+     "near": 518,
+     "far": 41,
+     "none": 21
+    },
+    "muNext": {
+     "same": 542,
+     "adjacent": 614,
+     "near": 609,
+     "far": 267,
+     "none": 555
+    }
+   },
+   {
+    "id": "block-153",
+    "cancels": 7606,
+    "targetChange": 3924,
+    "mouseUp": 3682,
+    "tcNext": {
+     "same": 87,
+     "adjacent": 3248,
+     "near": 514,
+     "far": 52,
+     "none": 23
+    },
+    "muNext": {
+     "same": 788,
+     "adjacent": 969,
+     "near": 593,
+     "far": 360,
+     "none": 972
+    }
+   },
+   {
+    "id": "block-123",
+    "cancels": 3251,
+    "targetChange": 1380,
+    "mouseUp": 1871,
+    "tcNext": {
+     "same": 25,
+     "adjacent": 1157,
+     "near": 169,
+     "far": 17,
+     "none": 12
+    },
+    "muNext": {
+     "same": 357,
+     "adjacent": 573,
+     "near": 348,
+     "far": 142,
+     "none": 451
+    }
+   },
+   {
+    "id": "block-11",
+    "cancels": 3047,
+    "targetChange": 2115,
+    "mouseUp": 932,
+    "tcNext": {
+     "same": 48,
+     "adjacent": 1927,
+     "near": 118,
+     "far": 12,
+     "none": 10
+    },
+    "muNext": {
+     "same": 197,
+     "adjacent": 205,
+     "near": 149,
+     "far": 133,
+     "none": 248
+    }
+   },
+   {
+    "id": "block-174",
+    "cancels": 2890,
+    "targetChange": 982,
+    "mouseUp": 1908,
+    "tcNext": {
+     "same": 10,
+     "adjacent": 851,
+     "near": 86,
+     "far": 25,
+     "none": 10
+    },
+    "muNext": {
+     "same": 400,
+     "adjacent": 592,
+     "near": 388,
+     "far": 148,
+     "none": 380
+    }
+   },
+   {
+    "id": "block-122",
+    "cancels": 2414,
+    "targetChange": 897,
+    "mouseUp": 1517,
+    "tcNext": {
+     "same": 35,
+     "adjacent": 734,
+     "near": 110,
+     "far": 7,
+     "none": 11
+    },
+    "muNext": {
+     "same": 324,
+     "adjacent": 379,
+     "near": 278,
+     "far": 91,
+     "none": 445
+    }
+   },
+   {
+    "id": "block-151",
+    "cancels": 2095,
+    "targetChange": 832,
+    "mouseUp": 1263,
+    "tcNext": {
+     "same": 17,
+     "adjacent": 723,
+     "near": 83,
+     "far": 3,
+     "none": 6
+    },
+    "muNext": {
+     "same": 202,
+     "adjacent": 283,
+     "near": 239,
+     "far": 182,
+     "none": 357
+    }
+   },
+   {
+    "id": "block-192",
+    "cancels": 2084,
+    "targetChange": 789,
+    "mouseUp": 1295,
+    "tcNext": {
+     "same": 19,
+     "adjacent": 606,
+     "near": 141,
+     "far": 20,
+     "none": 3
+    },
+    "muNext": {
+     "same": 191,
+     "adjacent": 395,
+     "near": 308,
+     "far": 111,
+     "none": 290
+    }
+   },
+   {
+    "id": "block-40",
+    "cancels": 2049,
+    "targetChange": 849,
+    "mouseUp": 1200,
+    "tcNext": {
+     "same": 83,
+     "adjacent": 563,
+     "near": 165,
+     "far": 26,
+     "none": 12
+    },
+    "muNext": {
+     "same": 586,
+     "adjacent": 150,
+     "near": 149,
+     "far": 73,
+     "none": 242
+    }
+   },
+   {
+    "id": "block-93",
+    "cancels": 2037,
+    "targetChange": 1611,
+    "mouseUp": 426,
+    "tcNext": {
+     "same": 71,
+     "adjacent": 1338,
+     "near": 185,
+     "far": 11,
+     "none": 6
+    },
+    "muNext": {
+     "same": 145,
+     "adjacent": 75,
+     "near": 67,
+     "far": 24,
+     "none": 115
+    }
+   },
+   {
+    "id": "block-124",
+    "cancels": 1821,
+    "targetChange": 842,
+    "mouseUp": 979,
+    "tcNext": {
+     "same": 30,
+     "adjacent": 732,
+     "near": 73,
+     "far": 6,
+     "none": 1
+    },
+    "muNext": {
+     "same": 178,
+     "adjacent": 317,
+     "near": 172,
+     "far": 127,
+     "none": 185
+    }
+   },
+   {
+    "id": "block-105",
+    "cancels": 1779,
+    "targetChange": 996,
+    "mouseUp": 783,
+    "tcNext": {
+     "same": 23,
+     "adjacent": 820,
+     "near": 135,
+     "far": 11,
+     "none": 7
+    },
+    "muNext": {
+     "same": 147,
+     "adjacent": 161,
+     "near": 154,
+     "far": 77,
+     "none": 244
+    }
+   },
+   {
+    "id": "block-176",
+    "cancels": 1707,
+    "targetChange": 933,
+    "mouseUp": 774,
+    "tcNext": {
+     "same": 16,
+     "adjacent": 824,
+     "near": 85,
+     "far": 2,
+     "none": 6
+    },
+    "muNext": {
+     "same": 125,
+     "adjacent": 210,
+     "near": 168,
+     "far": 86,
+     "none": 185
+    }
+   },
+   {
+    "id": "block-142",
+    "cancels": 1621,
+    "targetChange": 1021,
+    "mouseUp": 600,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 897,
+     "near": 106,
+     "far": 7,
+     "none": 8
+    },
+    "muNext": {
+     "same": 77,
+     "adjacent": 169,
+     "near": 171,
+     "far": 81,
+     "none": 102
+    }
+   },
+   {
+    "id": "block-127",
+    "cancels": 1612,
+    "targetChange": 850,
+    "mouseUp": 762,
+    "tcNext": {
+     "same": 28,
+     "adjacent": 724,
+     "near": 90,
+     "far": 4,
+     "none": 4
+    },
+    "muNext": {
+     "same": 138,
+     "adjacent": 153,
+     "near": 102,
+     "far": 139,
+     "none": 230
+    }
+   },
+   {
+    "id": "block-158",
+    "cancels": 1606,
+    "targetChange": 727,
+    "mouseUp": 879,
+    "tcNext": {
+     "same": 4,
+     "adjacent": 637,
+     "near": 62,
+     "far": 15,
+     "none": 9
+    },
+    "muNext": {
+     "same": 111,
+     "adjacent": 217,
+     "near": 203,
+     "far": 120,
+     "none": 228
+    }
+   },
+   {
+    "id": "block-143",
+    "cancels": 1601,
+    "targetChange": 446,
+    "mouseUp": 1155,
+    "tcNext": {
+     "same": 12,
+     "adjacent": 380,
+     "near": 49,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 204,
+     "adjacent": 281,
+     "near": 236,
+     "far": 136,
+     "none": 298
+    }
+   },
+   {
+    "id": "block-140",
+    "cancels": 1590,
+    "targetChange": 1145,
+    "mouseUp": 445,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 1043,
+     "near": 83,
+     "far": 10,
+     "none": 3
+    },
+    "muNext": {
+     "same": 75,
+     "adjacent": 151,
+     "near": 135,
+     "far": 24,
+     "none": 60
+    }
+   },
+   {
+    "id": "block-106",
+    "cancels": 1575,
+    "targetChange": 645,
+    "mouseUp": 930,
+    "tcNext": {
+     "same": 8,
+     "adjacent": 546,
+     "near": 64,
+     "far": 17,
+     "none": 10
+    },
+    "muNext": {
+     "same": 160,
+     "adjacent": 207,
+     "near": 147,
+     "far": 142,
+     "none": 274
+    }
+   },
+   {
+    "id": "block-85",
+    "cancels": 1573,
+    "targetChange": 959,
+    "mouseUp": 614,
+    "tcNext": {
+     "same": 19,
+     "adjacent": 777,
+     "near": 127,
+     "far": 29,
+     "none": 7
+    },
+    "muNext": {
+     "same": 223,
+     "adjacent": 89,
+     "near": 83,
+     "far": 65,
+     "none": 154
+    }
+   },
+   {
+    "id": "block-83",
+    "cancels": 1512,
+    "targetChange": 781,
+    "mouseUp": 731,
+    "tcNext": {
+     "same": 14,
+     "adjacent": 691,
+     "near": 65,
+     "far": 7,
+     "none": 4
+    },
+    "muNext": {
+     "same": 151,
+     "adjacent": 182,
+     "near": 142,
+     "far": 61,
+     "none": 195
+    }
+   },
+   {
+    "id": "block-16",
+    "cancels": 1468,
+    "targetChange": 794,
+    "mouseUp": 674,
+    "tcNext": {
+     "same": 19,
+     "adjacent": 676,
+     "near": 83,
+     "far": 12,
+     "none": 4
+    },
+    "muNext": {
+     "same": 192,
+     "adjacent": 156,
+     "near": 87,
+     "far": 64,
+     "none": 175
+    }
+   },
+   {
+    "id": "block-73",
+    "cancels": 1389,
+    "targetChange": 863,
+    "mouseUp": 526,
+    "tcNext": {
+     "same": 4,
+     "adjacent": 763,
+     "near": 63,
+     "far": 21,
+     "none": 12
+    },
+    "muNext": {
+     "same": 138,
+     "adjacent": 91,
+     "near": 61,
+     "far": 86,
+     "none": 150
+    }
+   },
+   {
+    "id": "block-6",
+    "cancels": 1364,
+    "targetChange": 704,
+    "mouseUp": 660,
+    "tcNext": {
+     "same": 17,
+     "adjacent": 603,
+     "near": 73,
+     "far": 8,
+     "none": 3
+    },
+    "muNext": {
+     "same": 114,
+     "adjacent": 180,
+     "near": 143,
+     "far": 53,
+     "none": 170
+    }
+   },
+   {
+    "id": "block-162",
+    "cancels": 1339,
+    "targetChange": 882,
+    "mouseUp": 457,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 835,
+     "near": 30,
+     "far": 11,
+     "none": 5
+    },
+    "muNext": {
+     "same": 62,
+     "adjacent": 118,
+     "near": 112,
+     "far": 38,
+     "none": 127
+    }
+   },
+   {
+    "id": "block-230",
+    "cancels": 1327,
+    "targetChange": 826,
+    "mouseUp": 501,
+    "tcNext": {
+     "same": 20,
+     "adjacent": 550,
+     "near": 228,
+     "far": 18,
+     "none": 10
+    },
+    "muNext": {
+     "same": 143,
+     "adjacent": 82,
+     "near": 59,
+     "far": 49,
+     "none": 168
+    }
+   },
+   {
+    "id": "block-27",
+    "cancels": 1257,
+    "targetChange": 909,
+    "mouseUp": 348,
+    "tcNext": {
+     "same": 33,
+     "adjacent": 740,
+     "near": 123,
+     "far": 8,
+     "none": 5
+    },
+    "muNext": {
+     "same": 71,
+     "adjacent": 86,
+     "near": 48,
+     "far": 35,
+     "none": 108
+    }
+   },
+   {
+    "id": "block-154",
+    "cancels": 1241,
+    "targetChange": 717,
+    "mouseUp": 524,
+    "tcNext": {
+     "same": 7,
+     "adjacent": 606,
+     "near": 92,
+     "far": 6,
+     "none": 6
+    },
+    "muNext": {
+     "same": 58,
+     "adjacent": 108,
+     "near": 73,
+     "far": 105,
+     "none": 180
+    }
+   },
+   {
+    "id": "block-120",
+    "cancels": 1211,
+    "targetChange": 417,
+    "mouseUp": 794,
+    "tcNext": {
+     "same": 11,
+     "adjacent": 362,
+     "near": 39,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 213,
+     "adjacent": 216,
+     "near": 132,
+     "far": 60,
+     "none": 173
+    }
+   },
+   {
+    "id": "block-129",
+    "cancels": 1168,
+    "targetChange": 638,
+    "mouseUp": 530,
+    "tcNext": {
+     "same": 19,
+     "adjacent": 556,
+     "near": 58,
+     "far": 4,
+     "none": 1
+    },
+    "muNext": {
+     "same": 165,
+     "adjacent": 130,
+     "near": 74,
+     "far": 56,
+     "none": 105
+    }
+   },
+   {
+    "id": "block-94",
+    "cancels": 1124,
+    "targetChange": 601,
+    "mouseUp": 523,
+    "tcNext": {
+     "same": 17,
+     "adjacent": 524,
+     "near": 54,
+     "far": 5,
+     "none": 1
+    },
+    "muNext": {
+     "same": 136,
+     "adjacent": 83,
+     "near": 85,
+     "far": 104,
+     "none": 115
+    }
+   },
+   {
+    "id": "block-149",
+    "cancels": 1091,
+    "targetChange": 736,
+    "mouseUp": 355,
+    "tcNext": {
+     "same": 32,
+     "adjacent": 610,
+     "near": 87,
+     "far": 4,
+     "none": 3
+    },
+    "muNext": {
+     "same": 148,
+     "adjacent": 44,
+     "near": 41,
+     "far": 24,
+     "none": 98
+    }
+   },
+   {
+    "id": "block-189",
+    "cancels": 1083,
+    "targetChange": 771,
+    "mouseUp": 312,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 690,
+     "near": 73,
+     "far": 5,
+     "none": 0
+    },
+    "muNext": {
+     "same": 61,
+     "adjacent": 85,
+     "near": 58,
+     "far": 29,
+     "none": 79
+    }
+   },
+   {
+    "id": "block-104",
+    "cancels": 965,
+    "targetChange": 559,
+    "mouseUp": 406,
+    "tcNext": {
+     "same": 15,
+     "adjacent": 482,
+     "near": 56,
+     "far": 2,
+     "none": 4
+    },
+    "muNext": {
+     "same": 94,
+     "adjacent": 107,
+     "near": 86,
+     "far": 45,
+     "none": 74
+    }
+   },
+   {
+    "id": "block-116",
+    "cancels": 962,
+    "targetChange": 486,
+    "mouseUp": 476,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 412,
+     "near": 67,
+     "far": 0,
+     "none": 2
+    },
+    "muNext": {
+     "same": 101,
+     "adjacent": 101,
+     "near": 94,
+     "far": 60,
+     "none": 120
+    }
+   },
+   {
+    "id": "block-152",
+    "cancels": 935,
+    "targetChange": 446,
+    "mouseUp": 489,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 392,
+     "near": 43,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 81,
+     "adjacent": 121,
+     "near": 84,
+     "far": 37,
+     "none": 166
+    }
+   },
+   {
+    "id": "block-101",
+    "cancels": 917,
+    "targetChange": 484,
+    "mouseUp": 433,
+    "tcNext": {
+     "same": 13,
+     "adjacent": 383,
+     "near": 74,
+     "far": 10,
+     "none": 4
+    },
+    "muNext": {
+     "same": 46,
+     "adjacent": 93,
+     "near": 70,
+     "far": 100,
+     "none": 124
+    }
+   },
+   {
+    "id": "block-144",
+    "cancels": 887,
+    "targetChange": 735,
+    "mouseUp": 152,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 702,
+     "near": 28,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 25,
+     "adjacent": 53,
+     "near": 54,
+     "far": 4,
+     "none": 16
+    }
+   },
+   {
+    "id": "block-191",
+    "cancels": 872,
+    "targetChange": 296,
+    "mouseUp": 576,
+    "tcNext": {
+     "same": 17,
+     "adjacent": 235,
+     "near": 32,
+     "far": 6,
+     "none": 6
+    },
+    "muNext": {
+     "same": 149,
+     "adjacent": 135,
+     "near": 99,
+     "far": 28,
+     "none": 165
+    }
+   },
+   {
+    "id": "block-163",
+    "cancels": 854,
+    "targetChange": 621,
+    "mouseUp": 233,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 536,
+     "near": 78,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 34,
+     "adjacent": 61,
+     "near": 81,
+     "far": 27,
+     "none": 30
+    }
+   },
+   {
+    "id": "block-98",
+    "cancels": 836,
+    "targetChange": 345,
+    "mouseUp": 491,
+    "tcNext": {
+     "same": 22,
+     "adjacent": 275,
+     "near": 36,
+     "far": 6,
+     "none": 6
+    },
+    "muNext": {
+     "same": 111,
+     "adjacent": 115,
+     "near": 88,
+     "far": 32,
+     "none": 145
+    }
+   },
+   {
+    "id": "block-108",
+    "cancels": 741,
+    "targetChange": 432,
+    "mouseUp": 309,
+    "tcNext": {
+     "same": 9,
+     "adjacent": 353,
+     "near": 57,
+     "far": 8,
+     "none": 5
+    },
+    "muNext": {
+     "same": 70,
+     "adjacent": 64,
+     "near": 55,
+     "far": 35,
+     "none": 85
+    }
+   },
+   {
+    "id": "block-118",
+    "cancels": 711,
+    "targetChange": 210,
+    "mouseUp": 501,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 175,
+     "near": 28,
+     "far": 1,
+     "none": 1
+    },
+    "muNext": {
+     "same": 81,
+     "adjacent": 140,
+     "near": 114,
+     "far": 30,
+     "none": 136
+    }
+   },
+   {
+    "id": "block-184",
+    "cancels": 620,
+    "targetChange": 215,
+    "mouseUp": 405,
+    "tcNext": {
+     "same": 11,
+     "adjacent": 172,
+     "near": 32,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 95,
+     "adjacent": 143,
+     "near": 77,
+     "far": 26,
+     "none": 64
+    }
+   },
+   {
+    "id": "block-8",
+    "cancels": 607,
+    "targetChange": 201,
+    "mouseUp": 406,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 171,
+     "near": 22,
+     "far": 0,
+     "none": 2
+    },
+    "muNext": {
+     "same": 74,
+     "adjacent": 140,
+     "near": 71,
+     "far": 30,
+     "none": 91
+    }
+   },
+   {
+    "id": "block-126",
+    "cancels": 605,
+    "targetChange": 227,
+    "mouseUp": 378,
+    "tcNext": {
+     "same": 10,
+     "adjacent": 198,
+     "near": 14,
+     "far": 2,
+     "none": 3
+    },
+    "muNext": {
+     "same": 77,
+     "adjacent": 104,
+     "near": 67,
+     "far": 15,
+     "none": 115
+    }
+   },
+   {
+    "id": "block-26",
+    "cancels": 543,
+    "targetChange": 203,
+    "mouseUp": 340,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 148,
+     "near": 38,
+     "far": 3,
+     "none": 9
+    },
+    "muNext": {
+     "same": 65,
+     "adjacent": 65,
+     "near": 61,
+     "far": 49,
+     "none": 100
+    }
+   },
+   {
+    "id": "block-157",
+    "cancels": 542,
+    "targetChange": 338,
+    "mouseUp": 204,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 279,
+     "near": 48,
+     "far": 4,
+     "none": 1
+    },
+    "muNext": {
+     "same": 54,
+     "adjacent": 43,
+     "near": 39,
+     "far": 12,
+     "none": 56
+    }
+   },
+   {
+    "id": "block-96",
+    "cancels": 538,
+    "targetChange": 273,
+    "mouseUp": 265,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 244,
+     "near": 21,
+     "far": 3,
+     "none": 4
+    },
+    "muNext": {
+     "same": 10,
+     "adjacent": 57,
+     "near": 54,
+     "far": 65,
+     "none": 79
+    }
+   },
+   {
+    "id": "block-19",
+    "cancels": 521,
+    "targetChange": 82,
+    "mouseUp": 439,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 48,
+     "near": 20,
+     "far": 9,
+     "none": 5
+    },
+    "muNext": {
+     "same": 178,
+     "adjacent": 17,
+     "near": 21,
+     "far": 26,
+     "none": 197
+    }
+   },
+   {
+    "id": "block-193",
+    "cancels": 520,
+    "targetChange": 217,
+    "mouseUp": 303,
+    "tcNext": {
+     "same": 18,
+     "adjacent": 159,
+     "near": 36,
+     "far": 3,
+     "none": 1
+    },
+    "muNext": {
+     "same": 84,
+     "adjacent": 91,
+     "near": 41,
+     "far": 20,
+     "none": 67
+    }
+   },
+   {
+    "id": "block-2",
+    "cancels": 499,
+    "targetChange": 316,
+    "mouseUp": 183,
+    "tcNext": {
+     "same": 12,
+     "adjacent": 248,
+     "near": 36,
+     "far": 15,
+     "none": 5
+    },
+    "muNext": {
+     "same": 42,
+     "adjacent": 26,
+     "near": 21,
+     "far": 14,
+     "none": 80
+    }
+   },
+   {
+    "id": "block-177",
+    "cancels": 488,
+    "targetChange": 284,
+    "mouseUp": 204,
+    "tcNext": {
+     "same": 19,
+     "adjacent": 213,
+     "near": 34,
+     "far": 6,
+     "none": 12
+    },
+    "muNext": {
+     "same": 47,
+     "adjacent": 11,
+     "near": 33,
+     "far": 22,
+     "none": 91
+    }
+   },
+   {
+    "id": "block-41",
+    "cancels": 459,
+    "targetChange": 246,
+    "mouseUp": 213,
+    "tcNext": {
+     "same": 26,
+     "adjacent": 176,
+     "near": 40,
+     "far": 1,
+     "none": 3
+    },
+    "muNext": {
+     "same": 74,
+     "adjacent": 29,
+     "near": 44,
+     "far": 12,
+     "none": 54
+    }
+   },
+   {
+    "id": "block-97",
+    "cancels": 448,
+    "targetChange": 135,
+    "mouseUp": 313,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 106,
+     "near": 15,
+     "far": 6,
+     "none": 2
+    },
+    "muNext": {
+     "same": 35,
+     "adjacent": 119,
+     "near": 62,
+     "far": 14,
+     "none": 83
+    }
+   },
+   {
+    "id": "block-30",
+    "cancels": 416,
+    "targetChange": 259,
+    "mouseUp": 157,
+    "tcNext": {
+     "same": 8,
+     "adjacent": 210,
+     "near": 31,
+     "far": 9,
+     "none": 1
+    },
+    "muNext": {
+     "same": 48,
+     "adjacent": 28,
+     "near": 15,
+     "far": 16,
+     "none": 50
+    }
+   },
+   {
+    "id": "block-179",
+    "cancels": 415,
+    "targetChange": 295,
+    "mouseUp": 120,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 234,
+     "near": 53,
+     "far": 3,
+     "none": 0
+    },
+    "muNext": {
+     "same": 16,
+     "adjacent": 23,
+     "near": 25,
+     "far": 11,
+     "none": 45
+    }
+   },
+   {
+    "id": "block-180",
+    "cancels": 408,
+    "targetChange": 140,
+    "mouseUp": 268,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 113,
+     "near": 18,
+     "far": 2,
+     "none": 1
+    },
+    "muNext": {
+     "same": 51,
+     "adjacent": 59,
+     "near": 52,
+     "far": 17,
+     "none": 89
+    }
+   },
+   {
+    "id": "block-181",
+    "cancels": 401,
+    "targetChange": 146,
+    "mouseUp": 255,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 121,
+     "near": 22,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 26,
+     "adjacent": 74,
+     "near": 55,
+     "far": 34,
+     "none": 66
+    }
+   },
+   {
+    "id": "block-186",
+    "cancels": 398,
+    "targetChange": 243,
+    "mouseUp": 155,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 198,
+     "near": 35,
+     "far": 3,
+     "none": 1
+    },
+    "muNext": {
+     "same": 39,
+     "adjacent": 23,
+     "near": 33,
+     "far": 14,
+     "none": 46
+    }
+   },
+   {
+    "id": "block-173",
+    "cancels": 397,
+    "targetChange": 68,
+    "mouseUp": 329,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 57,
+     "near": 6,
+     "far": 5,
+     "none": 0
+    },
+    "muNext": {
+     "same": 55,
+     "adjacent": 79,
+     "near": 90,
+     "far": 36,
+     "none": 69
+    }
+   },
+   {
+    "id": "block-42",
+    "cancels": 388,
+    "targetChange": 316,
+    "mouseUp": 72,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 287,
+     "near": 23,
+     "far": 3,
+     "none": 0
+    },
+    "muNext": {
+     "same": 12,
+     "adjacent": 17,
+     "near": 5,
+     "far": 14,
+     "none": 24
+    }
+   },
+   {
+    "id": "block-128",
+    "cancels": 376,
+    "targetChange": 245,
+    "mouseUp": 131,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 219,
+     "near": 21,
+     "far": 1,
+     "none": 1
+    },
+    "muNext": {
+     "same": 17,
+     "adjacent": 31,
+     "near": 18,
+     "far": 12,
+     "none": 53
+    }
+   },
+   {
+    "id": "block-3",
+    "cancels": 372,
+    "targetChange": 261,
+    "mouseUp": 111,
+    "tcNext": {
+     "same": 13,
+     "adjacent": 215,
+     "near": 31,
+     "far": 0,
+     "none": 2
+    },
+    "muNext": {
+     "same": 31,
+     "adjacent": 20,
+     "near": 13,
+     "far": 17,
+     "none": 30
+    }
+   },
+   {
+    "id": "block-29",
+    "cancels": 369,
+    "targetChange": 288,
+    "mouseUp": 81,
+    "tcNext": {
+     "same": 9,
+     "adjacent": 227,
+     "near": 38,
+     "far": 9,
+     "none": 5
+    },
+    "muNext": {
+     "same": 20,
+     "adjacent": 11,
+     "near": 13,
+     "far": 6,
+     "none": 31
+    }
+   },
+   {
+    "id": "block-229",
+    "cancels": 367,
+    "targetChange": 156,
+    "mouseUp": 211,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 144,
+     "near": 10,
+     "far": 2,
+     "none": 0
+    },
+    "muNext": {
+     "same": 67,
+     "adjacent": 24,
+     "near": 27,
+     "far": 25,
+     "none": 68
+    }
+   },
+   {
+    "id": "block-145",
+    "cancels": 344,
+    "targetChange": 239,
+    "mouseUp": 105,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 221,
+     "near": 17,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 17,
+     "adjacent": 17,
+     "near": 37,
+     "far": 15,
+     "none": 19
+    }
+   },
+   {
+    "id": "block-5",
+    "cancels": 338,
+    "targetChange": 232,
+    "mouseUp": 106,
+    "tcNext": {
+     "same": 9,
+     "adjacent": 184,
+     "near": 32,
+     "far": 6,
+     "none": 1
+    },
+    "muNext": {
+     "same": 31,
+     "adjacent": 16,
+     "near": 8,
+     "far": 8,
+     "none": 43
+    }
+   },
+   {
+    "id": "block-175",
+    "cancels": 317,
+    "targetChange": 154,
+    "mouseUp": 163,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 133,
+     "near": 10,
+     "far": 4,
+     "none": 1
+    },
+    "muNext": {
+     "same": 43,
+     "adjacent": 39,
+     "near": 23,
+     "far": 11,
+     "none": 47
+    }
+   },
+   {
+    "id": "block-214",
+    "cancels": 314,
+    "targetChange": 196,
+    "mouseUp": 118,
+    "tcNext": {
+     "same": 7,
+     "adjacent": 164,
+     "near": 19,
+     "far": 6,
+     "none": 0
+    },
+    "muNext": {
+     "same": 51,
+     "adjacent": 14,
+     "near": 18,
+     "far": 11,
+     "none": 24
+    }
+   },
+   {
+    "id": "block-92",
+    "cancels": 291,
+    "targetChange": 175,
+    "mouseUp": 116,
+    "tcNext": {
+     "same": 7,
+     "adjacent": 143,
+     "near": 21,
+     "far": 3,
+     "none": 1
+    },
+    "muNext": {
+     "same": 35,
+     "adjacent": 17,
+     "near": 29,
+     "far": 4,
+     "none": 31
+    }
+   },
+   {
+    "id": "block-36",
+    "cancels": 290,
+    "targetChange": 214,
+    "mouseUp": 76,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 166,
+     "near": 41,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 22,
+     "adjacent": 15,
+     "near": 10,
+     "far": 8,
+     "none": 21
+    }
+   },
+   {
+    "id": "block-25",
+    "cancels": 257,
+    "targetChange": 125,
+    "mouseUp": 132,
+    "tcNext": {
+     "same": 4,
+     "adjacent": 108,
+     "near": 12,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 35,
+     "adjacent": 32,
+     "near": 15,
+     "far": 13,
+     "none": 37
+    }
+   },
+   {
+    "id": "block-107",
+    "cancels": 255,
+    "targetChange": 101,
+    "mouseUp": 154,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 83,
+     "near": 16,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 38,
+     "adjacent": 37,
+     "near": 31,
+     "far": 10,
+     "none": 38
+    }
+   },
+   {
+    "id": "block-168",
+    "cancels": 253,
+    "targetChange": 86,
+    "mouseUp": 167,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 83,
+     "near": 2,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 26,
+     "adjacent": 43,
+     "near": 35,
+     "far": 25,
+     "none": 38
+    }
+   },
+   {
+    "id": "block-31",
+    "cancels": 248,
+    "targetChange": 163,
+    "mouseUp": 85,
+    "tcNext": {
+     "same": 16,
+     "adjacent": 93,
+     "near": 46,
+     "far": 4,
+     "none": 4
+    },
+    "muNext": {
+     "same": 21,
+     "adjacent": 11,
+     "near": 15,
+     "far": 7,
+     "none": 31
+    }
+   },
+   {
+    "id": "block-99",
+    "cancels": 232,
+    "targetChange": 74,
+    "mouseUp": 158,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 52,
+     "near": 11,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 28,
+     "adjacent": 46,
+     "near": 38,
+     "far": 14,
+     "none": 32
+    }
+   },
+   {
+    "id": "block-121",
+    "cancels": 216,
+    "targetChange": 58,
+    "mouseUp": 158,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 47,
+     "near": 11,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 36,
+     "adjacent": 22,
+     "near": 27,
+     "far": 30,
+     "none": 43
+    }
+   },
+   {
+    "id": "block-91",
+    "cancels": 211,
+    "targetChange": 75,
+    "mouseUp": 136,
+    "tcNext": {
+     "same": 4,
+     "adjacent": 60,
+     "near": 10,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 45,
+     "adjacent": 37,
+     "near": 18,
+     "far": 3,
+     "none": 33
+    }
+   },
+   {
+    "id": "block-135",
+    "cancels": 200,
+    "targetChange": 136,
+    "mouseUp": 64,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 125,
+     "near": 6,
+     "far": 2,
+     "none": 1
+    },
+    "muNext": {
+     "same": 20,
+     "adjacent": 13,
+     "near": 5,
+     "far": 7,
+     "none": 19
+    }
+   },
+   {
+    "id": "block-86",
+    "cancels": 197,
+    "targetChange": 90,
+    "mouseUp": 107,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 72,
+     "near": 13,
+     "far": 1,
+     "none": 2
+    },
+    "muNext": {
+     "same": 71,
+     "adjacent": 6,
+     "near": 2,
+     "far": 7,
+     "none": 21
+    }
+   },
+   {
+    "id": "block-134",
+    "cancels": 192,
+    "targetChange": 152,
+    "mouseUp": 40,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 140,
+     "near": 6,
+     "far": 2,
+     "none": 3
+    },
+    "muNext": {
+     "same": 11,
+     "adjacent": 7,
+     "near": 6,
+     "far": 2,
+     "none": 14
+    }
+   },
+   {
+    "id": "block-166",
+    "cancels": 187,
+    "targetChange": 73,
+    "mouseUp": 114,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 60,
+     "near": 11,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 20,
+     "adjacent": 25,
+     "near": 20,
+     "far": 23,
+     "none": 26
+    }
+   },
+   {
+    "id": "block-117",
+    "cancels": 187,
+    "targetChange": 63,
+    "mouseUp": 124,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 60,
+     "near": 2,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 41,
+     "adjacent": 31,
+     "near": 20,
+     "far": 7,
+     "none": 25
+    }
+   },
+   {
+    "id": "block-167",
+    "cancels": 186,
+    "targetChange": 80,
+    "mouseUp": 106,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 68,
+     "near": 8,
+     "far": 1,
+     "none": 2
+    },
+    "muNext": {
+     "same": 26,
+     "adjacent": 26,
+     "near": 17,
+     "far": 13,
+     "none": 24
+    }
+   },
+   {
+    "id": "block-211",
+    "cancels": 186,
+    "targetChange": 97,
+    "mouseUp": 89,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 79,
+     "near": 12,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 34,
+     "adjacent": 19,
+     "near": 12,
+     "far": 8,
+     "none": 16
+    }
+   },
+   {
+    "id": "block-164",
+    "cancels": 183,
+    "targetChange": 45,
+    "mouseUp": 138,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 43,
+     "near": 2,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 42,
+     "adjacent": 38,
+     "near": 29,
+     "far": 11,
+     "none": 18
+    }
+   },
+   {
+    "id": "block-137",
+    "cancels": 183,
+    "targetChange": 65,
+    "mouseUp": 118,
+    "tcNext": {
+     "same": 4,
+     "adjacent": 56,
+     "near": 4,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 16,
+     "adjacent": 21,
+     "near": 27,
+     "far": 22,
+     "none": 32
+    }
+   },
+   {
+    "id": "block-37",
+    "cancels": 177,
+    "targetChange": 139,
+    "mouseUp": 38,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 111,
+     "near": 22,
+     "far": 2,
+     "none": 1
+    },
+    "muNext": {
+     "same": 10,
+     "adjacent": 2,
+     "near": 8,
+     "far": 1,
+     "none": 17
+    }
+   },
+   {
+    "id": "block-178",
+    "cancels": 170,
+    "targetChange": 99,
+    "mouseUp": 71,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 79,
+     "near": 15,
+     "far": 2,
+     "none": 1
+    },
+    "muNext": {
+     "same": 22,
+     "adjacent": 10,
+     "near": 11,
+     "far": 3,
+     "none": 25
+    }
+   },
+   {
+    "id": "block-34",
+    "cancels": 166,
+    "targetChange": 100,
+    "mouseUp": 66,
+    "tcNext": {
+     "same": 8,
+     "adjacent": 81,
+     "near": 10,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 19,
+     "adjacent": 7,
+     "near": 11,
+     "far": 12,
+     "none": 17
+    }
+   },
+   {
+    "id": "block-33",
+    "cancels": 164,
+    "targetChange": 61,
+    "mouseUp": 103,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 35,
+     "near": 21,
+     "far": 2,
+     "none": 0
+    },
+    "muNext": {
+     "same": 28,
+     "adjacent": 10,
+     "near": 14,
+     "far": 13,
+     "none": 38
+    }
+   },
+   {
+    "id": "block-4",
+    "cancels": 157,
+    "targetChange": 76,
+    "mouseUp": 81,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 67,
+     "near": 6,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 30,
+     "adjacent": 19,
+     "near": 14,
+     "far": 6,
+     "none": 12
+    }
+   },
+   {
+    "id": "block-103",
+    "cancels": 156,
+    "targetChange": 111,
+    "mouseUp": 45,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 94,
+     "near": 14,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 14,
+     "adjacent": 6,
+     "near": 3,
+     "far": 3,
+     "none": 19
+    }
+   },
+   {
+    "id": "block-150",
+    "cancels": 153,
+    "targetChange": 52,
+    "mouseUp": 101,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 30,
+     "near": 20,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 14,
+     "adjacent": 14,
+     "near": 36,
+     "far": 12,
+     "none": 25
+    }
+   },
+   {
+    "id": "block-28",
+    "cancels": 153,
+    "targetChange": 85,
+    "mouseUp": 68,
+    "tcNext": {
+     "same": 6,
+     "adjacent": 72,
+     "near": 6,
+     "far": 1,
+     "none": 0
+    },
+    "muNext": {
+     "same": 22,
+     "adjacent": 10,
+     "near": 6,
+     "far": 5,
+     "none": 25
+    }
+   },
+   {
+    "id": "block-187",
+    "cancels": 151,
+    "targetChange": 78,
+    "mouseUp": 73,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 69,
+     "near": 6,
+     "far": 2,
+     "none": 0
+    },
+    "muNext": {
+     "same": 6,
+     "adjacent": 19,
+     "near": 7,
+     "far": 13,
+     "none": 28
+    }
+   },
+   {
+    "id": "block-32",
+    "cancels": 143,
+    "targetChange": 64,
+    "mouseUp": 79,
+    "tcNext": {
+     "same": 5,
+     "adjacent": 48,
+     "near": 11,
+     "far": 0,
+     "none": 0
+    },
+    "muNext": {
+     "same": 22,
+     "adjacent": 13,
+     "near": 12,
+     "far": 3,
+     "none": 29
+    }
+   },
+   {
+    "id": "block-110",
+    "cancels": 141,
+    "targetChange": 43,
+    "mouseUp": 98,
+    "tcNext": {
+     "same": 1,
+     "adjacent": 37,
+     "near": 3,
+     "far": 0,
+     "none": 2
+    },
+    "muNext": {
+     "same": 18,
+     "adjacent": 19,
+     "near": 21,
+     "far": 4,
+     "none": 36
+    }
+   },
+   {
+    "id": "block-160",
+    "cancels": 139,
+    "targetChange": 53,
+    "mouseUp": 86,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 41,
+     "near": 9,
+     "far": 0,
+     "none": 1
+    },
+    "muNext": {
+     "same": 41,
+     "adjacent": 6,
+     "near": 7,
+     "far": 7,
+     "none": 25
+    }
+   },
+   {
+    "id": "block-210",
+    "cancels": 124,
+    "targetChange": 52,
+    "mouseUp": 72,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 38,
+     "near": 8,
+     "far": 2,
+     "none": 1
+    },
+    "muNext": {
+     "same": 32,
+     "adjacent": 6,
+     "near": 8,
+     "far": 10,
+     "none": 16
+    }
+   },
+   {
+    "id": "block-109",
+    "cancels": 123,
+    "targetChange": 43,
+    "mouseUp": 80,
+    "tcNext": {
+     "same": 0,
+     "adjacent": 34,
+     "near": 6,
+     "far": 0,
+     "none": 3
+    },
+    "muNext": {
+     "same": 23,
+     "adjacent": 8,
+     "near": 11,
+     "far": 8,
+     "none": 30
+    }
+   },
+   {
+    "id": "block-185",
+    "cancels": 117,
+    "targetChange": 31,
+    "mouseUp": 86,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 21,
+     "near": 3,
+     "far": 3,
+     "none": 2
+    },
+    "muNext": {
+     "same": 26,
+     "adjacent": 10,
+     "near": 8,
+     "far": 19,
+     "none": 23
+    }
+   },
+   {
+    "id": "block-23",
+    "cancels": 104,
+    "targetChange": 77,
+    "mouseUp": 27,
+    "tcNext": {
+     "same": 3,
+     "adjacent": 62,
+     "near": 6,
+     "far": 6,
+     "none": 0
+    },
+    "muNext": {
+     "same": 9,
+     "adjacent": 0,
+     "near": 5,
+     "far": 0,
+     "none": 13
+    }
+   },
+   {
+    "id": "block-59",
+    "cancels": 102,
+    "targetChange": 43,
+    "mouseUp": 59,
+    "tcNext": {
+     "same": 2,
+     "adjacent": 35,
+     "near": 2,
+     "far": 3,
+     "none": 1
+    },
+    "muNext": {
+     "same": 10,
+     "adjacent": 14,
+     "near": 10,
+     "far": 3,
+     "none": 22
+    }
+   }
+  ],
+  "manualPerMin": {
+   "p10": 6.12,
+   "p25": 11.0,
+   "p50": 20.25,
+   "p75": 38.26,
+   "p90": 58.74
+  },
+  "manualDays": 242,
+  "bigBpPerSec": {
+   "p10": 3.38,
+   "p25": 3.63,
+   "p50": 3.74,
+   "p75": 3.83,
+   "p90": 3.95
+  },
+  "bigBpRuns": 282
+ }
+}

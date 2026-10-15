@@ -41,18 +41,6 @@ export interface Transition {
   n: number;
 }
 
-export interface Kpi {
-  label: string;
-  value: string;
-  hint: string;
-}
-
-/** A few 0..1 values that sum up the topic on the overview card. */
-export interface Highlight {
-  label: string;
-  value: number;
-}
-
 export interface TopicData {
   id: TopicId;
   opsExcluded: boolean;
@@ -61,7 +49,4 @@ export interface TopicData {
   entityGroups: EntityGroup[];
   overallReactions: Reaction[];
   edges: Transition[];
-  kpis: Kpi[];
-  highlightTitle: string;
-  highlights: Highlight[];
 }

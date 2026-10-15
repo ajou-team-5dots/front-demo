@@ -1,5 +1,6 @@
 // Chart configs shared by the topic dashboards and the visualization test page.
 import type { StackedRow, StackedSeries } from '@/components/charts/stacked-bar';
+import type { BlockCancel } from '@/types/insights';
 import type { EntityGroup, TopicData, TopicEntity, TopicId } from '@/types/topics';
 import type { ReactionMixRow } from '@/types/viz';
 
@@ -54,7 +55,7 @@ export function overviewViews(
             hollow: entity.flags.length > 0,
           })),
           xLabel: '실행 수',
-          yLabel: '직후 수정 비율',
+          yLabel: '결과물 칸 자체를 고친 비율',
           xDomain: [4, 2000],
           sizeLabel: '플레이어 수',
           labelSlugs: notable,
@@ -72,7 +73,7 @@ export function overviewViews(
         .map((entity) => entity.slug);
       return {
         id: group.id,
-        label: `${group.label} ${group.entities.length}`,
+        label: `취소율 · ${group.label} ${group.entities.length}`,
         scatter: {
           points: group.entities.map((entity) => ({
             slug: entity.slug,
@@ -97,7 +98,7 @@ export function overviewViews(
             },
           ],
         },
-        note: '빨강 = 조준 변경이 대부분(조작 신호) · 청록 = 손 뗌이 대부분(실제 막힘 후보) · 회색 = 취소 없음',
+        note: '빨강 = 조준 변경이 대부분(훑기 조작) · 청록 = 손 뗌이 대부분 · 회색 = 취소 없음. 취소율이 높다고 막힌 블록은 아니다 → 막힘 후보 탭',
       };
     }
     return {
@@ -117,6 +118,46 @@ export function overviewViews(
       note: '설계도 실행은 건너뛴 블록이 생긴 실행 비율 · n = 시도 수',
     };
   });
+}
+
+/**
+ * Blocks by how often a cancel was a release followed by re-mining the same cell:
+ * the likeliest "really stuck" cases, unlike the raw cancel rate (mostly sweeping).
+ */
+export function blockRetryView(group: EntityGroup, blocks: BlockCancel[]): OverviewView {
+  const byId = new Map(blocks.map((block) => [block.id, block]));
+  const points = group.entities.flatMap((entity) => {
+    const block = byId.get(entity.id);
+    return block
+      ? [
+          {
+            slug: entity.slug,
+            name: entity.name,
+            x: block.cancels,
+            y: block.muNext.same / Math.max(block.cancels, 1),
+            size: entity.players,
+            tone: 'release' as const,
+          },
+        ]
+      : [];
+  });
+  const notable = points
+    .filter((point) => point.x >= 1000)
+    .sort((a, b) => b.y - a.y)
+    .slice(0, 3)
+    .map((point) => point.slug);
+  return {
+    id: 'block-retry',
+    label: '막힘 후보',
+    scatter: {
+      points,
+      xLabel: '채굴 취소 수',
+      yLabel: '손 뗀 뒤 같은 칸 재시작 ÷ 취소',
+      sizeLabel: '플레이어 수',
+      labelSlugs: notable,
+    },
+    note: '취소 100건 이상 블록. 위쪽일수록 손을 뗐다가 같은 칸을 다시 캔 비율이 높다 (충전 부담 후보, 해석 3)',
+  };
 }
 
 /** Rows for the 100% stacked bar of first actions after a run. */

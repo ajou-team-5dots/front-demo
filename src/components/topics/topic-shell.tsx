@@ -18,15 +18,15 @@ import { RoleSwitcher } from './role-lens';
 type NavId = 'overview' | TopicId | 'viz-test';
 
 const NAV: { id: NavId; href: string; label: string; icon: typeof ChartColumn }[] = [
-  { id: 'overview', href: '/topics', label: '개요', icon: LayoutDashboard },
-  { id: 'postrun', href: '/topics/postrun', label: `T1 ${TOPIC_META.postrun.ask}`, icon: Wrench },
+  { id: 'overview', href: '/topics', label: '개요 · 건축 흐름', icon: LayoutDashboard },
+  { id: 'loop', href: '/topics/loop', label: `① T3 ${TOPIC_META.loop.ask}`, icon: GitBranch },
+  { id: 'postrun', href: '/topics/postrun', label: `② T1 ${TOPIC_META.postrun.ask}`, icon: Wrench },
   {
     id: 'friction',
     href: '/topics/friction',
-    label: `T2 ${TOPIC_META.friction.ask}`,
+    label: `③ T2 ${TOPIC_META.friction.ask}`,
     icon: Crosshair,
   },
-  { id: 'loop', href: '/topics/loop', label: `T3 ${TOPIC_META.loop.ask}`, icon: GitBranch },
   { id: 'viz-test', href: '/visualization-test', label: '시각화 실험', icon: FlaskConical },
 ];
 

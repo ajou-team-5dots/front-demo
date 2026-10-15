@@ -1,81 +1,58 @@
-import { ArrowRight, Crosshair, GitBranch, Wrench } from 'lucide-react';
-import Link from 'next/link';
-
-import { BarChart } from '@/components/charts/bar-chart';
+import { SampleNote } from '@/components/insights/insight-evidence';
+import { FlowOverview } from '@/components/topics/flow-stepper';
 import { TopicShell } from '@/components/topics/topic-shell';
-import { TOPIC_META } from '@/lib/topic-meta';
-import { getTopicData, TOPIC_IDS } from '@/server/data/topics';
+import { getBuildingInsights, getTopicInsight } from '@/server/data/insights';
+import { TOPIC_IDS } from '@/server/data/topics';
+import type { InsightSummary } from '@/types/insights';
 import type { TopicId } from '@/types/topics';
 
-const TOPIC_ICONS: Record<TopicId, typeof Wrench> = {
-  postrun: Wrench,
-  friction: Crosshair,
-  loop: GitBranch,
-};
+const STEPS = [
+  '관찰: 로그에 남은 행동과 n',
+  '해석: 같은 행동을 설명하는 여러 이유',
+  '근거: 이유마다 "맞다면 남을 흔적"을 실제와 비교',
+  '대상별 탐색: 설계도·블록·행동 하나씩',
+  '개선: 어느 해석이면 누가 무엇을 고치나',
+];
 
 export default async function TopicsPage() {
-  const topics = await Promise.all(TOPIC_IDS.map((id) => getTopicData(id)));
+  const [entries, data] = await Promise.all([
+    Promise.all(TOPIC_IDS.map(async (id) => [id, (await getTopicInsight(id)).summary] as const)),
+    getBuildingInsights(),
+  ]);
+  const summaries = Object.fromEntries(entries) as Record<TopicId, InsightSummary>;
 
   return (
     <TopicShell
       current="overview"
-      eyebrow="5dots · Akkadia 행동 데이터"
-      title="무언가를 했다 → 그 직후 무엇을 했나"
-      subtitle="같은 화면 틀로 보는 주제 3개"
+      eyebrow="5dots · Akkadia 건축 행동"
+      title="건축하는 동안 무엇이 방해되고, 무엇을 고쳐야 하나"
+      subtitle="설계도를 고르고 → 실행해 고치고 → 손으로 캐고 짓는 흐름을 따라, 같은 행동의 여러 해석을 로그로 가려 본다"
     >
-      <div className="grid gap-6 lg:grid-cols-3">
-        {topics.map((data) => {
-          const meta = TOPIC_META[data.id];
-          const Icon = TOPIC_ICONS[data.id];
-          const [headline] = data.kpis;
-          return (
-            <Link
-              key={data.id}
-              href={`/topics/${data.id}`}
-              className="group flex flex-col gap-5 rounded-lg border bg-card p-6 transition duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-card"
-            >
-              <div className="flex items-center gap-3">
-                <span className="flex size-11 items-center justify-center rounded-md bg-primary-soft text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <span className="text-xs font-bold text-muted-foreground">
-                  {meta.code} · {meta.title}
-                </span>
-              </div>
-              <span className="text-2xl font-black tracking-tight">{meta.ask}?</span>
-              {headline && (
-                <div className="flex flex-col">
-                  <span className="text-4xl font-black tracking-tight tabular-nums">
-                    {headline.value}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{headline.label}</span>
-                </div>
-              )}
-              <div className="flex flex-col gap-2 border-t pt-4">
-                <span className="text-xs font-bold text-muted-foreground">
-                  {data.highlightTitle}
-                </span>
-                <BarChart
-                  items={data.highlights.map((item) => ({
-                    key: item.label,
-                    label: item.label,
-                    value: item.value,
-                    valueLabel: `${(item.value * 100).toFixed(1)}%`,
-                  }))}
-                  labelWidth={118}
-                  width={340}
-                  rowHeight={30}
-                  ariaLabel={data.highlightTitle}
-                />
-              </div>
-              <span className="mt-auto flex items-center gap-1 text-sm font-bold text-primary">
-                {meta.detailTitle} 보기
-                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+      <FlowOverview summaries={summaries} />
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-extrabold">각 대시보드를 읽는 순서</h2>
+        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {STEPS.map((step, index) => (
+            <li key={step} className="flex items-start gap-3 rounded-lg border bg-card p-4 text-sm">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-black text-primary-foreground">
+                {index + 1}
               </span>
-            </Link>
-          );
-        })}
-      </div>
+              {step}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="flex flex-col gap-2 rounded-lg border bg-card p-6 text-sm">
+        <h2 className="text-lg font-extrabold">이번에 뺀 것</h2>
+        <p>
+          렐름·설계도 생성 같은 서버 기능의 실패는 건축 방해로 보지 않는다. 연결 오류는 게임이
+          재시도로 보정하는 구조이기 때문이다 (개발 측 설명). 이탈·잔존 지표도 만들지 않는다.
+        </p>
+      </section>
+
+      <SampleNote meta={data.meta} />
     </TopicShell>
   );
 }

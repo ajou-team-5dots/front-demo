@@ -1,11 +1,15 @@
 'use client';
 
+import { Lightbulb } from 'lucide-react';
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
+import type { RoleAction } from '@/lib/insight-meta';
 import { PANEL_LABELS, type PanelId, ROLES, type RoleId, TOPIC_META } from '@/lib/topic-meta';
 import { cn } from '@/lib/utils';
 import type { TopicId } from '@/types/topics';
+
+import { useSelectedHypothesis } from './hypothesis-lens';
 
 interface RoleLensState {
   role: RoleId | null;
@@ -99,6 +103,8 @@ interface LensPanelProps {
   variant?: 'card' | 'bare';
   /** Shadow only for the one panel a page is about. */
   elevated?: boolean;
+  /** Readings (hypothesis ids) this panel helps tell apart; lit when one of them is chosen. */
+  hypotheses?: string[];
 }
 
 /** A dashboard panel that lights up when the selected role should look at it. */
@@ -113,12 +119,15 @@ export function LensPanel({
   className,
   variant = 'card',
   elevated = false,
+  hypotheses = [],
 }: LensPanelProps) {
   const { role } = useContext(RoleLensContext);
+  const hypothesis = useSelectedHypothesis(topicId);
   const lens = role ? TOPIC_META[topicId].roles[role] : undefined;
   const panels = Array.isArray(panel) ? panel : [panel];
   const highlighted = panels.some((item) => lens?.panels.includes(item));
-  const dimmed = role !== null && !highlighted;
+  const tested = hypothesis !== null && hypotheses.includes(hypothesis);
+  const dimmed = (role !== null && !highlighted) || (hypothesis !== null && !tested);
   const roleLabel = ROLES.find((item) => item.id === role)?.label;
 
   return (
@@ -129,18 +138,19 @@ export function LensPanel({
         variant === 'card' && 'rounded-lg border bg-card p-6',
         elevated && 'shadow-card',
         variant === 'bare' && 'rounded-lg',
-        highlighted && 'ring-2 ring-primary ring-offset-4 ring-offset-background',
+        (highlighted || tested) && 'ring-2 ring-primary ring-offset-4 ring-offset-background',
         dimmed && 'opacity-50',
         className,
       )}
     >
-      {(title || action || highlighted) && (
+      {(title || action || highlighted || tested) && (
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
             {title && <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>}
             {description && <p className={cn('text-sm', 'text-muted-foreground')}>{description}</p>}
           </div>
           <div className="flex items-center gap-2">
+            {tested && <Badge variant="secondary">선택한 해석의 근거</Badge>}
             {highlighted && <Badge>{roleLabel}이 볼 곳</Badge>}
             {action}
           </div>
@@ -148,5 +158,41 @@ export function LensPanel({
       )}
       {children}
     </section>
+  );
+}
+
+/** Conditional fixes per role; the chosen role's cards stay lit, the rest fade. */
+export function RoleActionCards({ actions }: { actions: RoleAction[] }) {
+  const { role } = useContext(RoleLensContext);
+  return (
+    <ul className="grid gap-3 md:grid-cols-2">
+      {actions.map((item) => {
+        const label = ROLES.find((entry) => entry.id === item.role)?.label ?? item.role;
+        const mine = role === item.role;
+        return (
+          <li
+            key={`${item.role}-${item.action}`}
+            className={cn(
+              'flex gap-3 rounded-lg border bg-card p-5 transition-all duration-200',
+              mine && 'ring-2 ring-primary',
+              role !== null && !mine && 'opacity-50',
+            )}
+          >
+            <Lightbulb className="mt-0.5 size-5 shrink-0 text-primary" />
+            <div className="flex flex-col gap-1 text-sm">
+              <span className="flex flex-wrap items-center gap-2">
+                <span className="font-extrabold">{label}</span>
+                {item.when && (
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                    {item.when}
+                  </span>
+                )}
+              </span>
+              <span>{item.action}</span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

@@ -1,9 +1,12 @@
+import type { InsightId } from '@/types/insights';
 import type { TopicId } from '@/types/topics';
 
-// Topic definitions from information-design-5dots docs/demo_topics.md (2026-10-14).
+// Topic definitions from information-design-5dots docs/demo_topics.md (2026-10-14),
+// each now paired with one building insight (src/server/data/insights.ts).
 
 export type RoleId = 'level' | 'content' | 'dev' | 'system' | 'ops';
-export type PanelId = 'kpi' | 'ranking' | 'entity' | 'reactions' | 'detail';
+export type PanelId =
+  'kpi' | 'evidence' | 'ranking' | 'entity' | 'reactions' | 'detail' | 'actions';
 
 export const ROLES: { id: RoleId; label: string }[] = [
   { id: 'level', label: '레벨 디자인' },
@@ -14,11 +17,13 @@ export const ROLES: { id: RoleId; label: string }[] = [
 ];
 
 export const PANEL_LABELS: Record<PanelId, string> = {
-  kpi: '핵심 수치',
+  kpi: '관찰',
+  evidence: '해석을 가르는 근거',
   ranking: '대상 비교',
   entity: '선택한 대상',
   reactions: '직후 반응',
   detail: '상세 보기',
+  actions: '누가 무엇을 고치나',
 };
 
 export interface TopicMeta {
@@ -32,7 +37,14 @@ export interface TopicMeta {
   defaultEntityId: string;
   reactionTitle: Record<string, string>;
   detailTitle: string;
+  /** The building insight this topic carries. */
+  insight: InsightId;
+  /** Stage in the building flow: choose → run and fix → build by hand. */
+  stage: string;
 }
+
+/** Topics in building-flow order (codes keep the original T numbers). */
+export const TOPIC_FLOW: TopicId[] = ['loop', 'postrun', 'friction'];
 
 export const TOPIC_META: Record<TopicId, TopicMeta> = {
   postrun: {
@@ -42,42 +54,65 @@ export const TOPIC_META: Record<TopicId, TopicMeta> = {
     ask: '어디를 고쳤나',
     question: '블루프린트를 실행한 직후, 플레이어는 결과물의 어디를 캐거나 덧붙였나?',
     roles: {
-      level: { panels: ['detail'], focus: '3D 위에서 실행 직후 고친 위치' },
-      content: { panels: ['ranking', 'kpi'], focus: '설계도별 수정 비율' },
-      dev: { panels: ['kpi', 'entity'], focus: '건너뛴 블록 비율 (설치 실패 단서)' },
+      level: {
+        panels: ['detail', 'evidence', 'actions'],
+        focus: '3D와 위치 구성에서 지형 맞춤·덧붙이기가 어디서 일어나나',
+      },
+      content: {
+        panels: ['kpi', 'ranking', 'actions'],
+        focus: '처음 실행과 반복 실행의 수정 비율 차이',
+      },
+      dev: { panels: ['entity', 'evidence', 'actions'], focus: '건너뛴 블록과 수정의 관계' },
     },
     defaultEntityId: 'bp-20',
     reactionTitle: { blueprint: '실행 직후 30분 안의 다음 행동' },
     detailTitle: '3D 수정 히트맵',
+    insight: 'draft',
+    stage: '실행하고 결과 고치기',
   },
   friction: {
     id: 'friction',
     code: 'T2',
-    title: '시도 대비 실패와 재시도로 본 플레이 마찰 분석',
+    title: '채굴 취소와 재시도로 본 조작 마찰 분석',
     ask: '어디서 막히나',
-    question: '시도했다가 실패·취소한 곳은 어디이고, 그 다음 다시 했나 포기했나?',
+    question: '어떤 블록에서 채굴을 취소했고, 그 다음 같은 칸을 다시 캤나 다른 칸으로 옮겼나?',
     roles: {
-      dev: { panels: ['ranking', 'reactions'], focus: '기능별 실패율과 오류 유형' },
-      system: { panels: ['entity', 'detail'], focus: '취소 사유와 재시도 비율' },
-      content: { panels: ['ranking'], focus: '블록별 취소율 (조준 변경 비중과 함께)' },
+      dev: {
+        panels: ['ranking', 'reactions', 'actions'],
+        focus: '손 뗀 뒤 같은 칸을 다시 캐는 블록 (충전 시간 후보)',
+      },
+      system: {
+        panels: ['evidence', 'detail', 'actions'],
+        focus: '취소 사유별로 다음에 어디를 캤나',
+      },
+      level: { panels: ['evidence', 'actions'], focus: '수동 설치는 어디서 하나' },
     },
-    defaultEntityId: 'feature-realm_create',
-    reactionTitle: { feature: '실패 오류 유형 · 취소 사유', block: '채굴 취소 사유' },
-    detailTitle: '사유·오류 분포',
+    defaultEntityId: 'block-87',
+    reactionTitle: { block: '채굴 취소 사유' },
+    detailTitle: '사유별 다음 채굴 위치',
+    insight: 'manual',
+    stage: '손으로 캐고 짓기',
   },
   loop: {
     id: 'loop',
     code: 'T3',
-    title: '행동 전이로 본 실제 코어 루프 분석',
-    ask: '무엇 다음에 무엇을 하나',
-    question: '기획한 루프(채집 → 건축 → 공유)와 실제로 반복되는 행동 고리는 같은가?',
+    title: '설계도 준비와 행동 전이로 본 건축 루프 분석',
+    ask: '어디서 끊기나',
+    question: '설계도를 고르고, 준비하고, 실행하기까지 건축 흐름은 어디서 끊기나?',
     roles: {
+      system: {
+        panels: ['evidence', 'ranking', 'actions'],
+        focus: '준비 → 실행 경로와 취소 뒤 행동',
+      },
       content: { panels: ['ranking', 'reactions'], focus: '의도한 루프와 실제 루프의 차이' },
-      system: { panels: ['ranking', 'detail'], focus: '행동이 어디로 이어지고 어디서 끊기나' },
+      ops: { panels: ['kpi', 'evidence', 'actions'], focus: '운영자 계정이 섞이면 달라지는 값' },
+      dev: { panels: ['actions'], focus: '준비 중 미리보기 위치 로그' },
     },
-    defaultEntityId: 'UI 열기',
+    defaultEntityId: '설계도 준비',
     reactionTitle: { action: '60초 안의 다음 행동' },
     detailTitle: '행동 전이 그래프',
+    insight: 'prepare',
+    stage: '고르고 준비하기',
   },
 };
 

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-import { BarChart } from '@/components/charts/bar-chart';
 import { ChordChart } from '@/components/charts/chord-chart';
 import { EntityScatter } from '@/components/charts/entity-scatter';
 import { SankeyChart } from '@/components/charts/sankey-chart';
@@ -35,7 +34,6 @@ export default async function VisualizationTestPage() {
   ]);
   const [blueprintView] = overviewViews('postrun', postrun, '');
   const frictionViews = overviewViews('friction', friction, '');
-  const featureView = frictionViews.find((view) => view.id === 'feature');
   const blockView = frictionViews.find((view) => view.id === 'block');
 
   const charts: Record<string, ReactNode> = {
@@ -52,15 +50,6 @@ export default async function VisualizationTestPage() {
         rows={reactionMixRows(mix, '/topics/postrun', '')}
         series={REACTION_SERIES}
         ariaLabel="실행 직후 첫 행동 구성"
-      />
-    ),
-    't2-features': featureView?.bars && (
-      <BarChart
-        items={featureView.bars.map((bar) => ({ ...bar, selected: false }))}
-        labelWidth={190}
-        width={760}
-        valueWidth={featureView.barValueWidth}
-        ariaLabel="기능별 실패·취소율"
       />
     ),
     't2-blocks': blockView?.scatter && (
@@ -81,7 +70,7 @@ export default async function VisualizationTestPage() {
       current="viz-test"
       eyebrow="Flourish 실험을 d3로 다시 그림"
       title="시각화 실험"
-      subtitle="같은 데이터를 7가지로 그려 보고 고른 결과"
+      subtitle="같은 데이터를 6가지로 그려 보고 고른 결과"
       showRoleSwitcher={false}
     >
       <ol className="grid grid-cols-2 gap-4 md:grid-cols-4">
