@@ -82,6 +82,8 @@ cp .env.example .env.local
 
 리전은 `ap-northeast-2`로 고정했다. 실패는 `QueryError(code, message)`로 던져진다.
 
+Lambda는 `SELECT`/`WITH` 한 문장만 받고, SQL 텍스트 어디에든(주석 포함) `SETTINGS`가 있으면 거부한다. 그래서 `join_use_nulls` 같은 설정은 쓸 수 없고 LEFT JOIN의 기본값(`0`, `''`)으로 처리한다. 자세한 내용은 [`docs/CALC_SQL.md`](CALC_SQL.md) 6장.
+
 ## 3. 함수 만들기
 
 1. 계산 명세에서 그 값의 절을 찾는다 (예: H1은 3-2, H3은 3-4)

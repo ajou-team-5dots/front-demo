@@ -374,3 +374,50 @@ SELECT arrayFirst(k -> arraySum(arrayMap(i -> exp(i * log(10.0) - 10.0 - lgamma(
 - 적재·생성 때 `async_insert = 0`, `max_threads = 2`
 - 로컬에서 만든 결과 표를 EC2로 올리는 방법도 있다
 - 이 문서의 SQL은 로컬 25.3과 26.8.36.3에서 돌려 같은 결과를 얻었다. EC2에서 처음 돌릴 때도 결과를 2장 표와 비교한다
+
+### 조회 Lambda 제약
+
+화면 조회는 조회 Lambda(`5dots-query`, 읽기 전용 계정)를 거친다. Lambda는 아래 SQL을 거부한다.
+
+- `SELECT` 또는 `WITH`로 시작하는 **한 문장**만 받는다
+- **`SETTINGS`라는 단어가 SQL 텍스트 어디에든(주석 포함) 있으면 거부한다.** 읽기 전용 계정이 스스로 제한을 풀지 못하게 하려는 것이다
+
+그래서 화면 조회 SQL에서는 `join_use_nulls` 같은 설정을 쓸 수 없다. LEFT JOIN에서 짝이 없는 행은 기본값(숫자 `0`, 문자열 `''`)으로 오므로 그 값으로 판단한다. 2-2의 `SETTINGS join_use_nulls = 1`은 표를 만드는 **쓰기 작업**(쓰기 계정, Lambda 밖에서 실행)이라 괜찮다.
+
+## 7. 기초 표를 최신으로 유지하는 방법 (뷰)
+
+| 방식                                   | 동작                                   | 데이터 추가 반영 | 판단                                                            |
+| -------------------------------------- | -------------------------------------- | ---------------- | --------------------------------------------------------------- |
+| 일반 VIEW                              | 저장된 쿼리. 읽을 때마다 다시 계산     | 즉시             | 속도는 원래 쿼리와 같다                                         |
+| 일반 Materialized View (INSERT 트리거) | 새로 들어온 묶음만 처리                | 즉시             | **쓰지 않는다.** 교전 나누기처럼 여러 묶음에 걸친 계산이 틀린다 |
+| Refreshable Materialized View          | 정해진 때 전체를 다시 계산해 표로 저장 | `REFRESH` 후     | **권장**                                                        |
+
+```sql
+-- 형식. AS 뒤에 2-2의 WITH … SELECT를 그대로 넣는다
+CREATE MATERIALIZED VIEW encounters_mv
+REFRESH EVERY 1 DAY
+ENGINE = MergeTree ORDER BY (monsterId, a, e, startMs)
+AS <2-2의 WITH … SELECT>;
+
+-- 적재 직후 한 번
+SYSTEM REFRESH VIEW encounters_mv;
+SYSTEM WAIT VIEW encounters_mv;
+
+-- 상태 확인
+SELECT view, status, last_success_time FROM system.view_refreshes;
+```
+
+적재 → `SYSTEM REFRESH VIEW` → `SYSTEM WAIT VIEW` → `/api/revalidate` 순서로 실행한다.
+
+로컬 26.8.36.3 실측(원본에서 몬스터별 교전·사망을 계산하는 뷰, 결과 교전 59,113 / 전체 61,759 / 사망 698):
+
+| 방식           | 조회 시간   |
+| -------------- | ----------- |
+| 일반 VIEW      | 0.18~0.22초 |
+| Refreshable MV | 0.002초     |
+
+가짜 데이터를 넣어 시험했을 때 일반 VIEW는 바로 반영됐고, MV는 `REFRESH` 뒤에 반영됐다. 시험 행은 지웠다.
+
+- **권장:** 몬스터별 결과보다 `encounters`(2-2) 자체를 Refreshable MV로 두고, H1·H3·보조는 그 표에서 집계한다. 기준값을 바꿔도 MV를 다시 만들 필요가 없다
+- **주의:** MV 안에 패치 목록과 패치 시각이 상수로 들어간다. 목록이 바뀌면 MV를 다시 만든다
+- MV는 쓰기 계정(dev 등)으로 백엔드가 EC2에 만든다. **아직 EC2에는 만들지 않았다**

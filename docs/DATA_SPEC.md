@@ -202,7 +202,13 @@
 - 미리 계산 JSON: `readPrecomputed()`가 `cacheTag('precomputed')`로 캐시한다.
 - 적재·배치 후 `/api/revalidate` 한 번으로 둘 다 비운다.
 - 필터는 URL 쿼리(`?heavy=exclude&period=all`)에 둔다. 서버 캐시 키가 되고 공유·뒤로가기가 된다.
-- 캐시 없이 Lambda 경유 조회는 0.6~1.5초, 캐시 후 수 ms(11/2 실측). 배포에서 인스턴스마다 캐시가 따로인지(`'use cache: remote'` 필요 여부)는 확인 필요.
+- 지연 시간 (11/2 실측, EC2에 11일치 전체 33,753,633행 적재 후):
+  - Vercel 함수는 서울(`icn1`)에서 실행한다. Vercel → OIDC → Lambda로 더해지는 지연은 약 50ms
+  - 원본을 직접 조회하는 함수 0.5~1.2초
+  - 원본에서 교전까지 나누는 가장 무거운 계산 2.7~2.9초 (EC2 메모리 약 220MB)
+  - 캐시 후 3~5ms
+  - 기초 표·Refreshable MV([`docs/CALC_SQL.md`](CALC_SQL.md) 7장)를 쓰면 화면 조회는 ms 수준이 목표
+- 배포에서 인스턴스마다 캐시가 따로인지(`'use cache: remote'` 필요 여부)는 확인 필요.
 
 ## 7. 정해지지 않은 것
 
