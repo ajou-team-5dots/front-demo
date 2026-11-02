@@ -15,10 +15,6 @@
   --color-primary-soft: var(--primary-soft);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
-  --color-data-bar: var(--data-bar);
-  --color-reason-release: var(--reason-release);
-  --color-flow-next: var(--flow-next);
-  --color-flow-prev: var(--flow-prev);
   --shadow-card: 0 18px 44px rgb(15 23 42 / 0.08);
   --container-page: 1180px;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -50,9 +46,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --color-edit-none: var(--edit-none);
-  --color-edit-dig: var(--edit-dig);
-  --color-edit-add: var(--edit-add);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -63,7 +56,7 @@
 }
 
 :root {
-  /* UI tokens: "Realsee as your service" design system (.design/DESIGN.md) */
+  /* UI tokens. To be replaced by the new design system. */
   --background: #f6f8fb;
   --foreground: #172033;
   --card: #ffffff;
@@ -102,16 +95,6 @@
   --sidebar-accent-foreground: #1d4ed8;
   --sidebar-border: #dbe4f0;
   --sidebar-ring: #2563eb;
-
-  /* Data tokens: kept apart from UI blue so a color always means the same data. */
-  --data-bar: #475569;
-  --edit-none: oklch(0.88 0.005 255);
-  --edit-dig: oklch(0.58 0.22 27);
-  --edit-add: oklch(0.56 0.2 300);
-  --flow-next: oklch(0.6 0.2 35);
-  --flow-prev: oklch(0.56 0.2 300);
-  /* Mining cancelled by letting go of the button: a 'real block' candidate. */
-  --reason-release: oklch(0.6 0.11 195);
 }
 
 .dark {
@@ -150,13 +133,6 @@
   --primary-soft: oklch(0.269 0 0);
   --success: oklch(0.72 0.17 150);
   --success-soft: oklch(0.3 0.05 150);
-  --data-bar: oklch(0.75 0.02 255);
-  --edit-none: oklch(0.45 0 0);
-  --edit-dig: oklch(0.7 0.19 25);
-  --edit-add: oklch(0.72 0.15 300);
-  --flow-next: oklch(0.72 0.17 40);
-  --flow-prev: oklch(0.72 0.15 300);
-  --reason-release: oklch(0.72 0.11 195);
 }
 
 @layer base {
