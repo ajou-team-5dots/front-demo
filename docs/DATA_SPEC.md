@@ -10,8 +10,9 @@
 ```
 [적재]  로그 파일 ──(사람이 실행)──▶ ClickHouse game_events
                                           │
-[미리 계산] Python 배치 (적재 직후 1회) ───┤
-   ├─ 교전·사망·기술 표 ─────────────────▶ ClickHouse encounters / player_deaths / ability_events
+[기초 표] ClickHouse SQL (적재 직후 1회) ──┤
+   └─ 교전·사망·기술 표 ─────────────────▶ ClickHouse encounters / player_deaths / ability_events
+[미리 계산] Python 배치 (기초 표 다음)
    └─ 통계 모형 결과 ────────────────────▶ JSON (로컬 폴더 또는 S3)
    └─ 끝나면 POST /api/revalidate (캐시 비우기)
 
@@ -59,9 +60,9 @@
 - 엔진 ReplacingMergeTree, `ORDER BY (eventType, eventTime, eventId)`로 중복 eventId를 합친다.
 - 적재: `async_insert=0`, 하루치 파일을 한 번에, 날짜 하나씩 순서대로, `max_threads=2`.
 
-### 미리 만드는 기초 표 (배치가 매번 다시 만든다)
+### 미리 만드는 기초 표 (적재 직후 SQL로 매번 다시 만든다)
 
-교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 한 번 만들어 둔다. **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
+교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 ClickHouse SQL(`INSERT … SELECT` → `_new` → `EXCHANGE TABLES`)로 한 번 만들어 둔다. SQL과 대조 결과는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있고, 받은 피해 붙이기(`died` 일부, `near20`, `danger`, `n_taken` 등)는 아직 확인 대기다. **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
 
 `encounters` (교전 1행 = 플레이어 1명 × 몬스터 개체 1마리, 계산 명세 2-2)
 
@@ -106,7 +107,7 @@
 ### 단계
 
 1. **읽기:** ClickHouse `game_events`에서 계산 명세 2-1 이벤트만 꺼낸다(eventId 중복 제거, 운영 계정 제외).
-2. **기초 표 만들기:** 2-2, 2-3 규칙으로 `encounters`, `player_deaths`, `ability_events`를 만들고 ClickHouse에 `_new` → `EXCHANGE TABLES`. 계정 주소는 이 단계에서 `player_seq` 순번으로 바꾸고 주소↔순번 대응표는 저장하지 않는다.
+2. **기초 표 만들기 (SQL):** 2-2, 2-3 규칙을 [`docs/CALC_SQL.md`](CALC_SQL.md)의 SQL로 실행해 `encounters`, `player_deaths`, `ability_events`를 만들고 ClickHouse에 `_new` → `EXCHANGE TABLES`. 계정 주소는 이 단계에서 `player_seq` 순번으로 바꾸고 주소↔순번 대응표는 저장하지 않는다.
 3. **통계 모형 (계산 명세 4장):**
 
 | 값                | 방법                                                                                                                                                                                    | 입력                                         | 출력                                                                                                            |
