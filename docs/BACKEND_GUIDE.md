@@ -24,6 +24,7 @@ Next.js를 처음 쓰는 백엔드 개발자가 EC2의 ClickHouse에 연결해 �
 ## 1. 설치
 
 ```bash
+fnm install         # .nvmrc의 Node 24 LTS(24.22.2)로 맞춘다. Windows·nvm은 README "Node 버전" 참고
 pnpm install        # npm, yarn 쓰지 않는다
 ```
 
@@ -64,7 +65,7 @@ clickhouse-client --host <ec2-host> --user "$CLICKHOUSE_USER" --password "$CLICK
 scripts/db/load_mart.sh path/to/data/export/mart
 ```
 
-`load_mart.sh`는 테이블마다 `<table>_new`에 넣은 뒤 `EXCHANGE TABLES`로 한 번에 바꾼다. 적재 중에도 화면은 이전 데이터를 끝까지 읽는다. `REVALIDATE_URL`과 `REVALIDATE_TOKEN`이 있으면 끝에 캐시도 비운다(6장).
+Windows에서는 `load_mart.sh`(bash)를 Git Bash나 WSL에서 실행한다. `load_mart.sh`는 테이블마다 `<table>_new`에 넣은 뒤 `EXCHANGE TABLES`로 한 번에 바꾼다. 적재 중에도 화면은 이전 데이터를 끝까지 읽는다. `REVALIDATE_URL`과 `REVALIDATE_TOKEN`이 있으면 끝에 캐시도 비운다(6장).
 
 ## 4. 개발 서버와 curl 확인
 
