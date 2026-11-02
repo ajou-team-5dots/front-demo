@@ -2,9 +2,10 @@ import { timingSafeEqual } from 'node:crypto';
 
 import { revalidateTag } from 'next/cache';
 
+import { GAME_EVENTS_TAG } from '@/server/data/game-events';
 import { getRevalidateToken } from '@/server/env';
 
-// Called by scripts/db/load_mart.sh after a mart reload:
+// Clears the cached game_events results, e.g. after new logs land on EC2:
 //   curl -X POST -H "x-revalidate-token: $REVALIDATE_TOKEN" http://localhost:3000/api/revalidate
 // A Route Handler is allowed here because the caller is outside the app (CONVENTION 8장).
 
@@ -25,8 +26,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
 
-  // expire: 0 → the next request reads the new mart instead of being served stale data.
-  // The mart changes once a day, so one slower request after a reload is fine.
-  revalidateTag('mart', { expire: 0 });
-  return Response.json({ revalidated: true, tag: 'mart' });
+  // expire: 0 → the next request reads ClickHouse again instead of being served stale data.
+  revalidateTag(GAME_EVENTS_TAG, { expire: 0 });
+  return Response.json({ revalidated: true, tag: GAME_EVENTS_TAG });
 }
