@@ -181,4 +181,4 @@ curl -X POST -H "x-revalidate-token: $REVALIDATE_TOKEN" http://localhost:3000/ap
 
 - ClickHouse HTTP 포트(8123)를 인터넷에 그대로 열지 않는다. 화면용은 읽기 전용 계정을 쓴다.
 - `pnpm build`는 DB·AWS에 접속하지 않는다. 데이터 함수는 요청이 올 때 실행된다.
-- EC2에는 2026-10-12 09:39 ~ 10-13 15:17(UTC) 로그만 있다. 계산 명세 6장 기대값(10-12 ~ 10-22)과 숫자가 다른 것은 정상이다.
+- EC2 `game_events`에는 11/2 백엔드가 2026-10-12 ~ 10-22 전체 33,753,633행(`payload` String, ReplacingMergeTree, eventId 중복 없음)을 적재했다. 계산 명세 6장 기대값과 같은 기간이다.
