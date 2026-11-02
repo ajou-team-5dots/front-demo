@@ -61,19 +61,19 @@
 
 ### 미리 만드는 기초 표 (적재 직후 분석 배치가 매번 다시 만든다)
 
-교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 분석 배치(Python)가 한 번 만들어 둔다. 받은 피해 붙이기는 몬스터 종류 지문이 필요해 SQL로 옮기지 않는다([`docs/CALC_SQL.md`](CALC_SQL.md) 3장). CALC_SQL 2장 SQL은 숫자 대조·확인용이다. 아래 열은 11/2 배치 실제 출력과 같다(`encounters` 23열, `player_deaths` 12열, `ability_events` 4열). **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
+교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 분석 배치(Python)가 한 번 만들어 둔다. 받은 피해 붙이기는 몬스터 종류 지문이 필요해 SQL로 옮기지 않는다([`docs/CALC_SQL.md`](CALC_SQL.md) 3장). CALC_SQL 2장 SQL은 숫자 대조·확인용이다. 아래 열은 11/2 배치 실제 출력과 같다(`encounters` 24열, `player_deaths` 12열, `ability_events` 4열. `max_hit_ts`는 11/2 추가). **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
 
 `encounters` (교전 1행 = 플레이어 1명 × 몬스터 개체 1마리, 계산 명세 2-2)
 
-| 열                                             | 설명                                            |
-| ---------------------------------------------- | ----------------------------------------------- |
-| enc_id, player_seq                             | 교전 번호, 계정 순번(지갑 주소 대신)            |
-| entity_id, monster_id, role, grade, stage      | 개체, 종류, boss/midboss/mob, 등급, 던전 단계   |
-| start_ts, end_ts                               | 첫 타격, 끝(처치 시각 또는 마지막 타격)         |
-| killed, died, near20, danger                   | 처치, 사망, 빈사, 위험(사망 또는 빈사)          |
-| n_taken, max_hit_taken, p_max_hp, min_hp_after | 받은 피해 수, 한 번 최대 피해, 최대 HP, 최저 HP |
-| level, weapon_tier, armor_count, party         | 교전 시작 시점 상태                             |
-| pre_patch_entity, heavy_account                | 패치 전 개체 여부, 고활동 계정 여부             |
+| 열                                                         | 설명                                                                                                  |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| enc_id, player_seq                                         | 교전 번호, 계정 순번(지갑 주소 대신)                                                                  |
+| entity_id, monster_id, role, grade, stage                  | 개체, 종류, boss/midboss/mob, 등급, 던전 단계                                                         |
+| start_ts, end_ts                                           | 첫 타격, 끝(처치 시각 또는 마지막 타격)                                                               |
+| killed, died, near20, danger                               | 처치, 사망, 빈사, 위험(사망 또는 빈사)                                                                |
+| n_taken, max_hit_taken, max_hit_ts, p_max_hp, min_hp_after | 받은 피해 수, 한 번 최대 피해, 그 피해의 시각(`Int64`, 받은 피해가 없으면 `end_ts`), 최대 HP, 최저 HP |
+| level, weapon_tier, armor_count, party                     | 교전 시작 시점 상태                                                                                   |
+| pre_patch_entity, heavy_account                            | 패치 전 개체 여부, 고활동 계정 여부                                                                   |
 
 `player_deaths` (몬스터에게 죽은 사망 1행, 2-3)
 
@@ -91,7 +91,26 @@
 | ------------------------------- | ------------------------------------------------------------------- |
 | boss_id, entity_id, ability, ts | `monster_action`과 `monster_ability_phase_changed`(phase = execute) |
 
+- `ability`가 빈 문자열인 행(6,335행)은 보스 소환 동작이다(`monster_action` kind `summon_regular`, `summon_charge_regular`, `summon_miniboss`, `summon_charge_miniboss`, `summon_cancel`, 원래 `abilityId`가 비어 있음). 넣든 빼든 H3 결과는 같다. **H3 조회에서는 `ability != ''`로 뺀다** (화면 기술 목록에 빈 이름이 생기지 않게)
+
 - 표는 `_new`에 만들고 `EXCHANGE TABLES`로 한 번에 바꾼다. 바꾸는 중에도 화면은 이전 표를 읽는다.
+
+### H3를 기초 표만으로 계산하기 (계산 명세 3-4)
+
+| 쪽   | 대상                                                               | 기술 창                                                           |
+| ---- | ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| 사망 | `player_deaths` 중 `monster_id` = 보스                             | 같은 `entity_id`의 `ability_events` 중 [`ts` − w초, `ts`] 안 기술 |
+| 생존 | `encounters` 중 `monster_id` = 보스, `n_taken > 0`, `died = false` | 같은 `entity_id`의 [`max_hit_ts` − w초, `max_hit_ts`] 안 기술     |
+
+- w는 `H3_WINDOWS`(5, 2). 판정은 명세 3-4대로 `MIN_DEATHS`(5), `H3_MIN_SURV_ENC`(10), `H3_MIN_ABILITY_DEATHS`(3), `H3_PP`(15), `H3_RATIO`(2)
+- 고활동 제외는 `heavy_account = false` 행만 쓴다
+- 기초 표 3개만으로 계산해 기대값과 맞았다 (11/2, 분석 세션이 로컬 ClickHouse 26.8.36.3에서 확인)
+
+| 범위        | 5초 신호      | 2초 신호 | elderroot bloom 5초 (사망 대 생존) | 2초           |
+| ----------- | ------------- | -------- | ---------------------------------- | ------------- |
+| 고활동 포함 | 9개, 보스 7종 | 5개, 5종 | 10/28 대 5/106                     | 4/28 대 3/106 |
+| 고활동 제외 | 4개, 4종      | 1개, 1종 | 8/25 대 4/91                       |               |
+
 - 계산 명세 6장 기대값과 비교: 교전 61,759 / 패치 후 개체 59,113, 몬스터가 죽인 사망 698, 계정 68 / 고활동 1. 교전 수가 1% 넘게 다르면 2-2 규칙부터 확인한다.
 
 ## 4. 미리 계산 로직
@@ -100,7 +119,12 @@
 
 - **언제:** 사람이 로그를 적재한 직후 한 번. 주기 실행(cron)은 하지 않는다.
 - **무엇으로:** 분석 배치 `information-design-5dots/DataSet/beta_analysis/precompute/run.py`(분석 저장소, Python 3.13 가상환경). 분석의 검증된 스크립트(`explore/x1_units.py` 교전 규칙, `x10_revised.py` 기대 대비 위험·오각형, `x11_confirmed.py` H2)를 묶은 것이라 front-demo에서 다시 짜지 않는다.
-- **기초 표 쓰기:** `MB_CH_WRITE=1`이고 쓰기 계정(dev)이면 기초 표를 EC2에 `_new` → `EXCHANGE TABLES`로 넣는다. 아니면 `PRECOMPUTED_DIR`에 `*.csv.gz`로만 쓴다.
+- **기초 표 쓰기:** 배치는 기초 표를 `PRECOMPUTED_DIR`에 `*.csv.gz`로 쓴다. **EC2에는 CSV를 따로 넣는 방식을 권장한다** (6만 행이라 1초 안):
+  1. `base_tables.py`의 DDL 그대로 `<표>_new`를 만든다
+  2. `INSERT INTO <표>_new FORMAT CSVWithNames`로 gzip 파일을 그대로 넣는다(HTTP면 `Content-Encoding: gzip`)
+  3. `EXCHANGE TABLES <표>_new AND <표>`
+  4. 같은 실행의 CSV와 JSON을 함께 반영하고(`meta.json`의 `generatedAt` 확인) `/api/revalidate`
+- 배치의 `MB_CH_WRITE=1`(쓰기 계정으로 바로 넣기)은 쓰지 않는다. 빈 값을 NULL로 바꿔 넣는데 `ability` 열이 Nullable이 아니라 실패할 수 있고, CSV 방식은 계산(메모리 큰 곳)과 쓰기(쓰기 계정)를 나눌 수 있다.
 - **EC2 실행 실측(11/2, 분석 세션 보고):** 약 10분(표 216초, 피해 33초, 추출 249초, 교전 61초, 특징 7초, 기초 2초, 모형 18초). 하루치 읽기 쿼리를 `eventTime` 범위 조건과 `max_bytes_before_external_sort` 500MB로 줄여 메모리 2.06GB → 1.31GB(한도 2.56GB). 배치 중 화면 경로(`/api/health`)는 0.08~0.11초로 영향이 없었다. 출력 파일에 지갑 주소 0건.
 - **어디서:** 데모(11/5)까지는 적재한 사람의 컴퓨터. 이후 같은 코드를 계산 Lambda(Python 컨테이너, VPC 안)로 옮겨, 적재 스크립트 마지막 줄이 그 Lambda를 부르게 한다.
 - **진입점:** 위 `run.py` 하나로 아래 1~5단계를 순서대로 실행한다.
