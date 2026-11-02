@@ -1,83 +1,133 @@
 import 'server-only';
 
+import { cacheLife, cacheTag } from 'next/cache';
+
+import { AUX2_MIN_HIT_ENC, MIN_DEATHS, MIN_ENC_MAIN } from '@/server/config/criteria';
 import type { BossSkill, H2Patch, Heavy, MonsterDetail, MonsterMainRow } from '@/types/monsters';
 
-// Screen functions for the monster balance board. The backend developer fills in the SQL
-// and logic; connections are already done:
-//   query(sql, params)      ClickHouse (direct locally, Lambda when deployed)  src/server/db/query.ts
-//   readPrecomputed(name)   Python batch JSON (local folder or S3)             ./precomputed.ts
-// Thresholds come from src/server/config/criteria.ts, never literals in SQL.
-// Spec: 계산 명세 (분석 허브 아티팩트 x_api 페이지, 원문 DataSet/beta_analysis/explore/API_SPEC.md).
-// Expected values to check against: tests/expected.test.ts.
-//
-// When implementing, wrap each function with:
-//   'use cache'; cacheTag(GAME_EVENTS_TAG); cacheLife('hours');
-// and never SELECT actorId, sourceActor or chat text.
+import { GAME_EVENTS_TAG } from './game-events';
+import { getMonsterCounts, getMonsterReadiness } from './monster-counts';
+import { getMonsterPatches } from './monster-patches';
+import type { HeavyResults, PentagonResult } from './monster-precomputed';
+import { getBossState, getMonsterSkills } from './monster-skills';
+import { PRECOMPUTED_TAG, readPrecomputed } from './precomputed';
 
-class NotImplementedError extends Error {
-  constructor(fn: string, args: Record<string, unknown>) {
-    super(
-      `${fn}(${JSON.stringify(args)})는 아직 구현되지 않았습니다 (src/server/data/monsters.ts)`,
-    );
-    this.name = 'NotImplementedError';
-  }
-}
-
-/**
- * GET /monsters: main table rows (enc ≥ MIN_ENC_MAIN).
- *
- * TODO(query): encounters per 2-2 (ENC_GAP_S, ENC_PAD_S, excluding pre-patch entities and,
- *   when heavy = 'exclude', the high-activity account), then per monster:
- *   role, grade, mainStage, enc, deaths, deathsPer100, signal (Poisson vs expDeathsStage, 3-1),
- *   h3State / h3State2 / h3CriterionEffect (bosses, 3-4).
- * TODO(readPrecomputed): riskVsExpected, pentagonRank (4장),
- *   h2State / h2IntentCheck need sameCondition from the H2 batch (3-3, 4장).
- */
+/** Current entities only. Cheap counts come from base tables; models come from batch JSON. */
 export async function getMonsterList(heavy: Heavy): Promise<MonsterMainRow[]> {
-  throw new NotImplementedError('getMonsterList', { heavy });
+  'use cache';
+
+  cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
+  cacheLife('hours');
+
+  const counts = await getMonsterCounts(heavy);
+  const [risk, pentagon] = await Promise.all([
+    readPrecomputed<HeavyResults<number | null>>('expected-risk'),
+    readPrecomputed<HeavyResults<PentagonResult>>('pentagon'),
+  ]);
+  // Each query already covers every monster. Bound the DB fan-out on the small EC2 instance.
+  const patches = await getMonsterPatches(heavy);
+  const skills = await getMonsterSkills(heavy);
+  return counts
+    .filter((row) => row.enc >= MIN_ENC_MAIN)
+    .map((row) => {
+      // Patches are chronological; the last monster patch supplies the current H2 state.
+      const patch = patches.filter((item) => item.monster === row.monster).at(-1)?.patch;
+      const bossSkills = skills.filter((skill) => skill.monster === row.monster);
+      const h3State = row.role === 'boss' ? getBossState(bossSkills, 5) : null;
+      const h3State2 = row.role === 'boss' ? getBossState(bossSkills, 2) : null;
+      return {
+        monster: row.monster,
+        role: row.role,
+        grade: row.grade,
+        mainStage: row.mainStage,
+        enc: row.enc,
+        deaths: row.deaths,
+        danger: row.danger,
+        deathsPer100: row.deathsPer100,
+        signal: row.signal,
+        riskVsExpected: risk[heavy][row.monster] ?? null,
+        pentagonRank: pentagon[heavy][row.monster]?.rank ?? null,
+        h2State: patch?.state ?? null,
+        h2IntentCheck: patch?.intentCheck ?? false,
+        h3State,
+        h3State2,
+        h3CriterionEffect:
+          row.role === 'boss' && (h3State === 'signal') !== (h3State2 === 'signal'),
+      };
+    });
 }
 
-/**
- * GET /monsters/{monster}: detail panels.
- *
- * TODO(query): H1_readiness (3-2: dead, win, pp, ratio, encN, deadN, state per condition),
- *   aux1_unanswered (3-5), aux2_bigHit (3-6), H3_bossSkill via getBossSkills for bosses.
- * TODO(readPrecomputed): pentagon (4장: axis value, peer median, z, rank).
- * TODO(both): H2_patch via getPatchRisk.
- * Returns null for an unknown monster.
- */
+/** Both time windows in one response; no model fitting and no raw event reads. */
+export async function getBossSkills(monster: string, heavy: Heavy): Promise<BossSkill[]> {
+  'use cache';
+
+  cacheTag(GAME_EVENTS_TAG);
+  cacheLife('hours');
+
+  return (await getMonsterSkills(heavy))
+    .filter((row) => row.monster === monster)
+    .map((row) => ({
+      abilityId: row.abilityId,
+      ability: row.ability,
+      windows: row.windows,
+      state: row.state,
+      state2: row.state2,
+      criterionEffect: row.criterionEffect,
+    }));
+}
+
+/** H2 deliberately includes entities spawned before the patch. */
+export async function getPatchRisk(monster: string, heavy: Heavy): Promise<H2Patch[]> {
+  'use cache';
+
+  cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
+  cacheLife('hours');
+
+  return (await getMonsterPatches(heavy))
+    .filter((row) => row.monster === monster)
+    .map((row) => row.patch);
+}
+
+/** Detail shares have their numerator and denominator; unknown monsters return null. */
 export async function getMonsterDetail(
   monster: string,
   heavy: Heavy,
 ): Promise<MonsterDetail | null> {
-  throw new NotImplementedError('getMonsterDetail', { monster, heavy });
-}
+  'use cache';
 
-/**
- * GET /monsters/{monster}/h3: per-ability rows for a boss, 5 s and 2 s windows together.
- *
- * TODO(query): for each ability and window in H3_WINDOWS (3-4):
- *   deaths side  player deaths by this boss with the ability in [t − w, t]
- *   survive side encounters with damage taken and no death, window before the largest hit
- *   diffPP, ratio (null = infinite), state from H3_PP, H3_RATIO, MIN_DEATHS,
- *   H3_MIN_SURV_ENC, H3_MIN_ABILITY_DEATHS; criterionEffect = signal in only one window.
- *   Ability events: monster_action and monster_ability_phase_changed (phase = 'execute').
- */
-export async function getBossSkills(monster: string, heavy: Heavy): Promise<BossSkill[]> {
-  throw new NotImplementedError('getBossSkills', { monster, heavy });
-}
+  cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
+  cacheLife('hours');
 
-/**
- * H2: before/after each monster patch (3-3). Includes pre-patch entities, unlike the rest.
- *
- * TODO(query): per patch (kind = 'monster'): before/after enc, deaths, near, events,
- *   risk100, players; sampleOk (H2_MIN_ENC, H2_MIN_EVENTS); comparator search
- *   (same role, unchanged, sampleOk, stage overlap ≥ H2_STAGE_OVERLAP); state order:
- *   sample_short → no_comparator → changed_ok → unchanged_ok.
- * TODO(readPrecomputed): sameCondition (logistic regression or/lo/hi), netOfComparator,
- *   intentCheck needs sameCondition.lo > 1.
- * TODO: where the patch list lives (GET /patches) — table or precomputed file.
- */
-export async function getPatchRisk(monster: string, heavy: Heavy): Promise<H2Patch[]> {
-  throw new NotImplementedError('getPatchRisk', { monster, heavy });
+  const counts = (await getMonsterCounts(heavy)).find((row) => row.monster === monster);
+  if (!counts) return null;
+  const readiness = await getMonsterReadiness(monster, heavy);
+  const patches = await getPatchRisk(monster, heavy);
+  const skills = counts.role === 'boss' ? await getBossSkills(monster, heavy) : null;
+  const [pentagon, risk] = await Promise.all([
+    readPrecomputed<HeavyResults<PentagonResult>>('pentagon'),
+    readPrecomputed<HeavyResults<number | null>>('expected-risk'),
+  ]);
+  return {
+    monster,
+    enc: counts.enc,
+    deaths: counts.deaths,
+    riskVsExpected: risk[heavy][monster] ?? null,
+    pentagonRank: pentagon[heavy][monster]?.rank ?? null,
+    pentagon: pentagon[heavy][monster]?.axes ?? [],
+    H1_readiness: readiness,
+    H2_patch: patches,
+    H3_bossSkill: skills,
+    aux1_unanswered: {
+      unanswered: counts.unanswered,
+      deaths: counts.deaths,
+      unansweredShare: counts.deaths === 0 ? 0 : counts.unanswered / counts.deaths,
+      sampleShort: counts.deaths < MIN_DEATHS,
+    },
+    aux2_bigHit: {
+      hitEnc: counts.hitEnc,
+      bigHit: counts.bigHit,
+      bigHitShare: counts.hitEnc === 0 ? 0 : counts.bigHit / counts.hitEnc,
+      sampleShort: counts.hitEnc < AUX2_MIN_HIT_ENC,
+    },
+  };
 }

@@ -6,6 +6,12 @@ import {
   getMonsterOverview,
 } from '@/server/data/game-events';
 import { isDevelopment } from '@/server/env';
+import {
+  getBossSkills,
+  getMonsterDetail,
+  getMonsterList,
+  getPatchRisk,
+} from '@/server/data/monsters';
 
 // Development-only window onto the data functions, for checking results with curl:
 //   curl 'http://localhost:3000/api/dev/raw-monsters'
@@ -15,13 +21,17 @@ import { isDevelopment } from '@/server/env';
 const badRequest = (message: string) => Response.json({ error: message }, { status: 400 });
 
 const HELP = {
-  usage: '/api/dev/<fn>[?id=<monsterId>]',
+  usage: '/api/dev/<fn>[?id=<monsterId>&heavy=include|exclude]',
   fn: {
     'raw-range': 'game_events 행 수와 기간',
     'raw-monsters': '몬스터별 스폰·제거·처치·플레이어 사망',
     'raw-deaths': '플레이어 사망을 몬스터·원인별로',
     'raw-daily': '몬스터 일별 추이, id 필요',
     'raw-abilities': '몬스터 기술별 사용·단계 수, id 필요',
+    monsters: '몬스터 목록·신호',
+    'monster-detail': '몬스터 상세, id 필요',
+    'boss-skills': '보스 기술별 5초·2초 비교, id 필요',
+    'patch-risk': '패치 전후 위험, id 필요',
   },
 };
 
@@ -31,10 +41,26 @@ export async function GET(request: Request, { params }: RouteContext<'/api/dev/[
   }
 
   const { fn } = await params;
-  const id = new URL(request.url).searchParams.get('id');
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  const heavy = searchParams.get('heavy') ?? 'include';
+  if (heavy !== 'include' && heavy !== 'exclude') {
+    return badRequest('heavy는 include 또는 exclude여야 합니다');
+  }
 
   try {
     switch (fn) {
+      case 'monsters':
+        return Response.json(await getMonsterList(heavy));
+      case 'monster-detail':
+        if (!id) return badRequest('id가 필요합니다');
+        return Response.json(await getMonsterDetail(id, heavy));
+      case 'boss-skills':
+        if (!id) return badRequest('id가 필요합니다');
+        return Response.json(await getBossSkills(id, heavy));
+      case 'patch-risk':
+        if (!id) return badRequest('id가 필요합니다');
+        return Response.json(await getPatchRisk(id, heavy));
       case 'raw-range':
         return Response.json(await getGameDataRange());
       case 'raw-monsters':

@@ -11,7 +11,7 @@ import { AWS_DATA_REGION, getPrecomputedConfig } from '@/server/env';
 
 // Values SQL alone cannot produce (H2 same-condition ratio, risk vs expected, pentagon) are
 // computed in Python after each load and written as JSON. This reads them by name:
-//   PRECOMPUTED_SOURCE=local  <PRECOMPUTED_DIR>/<name>.json   (a folder outside the repo)
+//   PRECOMPUTED_SOURCE=local  <PRECOMPUTED_DIR>/<name>.json   (default: repo data/precomputed)
 //   PRECOMPUTED_SOURCE=s3     s3://<PRECOMPUTED_BUCKET>/<PRECOMPUTED_PREFIX><name>.json
 
 export const PRECOMPUTED_TAG = 'precomputed';
