@@ -10,5 +10,5 @@ description: 이 저장소 규칙에 맞게 GitHub 이슈를 작성하고 담당
 3. 제목, 라벨, 담당자, 본문을 사용자에게 보여 주고 확인받는다
 4. `gh issue create --title ... --label ... --assignee @me --body-file ...`
 5. 기존 이슈를 맡는 경우 `gh issue edit <번호> --add-assignee @me`
-6. 작업을 바로 시작하면 `<type>/<번호>-<설명>` 브랜치를 만든다
+6. 작업을 바로 시작하면 `git switch dev && git pull` 후 `<type>/<번호>-<설명>` 브랜치를 만든다
 7. 이슈 URL을 보고한다

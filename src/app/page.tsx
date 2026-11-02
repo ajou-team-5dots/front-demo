@@ -1,18 +1,10 @@
-import { Button } from '@/components/ui/button';
-
+// Placeholder until the new screens arrive with the design handoff.
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 px-4">
-      <p className="text-sm text-muted-foreground">5dots front demo</p>
-      <h1 className="text-3xl font-semibold tracking-tight">
-        플레이어의 콘텐츠 실행 직후 행동 분석
-      </h1>
-      <p className="text-muted-foreground">
-        블루프린트 실행 직후 플레이어가 무엇을 하는지로 콘텐츠의 개선점을 찾습니다.
-      </p>
-      <div>
-        <Button>시작하기</Button>
-      </div>
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-3 px-4">
+      <p className="text-sm text-muted-foreground">5dots</p>
+      <h1 className="text-3xl font-black tracking-tight">새 화면 준비 중</h1>
+      <p className="text-muted-foreground">디자인 시안이 확정되면 이 자리에 개발합니다.</p>
     </main>
   );
 }

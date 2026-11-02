@@ -2,11 +2,39 @@
 
 ## 1. 브랜치
 
-- `main`: 항상 빌드되는 상태. 직접 push 금지, PR로만 병합
-- 작업 브랜치: `<type>/<이슈번호>-<짧은-설명>`
-  - 예: `feat/12-blueprint-card`, `fix/18-chart-tooltip`, `docs/3-convention`
-- 병합 방식: **Squash and merge** (PR 하나 = main 커밋 하나)
-- 병합 후 브랜치 삭제
+```
+feat/12-xxx ─┐
+fix/18-xxx  ─┼─(squash)─▶ dev ─(릴리스 PR, merge commit)─▶ main (배포)
+docs/3-xxx  ─┘                                              ▲
+                              hotfix/21-xxx ─(squash)───────┘ → main을 dev에 다시 병합
+```
+
+| 브랜치                     | 역할                                                | 직접 push |
+| -------------------------- | --------------------------------------------------- | --------- |
+| `main`                     | 배포 브랜치. 항상 배포 가능한 상태                  | 금지      |
+| `dev`                      | 통합 브랜치, **기본 브랜치**. 모든 작업 PR이 여기로 | 금지      |
+| `<type>/<이슈번호>-<설명>` | 작업 브랜치. `dev`에서 만든다                       | 가능      |
+| `hotfix/<이슈번호>-<설명>` | 배포된 버그 긴급 수정. `main`에서 만든다            | 가능      |
+
+### 작업 (일상)
+
+1. `dev`에서 브랜치 생성: `git switch dev && git pull && git switch -c feat/12-blueprint-card`
+2. PR은 `dev`로 (기본 브랜치라 자동 선택됨)
+3. 병합 방식: **Squash and merge** (PR 하나 = dev 커밋 하나), 병합 후 브랜치 삭제
+4. `dev`에 병합되면 `Closes #번호`로 연결된 이슈가 자동으로 닫힌다
+
+### 배포 (dev → main)
+
+1. 배포할 시점에 `dev` → `main` PR 생성. 제목: `chore(release): YYYY-MM-DD 배포`
+2. 본문은 `.github/agent-templates/release.md` 사용. 포함된 PR 목록을 적는다
+3. 병합 방식: **Create a merge commit** (squash 금지. squash하면 dev와 main 기록이 어긋나 다음 릴리스에서 충돌한다)
+4. 릴리스 PR은 이슈 연결이 필요 없다. 리뷰어 지정과 승인은 똑같이 필요
+
+### 긴급 수정 (hotfix)
+
+1. 이슈 생성, 담당자 지정
+2. `main`에서 `hotfix/21-xxx` 생성 → `main`으로 PR (squash)
+3. 병합 후 바로 `main` → `dev` PR을 열어 merge commit으로 병합 (dev에 수정 반영)
 
 ## 2. 커밋 메시지
 
@@ -74,10 +102,10 @@ Fix: Chart.             # 대문자 type, 마침표
 
 ## 4. Pull Request
 
-- 제목은 커밋 메시지 형식과 동일 (squash 시 그대로 main 커밋이 됨)
+- 제목은 커밋 메시지 형식과 동일 (squash 시 그대로 dev 커밋 제목이 됨)
 - 본문은 PR 템플릿 사용, `Closes #이슈번호` 필수
 - **PR을 열 때 리뷰어 지정** (본인 제외 1명 이상), 승인 후 병합
-- 제목 형식, 이슈 연결, 이슈 담당자, 리뷰어는 CI `pr-rules`가 검사한다
+- 제목 형식, 브랜치 방향, 이슈 연결, 이슈 담당자, 리뷰어는 CI `pr-rules`가 검사한다
 - CI(`pnpm check`, `pnpm build`) 통과 필수
 - UI 변경은 스크린샷 첨부
 - 한 PR은 리뷰 가능한 크기로 (변경 400줄 이내 권장)

@@ -6,10 +6,11 @@
 
 1. **이슈 만들기** (없으면)
 2. **담당자 지정** — 작업 시작 전에 반드시. 담당자가 없는 이슈로 연 PR은 CI(`pr-rules`)가 막는다
-3. **브랜치 만들기** — `<type>/<이슈번호>-<설명>`
+3. **`dev`에서 브랜치 만들기** — `<type>/<이슈번호>-<설명>`
 4. 작업, `pnpm check`
-5. **PR 올리기 + 리뷰어 지정** — 리뷰어 없는 PR은 CI가 막는다
+5. **`dev`로 PR 올리기 + 리뷰어 지정** — 리뷰어 없는 PR, `main`으로 바로 가는 PR은 CI가 막는다
 6. 승인 1명 + CI 통과 후 Squash merge
+7. 배포는 `dev` → `main` 릴리스 PR로 따로 한다 (`GIT_WORKFLOW.md` 1장)
 
 ## 1. 이슈
 
@@ -34,7 +35,7 @@ gh issue edit <번호> --add-assignee @me
 ## 2. 브랜치
 
 ```bash
-git switch main && git pull
+git switch dev && git pull
 git switch -c feat/12-blueprint-chart
 ```
 
@@ -43,15 +44,28 @@ git switch -c feat/12-blueprint-chart
 ```bash
 cp .github/PULL_REQUEST_TEMPLATE.md /tmp/pr.md   # 채워 넣기
 gh pr create --title "feat(blueprint): 실행 후 행동 차트 추가" \
-  --body-file /tmp/pr.md --reviewer <github-id> --assignee @me --label feature
+  --base dev --body-file /tmp/pr.md --reviewer <github-id> --assignee @me --label feature
 ```
 
-- 제목: 커밋 메시지 형식. Squash merge 시 그대로 main 커밋 제목이 된다
+- base: 항상 `dev`. `main`은 릴리스/hotfix PR만
+- 제목: 커밋 메시지 형식. Squash merge 시 그대로 dev 커밋 제목이 된다
 - 본문 첫 줄: `Closes #<이슈번호>`
 - 리뷰어: 작성자 본인 제외 1명 이상. 누구로 할지 모르면 이슈 담당자가 아닌 팀원 중 해당 영역을 아는 사람
 - 라벨: 연결된 이슈와 같은 라벨
 
-## 4. 작성 규칙 (AI 에이전트는 특히 지킬 것)
+## 4. 릴리스 PR (dev → main)
+
+```bash
+gh pr list --base dev --state merged --search "merged:>=<지난 배포일>" --json number,title \
+  --jq '.[] | "- #\(.number) \(.title)"'          # 포함된 PR 목록
+cp .github/agent-templates/release.md /tmp/release.md   # 채워 넣기
+gh pr create --base main --head dev --title "chore(release): 2026-10-20 배포" \
+  --body-file /tmp/release.md --reviewer <github-id>
+```
+
+병합은 **Create a merge commit**. Squash하지 않는다.
+
+## 5. 작성 규칙 (AI 에이전트는 특히 지킬 것)
 
 1. **템플릿의 `###`/`##` 제목을 지우거나 바꾸지 않는다.** 내용만 채운다
 2. **`<!-- -->` 안내 주석은 지우고 내용으로 바꾼다.** 쓸 내용이 없으면 "없음"
@@ -63,7 +77,7 @@ gh pr create --title "feat(blueprint): 실행 후 행동 차트 추가" \
 8. 이탈률/리텐션 지표를 요구사항으로 쓰지 않는다
 9. 에이전트는 사용자가 요청했을 때만 이슈/PR을 생성한다. 만들기 전에 제목, 담당자, 리뷰어를 사용자에게 보여 준다
 
-## 5. 예시
+## 6. 예시
 
 <details>
 <summary>기능 이슈 예시</summary>

@@ -30,6 +30,8 @@ export default defineConfig([
       'react/jsx-props-no-spreading': 'off',
       // TypeScript types replace runtime prop-types.
       'react/require-default-props': 'off',
+      // any disables type checking from that point on. Use unknown and narrow instead.
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
   {
@@ -39,6 +41,15 @@ export default defineConfig([
       'import-x/no-extraneous-dependencies': 'off',
       'react/function-component-definition': 'off',
       'no-restricted-exports': 'off',
+    },
+  },
+
+  {
+    // Env vars (DB credentials etc.) may only be read in the server data layer. See docs/CONVENTION.md 7.
+    files: ['src/**'],
+    ignores: ['src/server/**'],
+    rules: {
+      'n/no-process-env': 'error',
     },
   },
 
