@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cacheLife, cacheTag } from 'next/cache';
 
-import { queryRows } from '@/server/db/clickhouse';
+import { query } from '@/server/db/query';
 import type {
   BossAbilityRow,
   DeathCauseRow,
@@ -15,16 +15,16 @@ import type {
 // - actorId and payload.sourceActor contain raw wallet addresses: use them only inside
 //   WHERE/joins, never in a SELECT list.
 // - Ops accounts (anyone who sent a chat starting with '/su') are excluded everywhere.
-// - payload is a JSON column; paths are read with toString(payload.a.b).
+// - payload is a JSON column; paths are read with JSONExtractString(payload, 'a', 'b').
 // - count() is UInt64, which JSON returns as a string, so counts are wrapped in toUInt32().
 
 export const GAME_EVENTS_TAG = 'game-events';
 
 /** CTEs shared by every query: ops accounts, and monster entityId → monsterId. */
-const BASE_CTES = `
+export const BASE_CTES = `
   ops AS (
     SELECT DISTINCT actorId FROM game_events
-    WHERE eventType = 'chat_send' AND startsWith(toString(payload.msg), '/su')
+    WHERE eventType = 'chat_send' AND startsWith(JSONExtractString(payload, 'msg'), '/su')
   ),
   events AS (
     -- Explicit columns: eventTime is a computed column that SELECT * does not return.
@@ -32,7 +32,7 @@ const BASE_CTES = `
     WHERE actorId IS NULL OR actorId NOT IN (SELECT actorId FROM ops)
   ),
   monsters AS (
-    SELECT toString(payload.entityId) AS entityId, any(toString(payload.monsterId)) AS monsterId
+    SELECT JSONExtractString(payload, 'entityId') AS entityId, any(JSONExtractString(payload, 'monsterId')) AS monsterId
     FROM events WHERE eventType = 'monster_spawned'
     GROUP BY entityId
   )`;
@@ -44,7 +44,7 @@ export async function getGameDataRange(): Promise<GameDataRange> {
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  const [row] = await queryRows<GameDataRange>(
+  const [row] = await query<GameDataRange>(
     `SELECT toUInt32(count()) AS rows, toString(min(eventTime)) AS from, toString(max(eventTime)) AS to
      FROM game_events`,
   );
@@ -58,24 +58,24 @@ export async function getMonsterOverview(): Promise<MonsterOverviewRow[]> {
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  return queryRows<MonsterOverviewRow>(
+  return query<MonsterOverviewRow>(
     `WITH ${BASE_CTES},
      player_deaths AS (
        SELECT m.monsterId AS monsterId, toUInt32(count()) AS n
        FROM events AS e
-       INNER JOIN monsters AS m ON m.entityId = toString(e.payload.sourceActor)
-       WHERE e.eventType = 'character_died' AND toString(e.payload.kind) = 'player'
+       INNER JOIN monsters AS m ON m.entityId = JSONExtractString(e.payload, 'sourceActor')
+       WHERE e.eventType = 'character_died' AND JSONExtractString(e.payload, 'kind') = 'player'
        GROUP BY m.monsterId
      ),
      per_monster AS (
-       SELECT toString(payload.monsterId) AS monsterId,
+       SELECT JSONExtractString(payload, 'monsterId') AS monsterId,
               toUInt32(countIf(eventType = 'monster_spawned')) AS spawns,
-              toUInt32(countIf(eventType = 'monster_removed' AND toString(payload.reason) = 'death')) AS removedByDeath,
-              toUInt32(countIf(eventType = 'monster_removed' AND toString(payload.reason) != 'death')) AS removedOther,
-              toUInt32(countIf(eventType = 'character_died' AND toString(payload.kind) = 'monster')) AS kills
+              toUInt32(countIf(eventType = 'monster_removed' AND JSONExtractString(payload, 'reason') = 'death')) AS removedByDeath,
+              toUInt32(countIf(eventType = 'monster_removed' AND JSONExtractString(payload, 'reason') != 'death')) AS removedOther,
+              toUInt32(countIf(eventType = 'character_died' AND JSONExtractString(payload, 'kind') = 'monster')) AS kills
        FROM events
        WHERE eventType IN ('monster_spawned', 'monster_removed', 'character_died')
-         AND toString(payload.monsterId) != ''
+         AND JSONExtractString(payload, 'monsterId') != ''
        GROUP BY monsterId
      )
      SELECT p.monsterId AS monsterId, p.spawns AS spawns, p.removedByDeath AS removedByDeath,
@@ -94,22 +94,22 @@ export async function getMonsterDaily(id: string): Promise<MonsterDailyRow[]> {
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  return queryRows<MonsterDailyRow>(
+  return query<MonsterDailyRow>(
     `WITH ${BASE_CTES},
      own AS (
        SELECT toDate(eventTime) AS d,
               countIf(eventType = 'monster_spawned') AS spawns,
-              countIf(eventType = 'character_died' AND toString(payload.kind) = 'monster') AS kills
+              countIf(eventType = 'character_died' AND JSONExtractString(payload, 'kind') = 'monster') AS kills
        FROM events
        WHERE eventType IN ('monster_spawned', 'character_died')
-         AND toString(payload.monsterId) = {id:String}
+         AND JSONExtractString(payload, 'monsterId') = {id:String}
        GROUP BY d
      ),
      deaths AS (
        SELECT toDate(e.eventTime) AS d, count() AS playerDeaths
        FROM events AS e
-       INNER JOIN monsters AS m ON m.entityId = toString(e.payload.sourceActor)
-       WHERE e.eventType = 'character_died' AND toString(e.payload.kind) = 'player'
+       INNER JOIN monsters AS m ON m.entityId = JSONExtractString(e.payload, 'sourceActor')
+       WHERE e.eventType = 'character_died' AND JSONExtractString(e.payload, 'kind') = 'player'
          AND m.monsterId = {id:String}
        GROUP BY d
      )
@@ -134,20 +134,20 @@ export async function getBossAbilities(id: string): Promise<BossAbilityRow[]> {
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  return queryRows<BossAbilityRow>(
+  return query<BossAbilityRow>(
     `WITH ${BASE_CTES},
      actions AS (
-       SELECT toString(payload.abilityId) AS abilityId, count() AS n
+       SELECT JSONExtractString(payload, 'abilityId') AS abilityId, count() AS n
        FROM events
-       WHERE eventType = 'monster_action' AND toString(payload.monsterId) = {id:String}
+       WHERE eventType = 'monster_action' AND JSONExtractString(payload, 'monsterId') = {id:String}
        GROUP BY abilityId
      ),
      phases AS (
-       SELECT toString(e.payload.abilityId) AS abilityId,
-              countIf(toString(e.payload.phase) = 'execute') AS execute,
-              countIf(toString(e.payload.phase) = 'recover') AS recover
+       SELECT JSONExtractString(e.payload, 'abilityId') AS abilityId,
+              countIf(JSONExtractString(e.payload, 'phase') = 'execute') AS execute,
+              countIf(JSONExtractString(e.payload, 'phase') = 'recover') AS recover
        FROM events AS e
-       INNER JOIN monsters AS m ON m.entityId = toString(e.payload.entityId)
+       INNER JOIN monsters AS m ON m.entityId = JSONExtractString(e.payload, 'entityId')
        WHERE e.eventType = 'monster_ability_phase_changed' AND m.monsterId = {id:String}
        GROUP BY abilityId
      )
@@ -172,14 +172,14 @@ export async function getDeathsByMonster(): Promise<DeathCauseRow[]> {
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  return queryRows<DeathCauseRow>(
+  return query<DeathCauseRow>(
     `WITH ${BASE_CTES}
      SELECT nullIf(m.monsterId, '') AS monsterId,
-            toString(e.payload.cause) AS cause,
+            JSONExtractString(e.payload, 'cause') AS cause,
             toUInt32(count()) AS deaths
      FROM events AS e
-     LEFT JOIN monsters AS m ON m.entityId = toString(e.payload.sourceActor)
-     WHERE e.eventType = 'character_died' AND toString(e.payload.kind) = 'player'
+     LEFT JOIN monsters AS m ON m.entityId = JSONExtractString(e.payload, 'sourceActor')
+     WHERE e.eventType = 'character_died' AND JSONExtractString(e.payload, 'kind') = 'player'
      GROUP BY monsterId, cause
      ORDER BY deaths DESC`,
   );
