@@ -20,8 +20,8 @@ Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 �
 - **무거운 값**(H2 같은 조건 배수, 기대 대비 위험, 오각형)은 적재 후 Python 배치가 계산한 JSON을 `readPrecomputed()`로 읽는다 (계산 명세 4장).
 - 기준값은 `src/server/config/criteria.ts`의 상수로 쓴다. SQL에 숫자를 박지 않는다. 기획이 기준을 바꾸면 이 파일만 바뀐다.
 - 값마다 실시간 조회인지 미리 계산인지, 미리 계산 배치를 어떻게 돌리는지는 `docs/DATA_SPEC.md`에 있다.
-- 기초 표(교전·사망·기술)를 만드는 SQL과 명세 기대값 대조 결과(확인됨 / 확인 대기)는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있다.
-- 계산 규칙의 원문: 분석 허브 아티팩트 **x_api 페이지**(원문 `DataSet/beta_analysis/explore/API_SPEC.md`). 이하 "계산 명세".
+- 기초 표는 분석 배치가 만든다. 그 규칙을 SQL로 대조한 결과(SQL로 재현되는 것 / 분석 배치가 맡는 것)는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있다.
+- 계산 명세 원문: 분석 담당 저장소 `DataSet/beta_analysis/explore/API_SPEC.md` (팀 사본: 분석 저장소 `information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md`). 분석 허브 아티팩트 **x_api 페이지**에도 있다. 이하 "계산 명세".
 
 | 파일                                                                     | 누가      | 역할                                                                                      |
 | ------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------- |

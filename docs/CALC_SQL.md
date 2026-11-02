@@ -1,13 +1,13 @@
-# 계산 SQL: 확인된 것과 확인 대기 (11/2)
+# 계산 SQL 대조: SQL로 재현되는 것과 분석 배치가 맡는 것 (11/2)
 
-백엔드가 계산 명세의 기초 표와 지표를 ClickHouse SQL로 만들 때 쓰는 문서다. **SQL은 그대로 실행되는 형태**이고, 숫자는 모두 실제로 돌린 결과다.
+계산 명세의 기초 표와 지표가 ClickHouse SQL로 얼마나 재현되는지 대조한 문서다. **기초 표는 분석 배치가 만들고, 이 문서의 SQL은 대조·확인용이다** ([`docs/DATA_SPEC.md`](DATA_SPEC.md) 4장). SQL은 그대로 실행되는 형태이고, 숫자는 모두 실제로 돌린 결과다.
 
-- 계산 명세: 분석 허브 아티팩트 x_api 페이지 (원문 `DataSet/beta_analysis/explore/API_SPEC.md`). 이하 "명세", 절 번호는 명세 기준
+- 계산 명세 원문: 분석 담당 저장소 `DataSet/beta_analysis/explore/API_SPEC.md` (팀 사본: 분석 저장소 `information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md`). 이하 "명세", 절 번호는 명세 기준
 - 데이터 흐름과 미리 계산 JSON: [`docs/DATA_SPEC.md`](DATA_SPEC.md), 개발 순서: [`docs/BACKEND_GUIDE.md`](BACKEND_GUIDE.md)
 
 ## 0. 이 문서의 기준
 
-- **명세 6장 기대값과 SQL 결과가 맞은 것만 "확인됨"으로 적는다.** 나머지는 "확인 대기"다.
+- **명세 6장 기대값과 SQL 결과가 맞은 것만 "확인됨"(2장)으로 적는다.** 받은 피해 붙이기는 분석 배치가 맡는다(3장).
 - 대조 데이터: 원본 로그 2026-10-12 ~ 10-22, 필요한 이벤트 1,651만 행(중복 제거 후)
 - 대조 환경: 로컬 ClickHouse 컨테이너 `ch-calc`(2장 숫자는 25.3과 26.8.36.3(EC2와 같은 버전) 모두 같음), EC2와 같은 스키마(`payload` String, ReplacingMergeTree)
 - EC2(ClickHouse 26.8)에도 아래 SQL이 쓰는 함수가 모두 있다 (4장)
@@ -102,7 +102,7 @@ WHERE monsterId IN (SELECT monsterId FROM patched)
   AND spawnTs < toDateTime64('2026-10-14 05:40:00', 3, 'UTC');
 ```
 
-**패치 대상 17종과 시각: 데이터에서 찾음, 분석 확인 대기.** 패치 목록 원본(`rules.py` PATCHES)이 없어서, 맞은 몬스터의 최대 HP(`damage_applied`의 `result.maxHp`)가 바뀐 몬스터를 찾았다. 개수·배율은 분석 기록(medium·등급 없음 9종 HP×1.36, strong 8종 HP×1.86)과 같다. 옛 HP로 마지막 스폰된 시각은 10/14 05:21 UTC이고, 패치 시각은 분석 추정(10/14 14:40 KST = 05:40 UTC)을 쓴다. 피해 배율(×1.5, ×2)은 아직 대조하지 않았다.
+**패치 대상 17종과 시각: 분석 목록과 일치.** 처음에는 패치 목록 원본(`rules.py` PATCHES)이 없어서, 맞은 몬스터의 최대 HP(`damage_applied`의 `result.maxHp`)가 바뀐 몬스터를 찾았다. 개수·배율은 분석 기록(medium·등급 없음 9종 HP×1.36, strong 8종 HP×1.86)과 같다. 옛 HP로 마지막 스폰된 시각은 10/14 05:21 UTC이고, 패치 시각은 분석 추정(10/14 14:40 KST = 05:40 UTC)을 쓴다. 분석 배치(11/2)의 패치 대상 17종과 정확히 같다. 1.36, 1.86은 반올림 표기이고 실제 비율은 몬스터마다 조금 다르다(예: 1.3522). 피해 배율은 대조하지 않았다.
 
 ```sql
 -- 최대 HP 값이 둘 이상인 몬스터 (0은 죽는 순간 기록이라 무시)
@@ -307,13 +307,32 @@ LEFT JOIN abil AS ab ON ab.e = bd.e;
 | elderroot_stage_1 bloom 사망 쪽 5초 | 10/28  | 10/28    |
 | elderroot_stage_1 bloom 사망 쪽 2초 | 4/28   | 4/28     |
 
-## 3. 확인 대기 (규칙이 분석과 다를 수 있음)
+## 3. 받은 피해 붙이기: 분석 규칙 (SQL로 옮기지 않음)
 
-### 3-1. 받은 피해 붙이기 (명세 2-2)
+### 3-1. 분석 담당의 규칙 (11/2 답)
 
-명세는 몬스터 → 플레이어 피해를 "같은 플레이어·같은 몬스터 종류의 교전 중 [start − ENC_PAD_S, end + ENC_PAD_S] 안, 여럿이면 중심 시각이 가장 가까운 교전"에 붙이라고 한다. 그런데 **원본 `damage_applied`(cause `MONSTER_*`)의 `payload.input`에는 `amount`, `cause`, `defense`, `identityId`, `nowMs`, `sourceAmount`, `worldId`뿐이라 어느 몬스터인지가 없다.** 그래서 "같은 몬스터 종류" 조건을 그대로 걸 수 없다.
+원본 `damage_applied`(cause `MONSTER_*`)의 `payload.input`에는 `amount`, `cause`, `defense`, `identityId`, `nowMs`, `sourceAmount`, `worldId`뿐이라 **어느 몬스터인지가 없다.** 분석 배치는 몬스터 종류를 아래처럼 정한다.
 
-시험한 가설: 후보 = 같은 플레이어·[start − 5초, end + 5초] 교전, 그중 피해 직전 W ms 안에 그 개체의 `monster_action`이 있는 교전(가장 최근 행동). 없으면 중심 시각이 가장 가까운 교전(fallback). 몬스터 피해 5만 968건 중 4만 1,395건이 붙었다.
+1. **몬스터 종류:** 피해 직전 1초 안, 같은 월드의 공격 행동(`monster_action`) + 방어 전 피해량(`sourceAmount`, 소수 첫째 자리) 지문으로 정한다
+   - 대상 행동 `kind`: `melee`, `projectile_player`, `projectile`, `projectile_world`, `dash_collision`, `flash`, `ground_hit`, `explode`
+   - cause가 `MONSTER_RANGED`이면 `projectile_player`만
+   - 사망 기록 746건 기준 정확도 100%, 몬스터 피해의 92.2%에 종류가 붙는다
+2. **교전에 붙이기:** 같은 플레이어·같은 몬스터 종류·[시작 − 5초, 끝 + 5초] 교전 중 중심 시각이 가장 가까운 교전
+3. **빈사 `near20`:** 붙은 피해의 피해 후 HP 최솟값 ÷ 붙은 피해 `maxHp` 최댓값(없으면 100) ≤ 0.2이고, 붙은 피해 중 `died`가 없음
+
+**결론: 이 규칙은 SQL로 옮기지 않는다.** 분석 배치가 만든 기초 표(`encounters` 등, [`docs/DATA_SPEC.md`](DATA_SPEC.md) 3장)를 쓰고, 위험·빈사·보조 2·H3 생존 쪽은 그 표에서 집계한다.
+
+분석 배치를 EC2 `game_events`(33,753,633행)로 돌린 결과(11/2, 분석 세션 보고), 아래 기대값이 모두 맞았다.
+
+| 항목                     | 기대값               | 분석 배치            |
+| ------------------------ | -------------------- | -------------------- |
+| small_zombie 위험        | 38                   | 38                   |
+| elderroot_stage_1 보조 2 | 21/131               | 21/131               |
+| H2 rift_stalker_strong   | 19.21배 (8.29~44.54) | 19.21배 (8.29~44.54) |
+
+### 3-2. 앞서 SQL로 시험한 가설 (참고)
+
+분석 규칙을 받기 전, 같은 플레이어·[시작 − 5초, 끝 + 5초] 교전 중 피해 직전 W ms 안에 그 개체의 `monster_action`이 있는 교전에 붙이는 가설을 시험했다. 몬스터 종류 지문(`sourceAmount`)을 쓰지 않아 맞지 않았다.
 
 | 설정                              | small_zombie 위험 (기대 38) | elderroot 보조 2 (기대 21/131) | bloom 생존 5초·2초 (기대 5/106·3/106) |
 | --------------------------------- | --------------------------- | ------------------------------ | ------------------------------------- |
@@ -321,26 +340,6 @@ LEFT JOIN abil AS ab ON ab.e = bd.e;
 | W 3초, fallback 있음              | 46                          | 22/137                         | 6/111 · 4/111                         |
 | W 3초, fallback 없음              | 44                          | 22/137                         | 4/111 · 3/111                         |
 | W 2초·1초, fallback 있음          | 46                          | 21/135                         | 5/110 · 3/110                         |
-
-- 가장 가까운 설정(W 2초): elderroot 분자(21, 5, 3)는 맞고 분모가 각각 4 많다. small_zombie 위험은 46으로 8 많다
-- cause ↔ 행동 종류(`MONSTER_MELEE` ↔ `melee` 등) 조건은 아직 시험하지 않았다
-
-### 3-2. 이것에 기대는 값
-
-받은 피해 붙이기가 확정될 때까지 아래 값도 확인 대기다.
-
-- 위험(`danger`)과 빈사(`near20`), 그리고 교전의 `died` 중 붙은 피해로 정해지는 부분
-- H2 전후 위험(`events`, `risk100`, `sampleOk`)
-- 보조 2 큰 피해 (`hitEnc`, `bigHit`)
-- H3 생존 쪽 (`survEncWithAbility_w`, `survEncTotal`)
-- 오각형 HP 소모량(`hpcost_mean`), 전투 열세도(경주비 `race_med`)
-
-교전 시점 레벨·장비(H1 조건)도 SQL(`ASOF JOIN`)로 만들 수 있지만 아직 기대값과 대조하지 않았다.
-
-### 3-3. 분석 담당에게 보낸 질문
-
-1. 몬스터 → 플레이어 `damage_applied`에는 몬스터 정보가 없는데, `x1_units.py`는 그 피해의 몬스터 종류를 무엇으로 정하나
-2. 붙이는 후보 교전의 조건(시간 창, 같은 월드 여부)과 `near20`의 HP 기준(피해 후 HP, 최대 HP를 어느 값으로 보는지)은 무엇인가
 
 ## 4. SQL로 하지 않는 것
 
@@ -360,13 +359,12 @@ EC2(ClickHouse 26.8)에서 확인한 함수: `argMax`, `argMin`, `lagInFrame`, `
 SELECT arrayFirst(k -> arraySum(arrayMap(i -> exp(i * log(10.0) - 10.0 - lgamma(i + 1)), range(k + 1))) >= 0.95, range(100));
 ```
 
-## 5. 백엔드가 이 SQL을 쓰는 순서
+## 5. 백엔드가 이 문서를 쓰는 법
 
-1. EC2 `game_events`를 `payload`, `context` String으로 다시 적재한다 ([`docs/DATA_SPEC.md`](DATA_SPEC.md) 3장)
-2. 2장 SQL로 기초 표(`encounters` 등)를 만든다. 적재 직후 `INSERT … SELECT` → `_new` → `EXCHANGE TABLES`
-3. `src/server/data/monsters.ts` 함수에 2장의 집계 SQL을 붙인다. 기준값은 `criteria.ts` 상수를 params로 넘긴다
-4. `tests/expected.test.ts`에서 확인됨 항목만 `skip`을 푼다
-5. 3장은 분석 담당의 답을 받은 뒤 같은 표로 다시 대조하고 옮긴다
+1. 기초 표(`encounters`, `player_deaths`, `ability_events`)는 **분석 배치가 만든다** ([`docs/DATA_SPEC.md`](DATA_SPEC.md) 4장). 이 문서의 2장 SQL로 표를 만들지 않는다
+2. `src/server/data/monsters.ts` 함수는 기초 표에서 집계한다. 2장 SQL은 숫자가 맞는지 대조할 때 쓴다. 기준값은 `criteria.ts` 상수를 params로 넘긴다
+3. `tests/expected.test.ts`에서 확인된 항목의 `skip`을 푼다
+4. 2장 SQL은 계정을 지갑 주소(`actorId`) 그대로 다루므로 **로컬 대조용**이다. EC2에 이 SQL로 표를 만들지 않는다. 배치가 만든 표는 계정을 순번(`player_seq`)으로 바꿔 둔다
 
 ## 6. EC2에서 돌릴 때 주의
 
@@ -418,6 +416,6 @@ SELECT view, status, last_success_time FROM system.view_refreshes;
 
 가짜 데이터를 넣어 시험했을 때 일반 VIEW는 바로 반영됐고, MV는 `REFRESH` 뒤에 반영됐다. 시험 행은 지웠다.
 
-- **권장:** 몬스터별 결과보다 `encounters`(2-2) 자체를 Refreshable MV로 두고, H1·H3·보조는 그 표에서 집계한다. 기준값을 바꿔도 MV를 다시 만들 필요가 없다
+- **기초 표는 분석 배치가 만든다** (3장 결론). MV는 SQL로 확인된 집계를 빠르게 읽어야 할 때 고른다
 - **주의:** MV 안에 패치 목록과 패치 시각이 상수로 들어간다. 목록이 바뀌면 MV를 다시 만든다
 - MV는 쓰기 계정(dev 등)으로 백엔드가 EC2에 만든다. **아직 EC2에는 만들지 않았다**

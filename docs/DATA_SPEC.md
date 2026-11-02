@@ -2,7 +2,7 @@
 
 화면: 메인 B(산점도), 상세 C(목록+상세), 보스 상세 (디자이너 확정 11/2).
 가설: 노션 「최종 가설 확정(11.1)」 H1~H3 + 보조 1·2.
-계산 규칙 원문: 분석 허브 아티팩트 「계산 명세」(x_api) 페이지, 원문 `DataSet/beta_analysis/explore/API_SPEC.md`. 이하 **계산 명세**. 장·절 번호는 계산 명세 기준이다.
+계산 명세 원문: 분석 담당 저장소 `DataSet/beta_analysis/explore/API_SPEC.md` (팀 사본: 분석 저장소 `information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md`). 분석 허브 아티팩트 「계산 명세」(x_api) 페이지에도 있다. 이하 **계산 명세**. 장·절 번호는 계산 명세 기준이다.
 코드 사용법은 `docs/BACKEND_GUIDE.md`, 이 문서는 **어떤 값을 어디서 어떻게 만드는지**를 정한다.
 
 ## 0. 구조 한눈에
@@ -10,9 +10,8 @@
 ```
 [적재]  로그 파일 ──(사람이 실행)──▶ ClickHouse game_events
                                           │
-[기초 표] ClickHouse SQL (적재 직후 1회) ──┤
-   └─ 교전·사망·기술 표 ─────────────────▶ ClickHouse encounters / player_deaths / ability_events
-[미리 계산] Python 배치 (기초 표 다음)
+[미리 계산] 분석 Python 배치 (적재 직후 1회) ──┤
+   ├─ 교전·사망·기술 표 ─────────────────▶ ClickHouse encounters / player_deaths / ability_events
    └─ 통계 모형 결과 ────────────────────▶ JSON (로컬 폴더 또는 S3)
    └─ 끝나면 POST /api/revalidate (캐시 비우기)
 
@@ -60,9 +59,9 @@
 - 엔진 ReplacingMergeTree, `ORDER BY (eventType, eventTime, eventId)`로 중복 eventId를 합친다.
 - 적재: `async_insert=0`, 하루치 파일을 한 번에, 날짜 하나씩 순서대로, `max_threads=2`.
 
-### 미리 만드는 기초 표 (적재 직후 SQL로 매번 다시 만든다)
+### 미리 만드는 기초 표 (적재 직후 분석 배치가 매번 다시 만든다)
 
-교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 ClickHouse SQL(`INSERT … SELECT` → `_new` → `EXCHANGE TABLES`)로 한 번 만들어 둔다. SQL과 대조 결과는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있고, 받은 피해 붙이기(`died` 일부, `near20`, `danger`, `n_taken` 등)는 아직 확인 대기다. **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
+교전 나누기(30초 간격), 피해 붙이기(±5초), 당시 레벨·장비 찾기는 요청마다 하기엔 무겁고 모든 가설이 이것에서 출발한다. 그래서 적재 직후 분석 배치(Python)가 한 번 만들어 둔다. 받은 피해 붙이기는 몬스터 종류 지문이 필요해 SQL로 옮기지 않는다([`docs/CALC_SQL.md`](CALC_SQL.md) 3장). CALC_SQL 2장 SQL은 숫자 대조·확인용이다. 아래 열은 11/2 배치 실제 출력과 같다(`encounters` 23열, `player_deaths` 12열, `ability_events` 4열). **화면 결과가 아니라 교전 단위 원재료**라서, 기준값이나 필터가 바뀌어도 다시 만들 필요가 없다.
 
 `encounters` (교전 1행 = 플레이어 1명 × 몬스터 개체 1마리, 계산 명세 2-2)
 
@@ -100,14 +99,16 @@
 ### 언제, 누가, 어디서
 
 - **언제:** 사람이 로그를 적재한 직후 한 번. 주기 실행(cron)은 하지 않는다.
-- **무엇으로:** 분석의 Python 스크립트(`explore/x1_units.py` 교전 규칙, `x10_revised.py` 기대 대비 위험·오각형, `x11_confirmed.py` H2)를 배치로 묶어 쓴다. 검증된 코드라 다시 짜지 않는다.
+- **무엇으로:** 분석 배치 `information-design-5dots/DataSet/beta_analysis/precompute/run.py`(분석 저장소, Python 3.13 가상환경). 분석의 검증된 스크립트(`explore/x1_units.py` 교전 규칙, `x10_revised.py` 기대 대비 위험·오각형, `x11_confirmed.py` H2)를 묶은 것이라 front-demo에서 다시 짜지 않는다.
+- **기초 표 쓰기:** `MB_CH_WRITE=1`이고 쓰기 계정(dev)이면 기초 표를 EC2에 `_new` → `EXCHANGE TABLES`로 넣는다. 아니면 `PRECOMPUTED_DIR`에 `*.csv.gz`로만 쓴다.
+- **EC2 실행 실측(11/2, 분석 세션 보고):** 약 10분(표 216초, 피해 33초, 추출 249초, 교전 61초, 특징 7초, 기초 2초, 모형 18초). 하루치 읽기 쿼리를 `eventTime` 범위 조건과 `max_bytes_before_external_sort` 500MB로 줄여 메모리 2.06GB → 1.31GB(한도 2.56GB). 배치 중 화면 경로(`/api/health`)는 0.08~0.11초로 영향이 없었다. 출력 파일에 지갑 주소 0건.
 - **어디서:** 데모(11/5)까지는 적재한 사람의 컴퓨터. 이후 같은 코드를 계산 Lambda(Python 컨테이너, VPC 안)로 옮겨, 적재 스크립트 마지막 줄이 그 Lambda를 부르게 한다.
-- **진입점:** `scripts/precompute`(추가 예정) 하나로 아래 1~5단계를 순서대로 실행한다.
+- **진입점:** 위 `run.py` 하나로 아래 1~5단계를 순서대로 실행한다.
 
 ### 단계
 
 1. **읽기:** ClickHouse `game_events`에서 계산 명세 2-1 이벤트만 꺼낸다(eventId 중복 제거, 운영 계정 제외).
-2. **기초 표 만들기 (SQL):** 2-2, 2-3 규칙을 [`docs/CALC_SQL.md`](CALC_SQL.md)의 SQL로 실행해 `encounters`, `player_deaths`, `ability_events`를 만들고 ClickHouse에 `_new` → `EXCHANGE TABLES`. 계정 주소는 이 단계에서 `player_seq` 순번으로 바꾸고 주소↔순번 대응표는 저장하지 않는다.
+2. **기초 표 만들기:** 2-2, 2-3 규칙으로 `encounters`, `player_deaths`, `ability_events`를 만들고 ClickHouse에 `_new` → `EXCHANGE TABLES`. 계정 주소는 이 단계에서 `player_seq` 순번으로 바꾸고 주소↔순번 대응표는 저장하지 않는다.
 3. **통계 모형 (계산 명세 4장):**
 
 | 값                | 방법                                                                                                                                                                                    | 입력                                         | 출력                                                                                                            |
@@ -146,8 +147,10 @@
 
 `expected-risk.json`
 
+11/2 배치 결과는 include 36종, exclude 33종이다. 아래 두 값은 실제 값이다(와이어프레임의 0.5, 5.1은 옛 값).
+
 ```json
-{ "include": { "small_zombie": 0.5, "elderroot_stage_1": 5.1 }, "exclude": { "...": 0 } }
+{ "include": { "small_zombie": 0.61, "elderroot_stage_1": 4.74 }, "exclude": { "...": 0 } }
 ```
 
 `pentagon.json`
@@ -189,10 +192,14 @@
     "id": "2026-10-14-monster",
     "ts": "2026-10-14T14:40:00+09:00",
     "kind": "monster",
-    "changed": { "rift_stalker_strong": { "hpRatio": 1.86, "dmgRatio": 2.0 } }
+    "label": "10/14 몬스터 HP·피해 상향",
+    "changed": { "rift_stalker_strong": { "hpRatio": 1.86, "dmgRatio": null } }
   }
 ]
 ```
+
+- `hpRatio`는 실제 비율이다(예: 1.3522). 1.36, 1.86은 반올림 표기다. `dmgRatio`는 `null`이다
+- `kind: "recipe"`인 2026-10-15 패치(장비 재료비 인하, `changed` 비어 있음)도 들어 있다. **H2는 `kind: "monster"`만** 쓴다
 
 패치 목록은 사람이 관리하는 값이라 배치가 그대로 복사해 둔다. 패치가 추가되면 이 파일에 한 줄 넣고 배치를 다시 돌린다.
 
