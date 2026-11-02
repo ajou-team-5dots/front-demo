@@ -1,5 +1,7 @@
 import 'server-only';
 
+import path from 'node:path';
+
 // Environment variables are read only under src/server (lint rule n/no-process-env).
 // Real values live in .env.local, which git ignores. See .env.example for the names.
 
@@ -63,11 +65,15 @@ export type PrecomputedConfig =
   | { source: 'local'; dir: string }
   | { source: 's3'; bucket: string; prefix: string; roleArn: string | undefined };
 
-/** local = a folder outside the repo (analysts' JSON), s3 = bucket + key prefix over OIDC. */
+// Default folder for PRECOMPUTED_SOURCE=local: the JSON committed in the repo. On Vercel the function
+// runs from the project root, and next.config.ts traces these files into the deployment.
+const DEFAULT_PRECOMPUTED_DIR = path.join(process.cwd(), 'data', 'precomputed');
+
+/** local = a folder (repo data/precomputed by default), s3 = bucket + key prefix over OIDC. */
 export const getPrecomputedConfig = (): PrecomputedConfig => {
   const source = process.env.PRECOMPUTED_SOURCE ?? 'local';
   if (source === 'local') {
-    return { source, dir: required('PRECOMPUTED_DIR') };
+    return { source, dir: process.env.PRECOMPUTED_DIR || DEFAULT_PRECOMPUTED_DIR };
   }
   if (source === 's3') {
     return {

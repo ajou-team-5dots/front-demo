@@ -12,14 +12,16 @@ Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 �
        │    ├─ DATA_SOURCE=direct     로컬: @clickhouse/client로 EC2에 직접
        │    └─ DATA_SOURCE=lambda     배포: Vercel OIDC → AWS IAM 역할 → 조회 Lambda(VPC) → ClickHouse
        └─ readPrecomputed(name)       src/server/data/precomputed.ts  Python이 미리 계산한 JSON
-            ├─ PRECOMPUTED_SOURCE=local   저장소 밖 로컬 폴더
+            ├─ PRECOMPUTED_SOURCE=local   저장소 data/precomputed (기본)
             └─ PRECOMPUTED_SOURCE=s3      S3 (OIDC로 GetObject)
 ```
 
 - **가벼운 조회**(건수, 비율, 상태)는 `query()`로 SQL을 돌린다.
 - **무거운 값**(H2 같은 조건 배수, 기대 대비 위험, 오각형)은 적재 후 Python 배치가 계산한 JSON을 `readPrecomputed()`로 읽는다 (계산 명세 4장).
 - 기준값은 `src/server/config/criteria.ts`의 상수로 쓴다. SQL에 숫자를 박지 않는다. 기획이 기준을 바꾸면 이 파일만 바뀐다.
-- 계산 규칙의 원문: 분석 허브 아티팩트 **x_api 페이지**(원문 `DataSet/beta_analysis/explore/API_SPEC.md`). 이하 "계산 명세".
+- 값마다 실시간 조회인지 미리 계산인지, 미리 계산 배치를 어떻게 돌리는지는 `docs/DATA_SPEC.md`에 있다.
+- 기초 표는 분석 배치가 만든다. 그 규칙을 SQL로 대조한 결과(SQL로 재현되는 것 / 분석 배치가 맡는 것)는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있다.
+- 계산 명세 원문: 분석 담당 저장소 `DataSet/beta_analysis/explore/API_SPEC.md` (팀 사본: 분석 저장소 `information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md`). 분석 허브 아티팩트 **x_api 페이지**에도 있다. 이하 "계산 명세".
 
 | 파일                                                                     | 누가      | 역할                                                                                      |
 | ------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------- |
@@ -55,7 +57,7 @@ cp .env.example .env.local
 | `CLICKHOUSE_URL`                          | `http://<ec2-host>:8123`. `http://`로 시작하고 URL에 사용자 이름(`ec2-user@` 등)을 넣지 않는다 |
 | `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` | `api`(읽기 전용) / 받은 비밀번호                                                               |
 | `CLICKHOUSE_DB`                           | `default`                                                                                      |
-| `PRECOMPUTED_SOURCE` / `PRECOMPUTED_DIR`  | `local` / 분석이 낸 JSON 폴더의 절대 경로 (저장소 밖)                                          |
+| `PRECOMPUTED_SOURCE` / `PRECOMPUTED_DIR`  | `local` / 비우면 저장소 `data/precomputed`. 다른 폴더를 쓸 때만 경로를 적는다                  |
 | `REVALIDATE_TOKEN`                        | `openssl rand -hex 32`                                                                         |
 
 조회 Lambda(`5dots-query`)로 바꿔 시험하거나 배포할 때:
@@ -79,6 +81,8 @@ cp .env.example .env.local
 ```
 
 리전은 `ap-northeast-2`로 고정했다. 실패는 `QueryError(code, message)`로 던져진다.
+
+Lambda는 `SELECT`/`WITH` 한 문장만 받고, SQL 텍스트 어디에든(주석 포함) `SETTINGS`가 있으면 거부한다. 그래서 `join_use_nulls` 같은 설정은 쓸 수 없고 LEFT JOIN의 기본값(`0`, `''`)으로 처리한다. 자세한 내용은 [`docs/CALC_SQL.md`](CALC_SQL.md) 6장.
 
 ## 3. 함수 만들기
 
@@ -177,4 +181,4 @@ curl -X POST -H "x-revalidate-token: $REVALIDATE_TOKEN" http://localhost:3000/ap
 
 - ClickHouse HTTP 포트(8123)를 인터넷에 그대로 열지 않는다. 화면용은 읽기 전용 계정을 쓴다.
 - `pnpm build`는 DB·AWS에 접속하지 않는다. 데이터 함수는 요청이 올 때 실행된다.
-- EC2에는 2026-10-12 09:39 ~ 10-13 15:17(UTC) 로그만 있다. 계산 명세 6장 기대값(10-12 ~ 10-22)과 숫자가 다른 것은 정상이다.
+- EC2 `game_events`에는 11/2 백엔드가 2026-10-12 ~ 10-22 전체 33,753,633행(`payload` String, ReplacingMergeTree, eventId 중복 없음)을 적재했다. 계산 명세 6장 기대값과 같은 기간이다.

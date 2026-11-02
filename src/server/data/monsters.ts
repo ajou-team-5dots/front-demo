@@ -7,7 +7,8 @@ import type { BossSkill, H2Patch, Heavy, MonsterDetail, MonsterMainRow } from '@
 //   query(sql, params)      ClickHouse (direct locally, Lambda when deployed)  src/server/db/query.ts
 //   readPrecomputed(name)   Python batch JSON (local folder or S3)             ./precomputed.ts
 // Thresholds come from src/server/config/criteria.ts, never literals in SQL.
-// Spec: 계산 명세 (분석 허브 아티팩트 x_api 페이지, 원문 DataSet/beta_analysis/explore/API_SPEC.md).
+// Spec: 계산 명세. 원문은 분석 담당 저장소 DataSet/beta_analysis/explore/API_SPEC.md
+// (팀 사본: information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md).
 // Expected values to check against: tests/expected.test.ts.
 //
 // When implementing, wrap each function with:
