@@ -9,11 +9,13 @@
 
 - **명세 6장 기대값과 SQL 결과가 맞은 것만 "확인됨"으로 적는다.** 나머지는 "확인 대기"다.
 - 대조 데이터: 원본 로그 2026-10-12 ~ 10-22, 필요한 이벤트 1,651만 행(중복 제거 후)
-- 대조 환경: 로컬 ClickHouse 25.3 컨테이너 `ch-calc`, EC2와 같은 스키마(`payload` String, ReplacingMergeTree)
+- 대조 환경: 로컬 ClickHouse 컨테이너 `ch-calc`(2장 숫자는 25.3과 26.8.36.3(EC2와 같은 버전) 모두 같음), EC2와 같은 스키마(`payload` String, ReplacingMergeTree)
 - EC2(ClickHouse 26.8)에도 아래 SQL이 쓰는 함수가 모두 있다 (4장)
 - 기준값은 SQL에 숫자로 적었고, 주석에 `src/server/config/criteria.ts`의 이름을 달았다. 백엔드 코드에서는 상수를 params로 넘긴다
 
 ## 1. 로컬 대조 환경 만들기
+
+> **이 로컬 컨테이너는 필수가 아니다.** SQL 결과를 기대값과 대조해 보고 싶을 때만 쓴다. 개발과 실행은 EC2 ClickHouse로 충분하다(로컬 개발은 Lambda 또는 허용 IP에서 직접 연결, [`docs/BACKEND_GUIDE.md`](BACKEND_GUIDE.md)).
 
 원본은 **읽기 전용**으로 붙이고, 원본 폴더 안에는 파일을 만들지 않는다.
 
@@ -24,7 +26,7 @@ docker run -d --name ch-calc -p 18123:8123 \
   -e CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 -e CLICKHOUSE_DO_NOT_CHOWN=1 \
   --ulimit nofile=262144:262144 \
   -v <분석 저장소>/Akkadia_dataset/telemetry:/var/lib/clickhouse/user_files/telemetry:ro \
-  clickhouse/clickhouse-server:25.3
+  clickhouse/clickhouse-server:26.8.36.3
 
 curl -u calc:calc 'http://localhost:18123/' --data-binary @query.sql   # SQL 실행
 ```
@@ -76,6 +78,7 @@ OPTIMIZE TABLE game_events FINAL;   -- eventId 중복 제거 (2-1)
 
 - 운영 계정 = 채팅을 `/su`로 시작한 계정. **이 데이터에는 `/su` 채팅이 0건이라 대상 0명**이다. SQL은 넣었지만 효과는 확인하지 못했다
 - `monster_spawned`의 `entityId`(`monster:<번호>`) → `monsterId`. 플레이어 사망의 `sourceActor`도 같은 형식이라 그대로 조인한다
+- **실행 순서:** 아래 `patched` 표(패치 대상 17종)를 먼저 만든 뒤 이 SQL을 돌린다. `prepatch_entities`가 그 표를 읽는다
 
 ```sql
 -- 2-1·2-2 공통: 운영 계정, 몬스터 개체, 패치 전 개체
@@ -183,6 +186,8 @@ LEFT JOIN mon m ON m.entityId = g.e
 LEFT JOIN mdeath d ON d.e = g.e
 SETTINGS join_use_nulls = 1;
 
+-- 처음 실행할 때는 encounters가 없어 EXCHANGE가 실패하므로 빈 표를 먼저 만든다
+CREATE TABLE IF NOT EXISTS encounters AS encounters_new;
 EXCHANGE TABLES encounters_new AND encounters;
 DROP TABLE encounters_new;
 ```
@@ -368,4 +373,4 @@ SELECT arrayFirst(k -> arraySum(arrayMap(i -> exp(i * log(10.0) - 10.0 - lgamma(
 - EC2는 메모리 4GB다. 받은 피해 붙이기 조인은 메모리를 많이 쓰니 **날짜(파티션)별로 나눠** `INSERT`한다
 - 적재·생성 때 `async_insert = 0`, `max_threads = 2`
 - 로컬에서 만든 결과 표를 EC2로 올리는 방법도 있다
-- 이 문서의 SQL은 로컬 25.3에서 돌렸다. EC2 26.8에서 처음 돌릴 때 결과를 2장 표와 다시 비교한다
+- 이 문서의 SQL은 로컬 25.3과 26.8.36.3에서 돌려 같은 결과를 얻었다. EC2에서 처음 돌릴 때도 결과를 2장 표와 비교한다
