@@ -21,7 +21,7 @@
 
 ```bash
 # 이미지 기본 동작은 데이터 폴더 전체의 소유자를 바꾸는데, 읽기 전용 마운트라 실패한다 → CLICKHOUSE_DO_NOT_CHOWN=1
-docker run -d --name ch-calc -p 18123:8123 \
+docker run -d --name ch-calc -p 127.0.0.1:18123:8123 \
   -e CLICKHOUSE_USER=calc -e CLICKHOUSE_PASSWORD=calc \
   -e CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1 -e CLICKHOUSE_DO_NOT_CHOWN=1 \
   --ulimit nofile=262144:262144 \

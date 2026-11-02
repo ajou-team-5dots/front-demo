@@ -12,7 +12,7 @@ Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 �
        │    ├─ DATA_SOURCE=direct     로컬: @clickhouse/client로 EC2에 직접
        │    └─ DATA_SOURCE=lambda     배포: Vercel OIDC → AWS IAM 역할 → 조회 Lambda(VPC) → ClickHouse
        └─ readPrecomputed(name)       src/server/data/precomputed.ts  Python이 미리 계산한 JSON
-            ├─ PRECOMPUTED_SOURCE=local   저장소 밖 로컬 폴더
+            ├─ PRECOMPUTED_SOURCE=local   저장소 data/precomputed (기본)
             └─ PRECOMPUTED_SOURCE=s3      S3 (OIDC로 GetObject)
 ```
 
@@ -57,7 +57,7 @@ cp .env.example .env.local
 | `CLICKHOUSE_URL`                          | `http://<ec2-host>:8123`. `http://`로 시작하고 URL에 사용자 이름(`ec2-user@` 등)을 넣지 않는다 |
 | `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` | `api`(읽기 전용) / 받은 비밀번호                                                               |
 | `CLICKHOUSE_DB`                           | `default`                                                                                      |
-| `PRECOMPUTED_SOURCE` / `PRECOMPUTED_DIR`  | `local` / 분석이 낸 JSON 폴더의 절대 경로 (저장소 밖)                                          |
+| `PRECOMPUTED_SOURCE` / `PRECOMPUTED_DIR`  | `local` / 비우면 저장소 `data/precomputed`. 다른 폴더를 쓸 때만 경로를 적는다                  |
 | `REVALIDATE_TOKEN`                        | `openssl rand -hex 32`                                                                         |
 
 조회 Lambda(`5dots-query`)로 바꿔 시험하거나 배포할 때:

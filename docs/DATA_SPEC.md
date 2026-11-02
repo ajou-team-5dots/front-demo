@@ -233,6 +233,7 @@
 - 실시간 값: data 함수에 `'use cache'` + `cacheTag(GAME_EVENTS_TAG)` + `cacheLife('hours')`.
 - 미리 계산 JSON: `readPrecomputed()`가 `cacheTag('precomputed')`로 캐시한다.
 - 적재·배치 후 `/api/revalidate` 한 번으로 둘 다 비운다.
+- 미리 계산 JSON은 저장소 `data/precomputed/`에 커밋해 배포에 함께 싣는다(`PRECOMPUTED_SOURCE=local`, `PRECOMPUTED_DIR` 비움). **새 JSON은 커밋·배포해야 반영된다.** `/api/revalidate`만으로는 배포된 파일이 바뀌지 않는다.
 - 필터는 URL 쿼리(`?heavy=exclude&period=all`)에 둔다. 서버 캐시 키가 되고 공유·뒤로가기가 된다.
 - 지연 시간 (11/2 실측, EC2에 11일치 전체 33,753,633행 적재 후):
   - Vercel 함수는 서울(`icn1`)에서 실행한다. Vercel → OIDC → Lambda로 더해지는 지연은 약 50ms
