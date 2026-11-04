@@ -169,34 +169,52 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 
 ### 크기, 모서리, 간격
 
-| 토큰                     | 값  | 화면 위치                                        |
-| ------------------------ | --- | ------------------------------------------------ |
-| `size.bar.skill`         | 15  | 보스 기술 막대 높이                              |
-| `size.bar.share`         | 16  | 준비 패널 비율 막대 높이                         |
-| `size.bar.interval`      | 6   | 같은 조건 위험 배수 범위 막대 높이               |
-| `size.bar.zero-stub`     | 3   | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)    |
-| `size.dumbbell.line`     | 3   | 준비 조건 처치자→사망자 선                       |
-| `size.dumbbell.dot`      | 14  | 준비 조건 점 지름                                |
-| `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                          |
-| `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                         |
-| `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                  |
-| `size.icon.search`       | 14  | 필터 바 몬스터 검색 돋보기 아이콘                |
-| `size.panel-header`      | 30  | 모든 패널 머리 줄 높이                           |
-| `size.kpi-box.w`         | 420 | 상세 KPI 상자 너비                               |
-| `size.kpi-box.h`         | 72  | 상세 KPI 상자 높이 = 제목 줄 높이                |
-| `size.sankey.node-width` | 14  | 흐름도 칸 너비                                   |
-| `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                              |
-| `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                            |
-| `radius.panel`           | 10  | 패널, KPI 상자 (`rounded-panel`)                 |
-| `radius.control`         | 6   | 선택 상자, 칩, 목록 행, 툴팁 (`rounded-control`) |
-| `radius.pill`            | 4   | 배지, 세그먼트 단추, 막대 (`rounded-pill`)       |
-| `radius.focus`           | 4   | 흐름도 칸 초점 고리                              |
-| `radius.mark`            | 2   | 흐름도 칸, 범위 막대                             |
-| `radius.mark-sm`         | 1   | 산점도 네모 점                                   |
-| `space.panel-gap`        | 14  | 패널 사이                                        |
-| `space.panel-inset`      | 16  | 패널 안쪽 좌우                                   |
-| `space.panel-top`        | 12  | 패널 위 (제목 위)                                |
-| `space.segment-inset`    | 3   | 기간, 2초·5초 세그먼트 안쪽                      |
+| 토큰                     | 값  | 화면 위치                                               |
+| ------------------------ | --- | ------------------------------------------------------- |
+| `size.bar.skill`         | 15  | 보스 기술 막대 높이                                     |
+| `size.bar.share`         | 16  | 준비 패널 비율 막대 높이                                |
+| `size.bar.interval`      | 6   | 같은 조건 위험 배수 범위 막대 높이                      |
+| `size.bar.zero-stub`     | 3   | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)           |
+| `size.dumbbell.line`     | 3   | 준비 조건 처치자→사망자 선                              |
+| `size.dumbbell.dot`      | 14  | 준비 조건 점 지름                                       |
+| `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                                 |
+| `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                                |
+| `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                         |
+| `size.icon.search`       | 14  | 필터 바 몬스터 검색 돋보기 아이콘                       |
+| `size.panel-header`      | 30  | 모든 패널 머리 줄 높이                                  |
+| `size.kpi-box.w`         | 420 | 상세 KPI 상자 너비                                      |
+| `size.kpi-box.h`         | 72  | 상세 KPI 상자 높이 = 제목 줄 높이                       |
+| `size.detail-row`        | 340 | 상세 첫 줄(전투 양상 + 준비 조건) 높이                  |
+| `size.patch-panel`       | 288 | 패치 전후 위험 패널 높이 (모든 몬스터 같은 값)          |
+| `size.sankey.node-width` | 14  | 흐름도 칸 너비                                          |
+| `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                                     |
+| `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                                   |
+| `radius.panel`           | 10  | 패널, 사이드바, KPI 상자 (`rounded-panel`)              |
+| `radius.control`         | 6   | 입력·조작 요소, 목록 행, 툴팁 (`rounded-control`)       |
+| `radius.pill`            | 4   | 칩, 배지 (`rounded-pill`)                               |
+| `radius.mark`            | 2   | 모든 막대·트랙, 흐름도 칸, 산점도 네모 (`rounded-mark`) |
+| `space.panel-gap`        | 14  | 패널 사이                                               |
+| `space.panel-inset`      | 16  | 패널 안쪽 좌우                                          |
+| `space.panel-top`        | 12  | 패널 위 (제목 위)                                       |
+| `space.segment-inset`    | 3   | 기간, 2초·5초 세그먼트 안쪽                             |
+
+### 모서리 규칙 (요소 종류 → 토큰)
+
+새 요소도 이 표를 따릅니다. AI 작업 지침은 `design-tokens/AGENTS.md` 4-1.
+
+| 요소 종류         | 토큰                 | 클래스 / SVG                                   | 예                                                                                                                                            |
+| ----------------- | -------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 패널              | `radius.panel` 10px  | `rounded-panel`                                | 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널                                                                                                  |
+| 컨트롤(입력·조작) | `radius.control` 6px | `rounded-control`                              | 선택 상자와 그 목록·항목, 검색 입력, 세그먼트(기간, 고활동 계정, 2초·5초) 바깥과 안 단추, 단추, ⓘ 단추, 목록 행, 패널 안 보조 상자(흐름 요약) |
+| 툴팁              | `radius.control` 6px | `rounded-control`                              | 차트 툴팁, ⓘ 설명 (떠 있는 상자는 선택 목록과 같은 값)                                                                                        |
+| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 선택한 흐름 기준, 흐름 조건 칩                                           |
+| 막대              | `radius.mark` 2px    | `rounded-mark`, SVG `rx={RADIUS.mark}`         | 비율 막대와 트랙, 기술 막대와 트랙, 0 표시, 범위 막대, 흐름도 칸, 산점도 네모(중간보스), 막대 범례 견본. 트랙과 채움은 항상 같은 값           |
+| 점                | 원                   | `rounded-full`, SVG `<circle>`                 | 산점도 원, 오각형 꼭짓점, 추이 점, 범례 동그라미, 준비 조건 점                                                                                |
+| 선                | 둥근 끝              | `strokeLinecap="round"`, 연결선 `rounded-full` | 데이터 선(추이 선, 오각형 바깥선, 실선 범례 견본), 준비 조건 연결선. 점선 기준선(1배, 평균, 중앙값 고리)은 끝을 둥글게 하지 않음              |
+| 초점 고리         | 감싸는 요소의 값     | 요소와 같은 클래스, 흐름도 칸은 `RADIUS.mark`  | 단추·입력은 control, 흐름도 칸은 mark                                                                                                         |
+
+- 새 요소는 이 표에서 종류를 골라 그 토큰을 씁니다. `rounded-lg`, `rounded-md`, `rounded`, `rounded-[…]`, `rounded-none`처럼 토큰이 아닌 클래스는 쓰지 않습니다(`src/components/ui/*` 포함). 원은 `rounded-full`만 씁니다.
+- 확인: `grep -rnoE "rounded(-[a-z0-9]+|-\[[^]]+\])?" src/components src/app | grep -vE "rounded-(panel|control|pill|mark|full)$"` 가 아무것도 내지 않아야 합니다(주석의 낱말 제외).
 
 ### 모션
 

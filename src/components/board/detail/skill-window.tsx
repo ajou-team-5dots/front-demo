@@ -44,21 +44,16 @@ function Bars({ w }: { w: H3Window }) {
         },
       ].map((b) => (
         <div key={b.key} className="flex items-center gap-2">
-          {/* The light track takes the column width left of the count label (0% → 100%); a zero
-              share shows only a short stub, no empty track. */}
-          <div
-            className={cn(
-              'h-(--size-bar-skill) min-w-0 flex-1 rounded-pill',
-              b.share > 0 && 'bg-chart-track-bar',
-            )}
-          >
+          {/* The light track takes the column width left of the count label (0% → 100%), the same
+              on every row; a zero share puts a short stub on it instead of a fill. */}
+          <div className="h-(--size-bar-skill) min-w-0 flex-1 rounded-mark bg-chart-track-bar">
             {b.share > 0 ? (
               <div
-                className={cn('board-grow board-first board-mark h-full rounded-pill', b.fill)}
+                className={cn('board-grow board-first board-mark h-full rounded-mark', b.fill)}
                 style={{ width: `${Math.min(1, b.share) * 100}%` }}
               />
             ) : (
-              <div aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-pill bg-gray-2" />
+              <div aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-mark bg-gray-2" />
             )}
           </div>
           <span className="w-[92px] shrink-0 text-(length:--font-size-label) leading-[14px] font-medium whitespace-nowrap text-gray-1 tabular-nums">
@@ -114,7 +109,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
               swatch={
                 <span
                   aria-hidden
-                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-pill bg-chart-death"
+                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-mark bg-chart-death"
                 />
               }
             >
@@ -124,7 +119,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
               swatch={
                 <span
                   aria-hidden
-                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-pill bg-chart-survival"
+                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-mark bg-chart-survival"
                 />
               }
             >
@@ -164,7 +159,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
             {/* Active pill slides between the two 44px buttons (gap 4). */}
             <span
               aria-hidden
-              className="board-mark absolute top-(--space-segment-inset) left-(--space-segment-inset) h-6 w-11 rounded-pill bg-panel"
+              className="board-mark absolute top-(--space-segment-inset) left-(--space-segment-inset) h-6 w-11 rounded-control bg-panel"
               style={{ transform: `translateX(${win === 5 ? 48 : 0}px)` }}
             />
             {([2, 5] as const).map((w) => (
@@ -175,7 +170,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
                 aria-checked={win === w}
                 onClick={() => setWin(w)}
                 className={cn(
-                  'board-control relative h-6 w-11 rounded-pill text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
+                  'board-control relative h-6 w-11 rounded-control text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
                   win === w ? 'text-ink' : 'text-gray-1 hover:text-ink',
                 )}
               >

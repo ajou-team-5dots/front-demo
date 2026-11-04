@@ -62,16 +62,32 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 
 ## 4. 이름 규칙
 
-| JSON 경로              | CSS 변수              | 코드에서                                                              |
-| ---------------------- | --------------------- | --------------------------------------------------------------------- |
-| `color.base.<이름>`    | `--<이름>`            | Tailwind `bg-ink`, `text-gray-1` 등, SVG `var(--ink)`                 |
-| `color.<묶음>.<이름>`  | `--<묶음>-<이름>`     | `COLOR.<묶음>.<이름>` (`tokens.ts`)                                   |
-| `radius.<이름>`        | `--corner-<이름>`     | `rounded-panel`, `rounded-control`, `rounded-pill`, SVG `RADIUS.mark` |
-| `motion.<묶음>.<이름>` | `--<묶음>-<이름>`     | `--ease-board`, `--duration-slow`                                     |
-| 그 밖                  | `--<경로를 -로 이음>` | `OPACITY.band.dim`, `text-(length:--font-size-label)`                 |
+| JSON 경로              | CSS 변수              | 코드에서                                                                              |
+| ---------------------- | --------------------- | ------------------------------------------------------------------------------------- |
+| `color.base.<이름>`    | `--<이름>`            | Tailwind `bg-ink`, `text-gray-1` 등, SVG `var(--ink)`                                 |
+| `color.<묶음>.<이름>`  | `--<묶음>-<이름>`     | `COLOR.<묶음>.<이름>` (`tokens.ts`)                                                   |
+| `radius.<이름>`        | `--corner-<이름>`     | `rounded-panel`, `rounded-control`, `rounded-pill`, `rounded-mark`, SVG `RADIUS.mark` |
+| `motion.<묶음>.<이름>` | `--<묶음>-<이름>`     | `--ease-board`, `--duration-slow`                                                     |
+| 그 밖                  | `--<경로를 -로 이음>` | `OPACITY.band.dim`, `text-(length:--font-size-label)`                                 |
 
 - **새 토큰을 추가하거나 이름을 바꾸면 컴포넌트가 그 이름을 써야 하므로 디자인 변경만으로 끝나지 않습니다.** 값만 바꾸는 일이면 이름은 건드리지 않습니다.
 - `color.sankey.<열>.<번호>`의 번호는 그 열 값 순서입니다(아래 표). 번호를 늘리거나 줄이지 않습니다.
+
+## 4-1. 모서리 규칙 (요소 종류 → 토큰)
+
+| 요소 종류         | 토큰                 | 클래스 / SVG                                   | 예                                                                                                                                            |
+| ----------------- | -------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 패널              | `radius.panel` 10px  | `rounded-panel`                                | 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널                                                                                                  |
+| 컨트롤(입력·조작) | `radius.control` 6px | `rounded-control`                              | 선택 상자와 그 목록·항목, 검색 입력, 세그먼트(기간, 고활동 계정, 2초·5초) 바깥과 안 단추, 단추, ⓘ 단추, 목록 행, 패널 안 보조 상자(흐름 요약) |
+| 툴팁              | `radius.control` 6px | `rounded-control`                              | 차트 툴팁, ⓘ 설명 (떠 있는 상자는 선택 목록과 같은 값)                                                                                        |
+| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 선택한 흐름 기준, 흐름 조건 칩                                           |
+| 막대              | `radius.mark` 2px    | `rounded-mark`, SVG `rx={RADIUS.mark}`         | 비율 막대와 트랙, 기술 막대와 트랙, 0 표시, 범위 막대, 흐름도 칸, 산점도 네모(중간보스), 막대 범례 견본. 트랙과 채움은 항상 같은 값           |
+| 점                | 원                   | `rounded-full`, SVG `<circle>`                 | 산점도 원, 오각형 꼭짓점, 추이 점, 범례 동그라미, 준비 조건 점                                                                                |
+| 선                | 둥근 끝              | `strokeLinecap="round"`, 연결선 `rounded-full` | 데이터 선(추이 선, 오각형 바깥선, 실선 범례 견본), 준비 조건 연결선. 점선 기준선(1배, 평균, 중앙값 고리)은 끝을 둥글게 하지 않음              |
+| 초점 고리         | 감싸는 요소의 값     | 요소와 같은 클래스, 흐름도 칸은 `RADIUS.mark`  | 단추·입력은 control, 흐름도 칸은 mark                                                                                                         |
+
+- 새 요소는 이 표에서 종류를 골라 그 토큰을 씁니다. `rounded-lg`, `rounded-md`, `rounded`, `rounded-[…]`, `rounded-none`처럼 토큰이 아닌 클래스는 쓰지 않습니다(`src/components/ui/*` 포함). 원은 `rounded-full`만 씁니다.
+- 확인: `grep -rnoE "rounded(-[a-z0-9]+|-\[[^]]+\])?" src/components src/app | grep -vE "rounded-(panel|control|pill|mark|full)$"` 가 아무것도 내지 않아야 합니다(주석의 낱말 제외).
 
 ## 5. 그룹별 영향 범위
 

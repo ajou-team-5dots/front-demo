@@ -93,7 +93,7 @@ function Shape({ role, r, fill }: ShapeProps) {
   }
   if (role === 'midboss') {
     const h = r2(r * SQUARE_HALF);
-    return <rect x={-h} y={-h} width={2 * h} height={2 * h} rx={RADIUS.markSm} fill={fill} />;
+    return <rect x={-h} y={-h} width={2 * h} height={2 * h} rx={RADIUS.mark} fill={fill} />;
   }
   return <circle r={r} fill={fill} />;
 }
@@ -181,9 +181,11 @@ export function FocusScatter({
   const y1 = sy(1);
   const y2 = sy(RISK_FLAG);
 
-  // Zone label at the zone's top-left corner, pulled left if the zone is too narrow for it.
+  // Zone label at the zone's top-left corner. When the zone is too narrow for it, it moves to the
+  // left of the median line (ending 6px before it), so it never sits across the dashed line.
   const zoneW = textWidth(ZONE_LABEL, 12);
-  const zoneLabelX = Math.min(qx + 6, PL + PW - 4 - zoneW);
+  const zoneLabelFits = qx + 6 <= PL + PW - 4 - zoneW;
+  const zoneLabelX = zoneLabelFits ? qx + 6 : Math.max(PL + 2, qx - 6 - zoneW);
   const zoneBox: Box = { x1: zoneLabelX - 2, y1: PT + 3, x2: zoneLabelX + zoneW + 2, y2: PT + 19 };
   const refW = textWidth(REF_LABEL, 11);
   const refBox: Box = {
@@ -414,7 +416,7 @@ export function FocusScatter({
             fontSize={FONT_SIZE.label}
             fontWeight="600"
             fill="var(--gray-1)"
-            stroke={ZONE_FILL}
+            stroke={zoneLabelFits ? ZONE_FILL : 'var(--panel)'}
             strokeWidth={STROKE.width.halo}
             strokeLinejoin="round"
             style={{ paintOrder: 'stroke fill' }}

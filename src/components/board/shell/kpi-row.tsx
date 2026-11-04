@@ -18,7 +18,9 @@ interface KpiRowProps {
 
 // A white box (size.kpi-box, radius 10, no border) at the right end of the detail's title row:
 // three equal columns of label (12 SemiBold gray-1) over value (32 Bold ink, tabular) with its
-// unit (16 gray-1). The values fade in when they change.
+// unit (16 gray-1) on the number's baseline. Both lines are trimmed to cap height and baseline
+// (text-box), so centring the group leaves equal space above the label and below the digits.
+// The values fade in when they change.
 export function KpiRow({ items, className }: KpiRowProps) {
   return (
     <dl
@@ -29,14 +31,11 @@ export function KpiRow({ items, className }: KpiRowProps) {
     >
       {items.slice(0, 3).map((k) => (
         <div key={k.label} className="flex min-w-0 flex-col whitespace-nowrap" title={k.title}>
-          <dt className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1">
+          <dt className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1 [text-box:trim-both_cap_alphabetic]">
             {k.label}
           </dt>
-          <dd className="mt-0.5 leading-9 text-ink">
-            <span
-              key={k.value}
-              className="board-swap inline-block text-(length:--font-size-kpi) font-bold"
-            >
+          <dd className="mt-2 text-(length:--font-size-kpi) leading-9 font-bold text-ink [text-box:trim-both_cap_alphabetic]">
+            <span key={k.value} className="board-swap inline-block">
               {k.value}
             </span>
             {k.unit ? (

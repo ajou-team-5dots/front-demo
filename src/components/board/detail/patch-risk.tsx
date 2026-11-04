@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 
-import { FONT_SIZE, OPACITY, RADIUS, SIZE, STROKE } from '@/styles/tokens';
+import { FONT_SIZE, OPACITY, RADIUS, SIZE, SPACE, STROKE } from '@/styles/tokens';
 import type { DailyPoint, PatchInfo } from '@/types/board';
 import type { H2Patch, H2Period } from '@/types/monsters';
 
@@ -14,7 +14,7 @@ import { Panel } from '../shell/panel';
 import { LegendItem, LineSwatch } from '../shell/panel-header';
 import { useTween } from '../shell/use-tween';
 import type { PatchRiskProps } from './contracts';
-import { DetailMotion, EASE, SLOW } from './detail-motion';
+import { DetailMotion } from './detail-motion';
 import { kstDay, kstDayFraction, md, num, round2, times } from './format';
 import { SignalBadge } from './signal-badge';
 
@@ -332,6 +332,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
           stroke="var(--chart-actual)"
           strokeOpacity={anyThin ? OPACITY.dim.line : 1}
           strokeWidth={STROKE.width.bold}
+          strokeLinecap="round"
           strokeLinejoin="round"
         />
         {anyThin && solid ? (
@@ -509,8 +510,6 @@ interface SidePanelProps {
   patch: PatchInfo | undefined;
   h2: H2Patch | undefined;
   picked: boolean;
-  /** 240-tall panel (unchanged monster): no hint line, before/after on one line. */
-  compact: boolean;
   show: Show;
   hide: () => void;
 }
@@ -520,25 +519,7 @@ const HINT = '레벨·장비·던전 단계를 맞춘 뒤 패치 후 ÷ 패치 �
 const periodLine = (label: string, p: H2Period) =>
   `${label} ${num(p.events)}/${num(p.enc)}교전 (100교전당 ${p.risk100.toFixed(1)})`;
 
-interface PeriodLineProps {
-  label: string;
-  p: H2Period;
-}
-
-/** periodLine with the numbers in ink and the words in gray. */
-function PeriodLine({ label, p }: PeriodLineProps) {
-  return (
-    <p>
-      {label}{' '}
-      <span className="text-ink">
-        {num(p.events)}/{num(p.enc)}
-      </span>
-      교전 (100교전당 <span className="text-ink">{p.risk100.toFixed(1)}</span>)
-    </p>
-  );
-}
-
-function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
+function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
   if (!patch) return <EmptyState>패치 기록 없음</EmptyState>;
   const sc = h2?.sameCondition ?? null;
   let stateText: string | null = null;
@@ -595,25 +576,18 @@ function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
       )}
       {h2 ? (
         <div className="mt-2 text-(length:--font-size-label) leading-[18px] font-medium text-gray-1 tabular-nums">
-          {compact ? (
-            <p>
-              위험 사건{' '}
-              <span className="text-ink">
-                {num(h2.before.events)}/{num(h2.before.enc)} → {num(h2.after.events)}/
-                {num(h2.after.enc)}
-              </span>{' '}
-              (100교전당{' '}
-              <span className="text-ink">
-                {h2.before.risk100.toFixed(1)} → {h2.after.risk100.toFixed(1)}
-              </span>
-              )
-            </p>
-          ) : (
-            <>
-              <PeriodLine label="패치 전 위험 사건" p={h2.before} />
-              <PeriodLine label="패치 후 위험 사건" p={h2.after} />
-            </>
-          )}
+          <p>
+            위험 사건{' '}
+            <span className="text-ink">
+              {num(h2.before.events)}/{num(h2.before.enc)} → {num(h2.after.events)}/
+              {num(h2.after.enc)}
+            </span>{' '}
+            (100교전당{' '}
+            <span className="text-ink">
+              {h2.before.risk100.toFixed(1)} → {h2.after.risk100.toFixed(1)}
+            </span>
+            )
+          </p>
           {picked ? <p>선택 조건과 관계없이 전체 교전 기준</p> : null}
           {h2.netOfComparator !== null ? (
             <p>
@@ -639,12 +613,15 @@ function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
 
 // ---- Panel ---------------------------------------------------------------------------------
 
-/** Panel heights: Figma 332 for a monster the patch changed, 240 when it did not. */
-const H_CHANGED = 332;
-const H_UNCHANGED = 240;
-/** Trend SVG heights that fill those panels. */
-const TH_CHANGED = 262;
-const TH_UNCHANGED = 170;
+/** Space under the header before the trend, and under the trend (the panel's bottom padding). */
+const BODY_TOP = 12;
+const BODY_BOTTOM = 16;
+/**
+ * One panel height for every monster, patch and period (size.patch-panel); the trend takes what
+ * the header and paddings leave, so the chart always fills the panel and empty states centre in
+ * the same box.
+ */
+const TREND_H = SIZE.patchPanel - SPACE.panelTop - SIZE.panelHeader - BODY_TOP - BODY_BOTTOM;
 
 // Figma 38:448 / 38:595: title + patch select (150×30 at 138/9), patch label, trend + ratio.
 export function PatchRisk({
@@ -670,13 +647,7 @@ export function PatchRisk({
   const sum = summarize(trend, patch, picked ? undefined : h2);
 
   return (
-    <div
-      className="shrink-0"
-      style={{
-        height: changed ? H_CHANGED : H_UNCHANGED,
-        transition: `height ${SLOW} ${EASE}`,
-      }}
-    >
+    <div className="h-(--size-patch-panel) shrink-0">
       <Panel
         title="패치 전후 위험"
         className="h-full overflow-hidden"
@@ -788,8 +759,8 @@ export function PatchRisk({
           ) : undefined
         }
       >
-        <div className="mt-3 flex" style={{ gap: COL_GAP }}>
-          <div className="flex shrink-0" style={{ width: trendW }}>
+        <div className="flex" style={{ gap: COL_GAP, marginTop: BODY_TOP, height: TREND_H }}>
+          <div className="flex shrink-0" style={{ width: trendW, height: TREND_H }}>
             {!hasTrend ? (
               <EmptyState>{picked ? '선택한 조건의 교전 없음' : '일별 기록 없음'}</EmptyState>
             ) : (
@@ -801,20 +772,13 @@ export function PatchRisk({
                 h2={picked ? undefined : h2}
                 picked={picked}
                 width={trendW}
-                height={changed ? TH_CHANGED : TH_UNCHANGED}
+                height={TREND_H}
                 show={tip.show}
                 hide={tip.hide}
               />
             )}
           </div>
-          <SidePanel
-            patch={patch}
-            h2={h2}
-            picked={picked}
-            compact={!changed}
-            show={tip.show}
-            hide={tip.hide}
-          />
+          <SidePanel patch={patch} h2={h2} picked={picked} show={tip.show} hide={tip.hide} />
         </div>
         <DetailMotion />
         {tip.node}

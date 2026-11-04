@@ -98,9 +98,7 @@ export const RADIUS = {
   panel: 10,
   control: 6,
   pill: 4,
-  focus: 4,
   mark: 2,
-  markSm: 1,
 } as const;
 
 /** Spacing, px. */
@@ -180,6 +178,8 @@ export const SIZE = {
     w: 420,
     h: 72,
   },
+  detailRow: 340,
+  patchPanel: 288,
 } as const;
 
 /** Easing control points [x1, y1, x2, y2] and durations (ms). */
@@ -800,7 +800,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-panel',
     css: '10px',
     value: 10,
-    description: '패널, KPI 상자, 필터 바 (rounded-panel). 제약: 레이아웃에 영향 없음',
+    description:
+      '모서리 규칙 "패널": 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널 (rounded-panel). 제약: control 이상',
   },
   {
     path: 'radius.control',
@@ -808,7 +809,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-control',
     css: '6px',
     value: 6,
-    description: '선택 상자, 칩, 목록 행, 툴팁, 세그먼트 바깥 (rounded-control). 제약: panel 이하',
+    description:
+      '모서리 규칙 "컨트롤": 입력·조작 요소 전부(선택 상자와 그 목록, 검색 입력, 세그먼트 바깥과 안 단추, 단추, ⓘ 단추, 목록 행), 툴팁, 패널 안 보조 상자(흐름 요약) (rounded-control). 제약: panel 이하, pill 이상',
   },
   {
     path: 'radius.pill',
@@ -817,15 +819,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '4px',
     value: 4,
     description:
-      '배지, 세그먼트 단추, 기술·비율 막대 끝 (rounded-pill). 제약: 막대 높이(size.bar.skill 15px, bar.share 16px)의 절반 이하가 자연스러움',
-  },
-  {
-    path: 'radius.focus',
-    type: 'dimension',
-    cssVar: '--corner-focus',
-    css: '4px',
-    value: 4,
-    description: '흐름도 칸 키보드 초점 고리 모서리. 제약: 없음',
+      '모서리 규칙 "칩·배지": 점검 신호·표본 부족·수치 미변경 등 배지, 흐름 조건 칩 (rounded-pill). 제약: 배지 높이(20px)의 절반 미만, control 이하',
   },
   {
     path: 'radius.mark',
@@ -833,15 +827,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-mark',
     css: '2px',
     value: 2,
-    description: '흐름도 칸, 같은 조건 위험 배수 범위 막대 모서리. 제약: 칸 너비(14px)의 1/4 이하',
-  },
-  {
-    path: 'radius.mark-sm',
-    type: 'dimension',
-    cssVar: '--corner-mark-sm',
-    css: '1px',
-    value: 1,
-    description: '산점도 네모(중간보스) 점 모서리. 제약: 2px 이하, 크면 원과 구분이 어려움',
+    description:
+      '모서리 규칙 "막대": 모든 막대 끝과 트랙(비율 막대, 기술 막대, 범위 막대, 0 표시), 막대 범례 견본, 흐름도 칸과 그 초점 고리, 산점도 네모 점 (rounded-mark, SVG RADIUS.mark). 트랙과 채움은 같은 값. 제약: 가장 작은 막대(size.bar.zero-stub 3px)보다 작게',
   },
   {
     path: 'space.panel-gap',
@@ -1242,6 +1229,24 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 72,
     description:
       'KPI 상자 높이 = 상세 제목 줄 높이. 제약: 라벨과 숫자(font-size.kpi) 두 줄이 들어가야 함, 레이아웃 영향',
+  },
+  {
+    path: 'size.detail-row',
+    type: 'dimension',
+    cssVar: '--size-detail-row',
+    css: '340px',
+    value: 340,
+    description:
+      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 준비 조건 패널 내용(머리 줄 + 네 조건 + 두 비율 막대)이 들어가야 함',
+  },
+  {
+    path: 'size.patch-panel',
+    type: 'dimension',
+    cssVar: '--size-patch-panel',
+    css: '288px',
+    value: 288,
+    description:
+      '상세 "패치 전후 위험" 패널 높이. 모든 몬스터·패치·기간에서 같은 값, 추이 차트 높이는 이 값에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함',
   },
   {
     path: 'motion.ease.board',

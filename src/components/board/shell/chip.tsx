@@ -18,7 +18,7 @@ export function FlowChip({ label, removeHref, arrow }: ChipProps) {
       type="button"
       onClick={() => navigate(removeHref)}
       aria-label={`${label} 조건 풀기`}
-      className="board-pop board-first board-control inline-flex h-7 min-w-32 items-center justify-center rounded-control bg-gray-3 px-3 text-(length:--font-size-label) font-medium whitespace-nowrap text-gray-1 hover:bg-state-chip-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+      className="board-pop board-first board-control inline-flex h-7 min-w-32 items-center justify-center rounded-pill bg-gray-3 px-3 text-(length:--font-size-label) font-medium whitespace-nowrap text-gray-1 hover:bg-state-chip-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
     >
       {arrow ? '→ ' : ''}
       {label} ×

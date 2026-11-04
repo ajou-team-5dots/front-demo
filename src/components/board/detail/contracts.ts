@@ -30,9 +30,9 @@ export interface ReadinessPanelProps {
 }
 
 /**
- * Figma 38:448 "패치 전후 위험" with the patch select, `width` wide (the detail column, measured) × 332. 240 tall when the selected patch
- * did not change this monster. Picked flow chips sit in PickedFlowRow; `picked` only marks the
- * trend as filtered.
+ * Figma 38:448 "패치 전후 위험" with the patch select, `width` wide (the detail column, measured) ×
+ * size.patch-panel, the same height for every monster and patch. Picked flow chips sit in
+ * PickedFlowRow; `picked` only marks the trend as filtered.
  */
 export interface PatchRiskProps {
   monster: string;

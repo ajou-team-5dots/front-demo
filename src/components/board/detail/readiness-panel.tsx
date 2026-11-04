@@ -171,8 +171,8 @@ function ShareBar({
           )}
         </span>
       </div>
-      {/* A zero share draws no empty track, only a short stub at 0 beside the "0/n건 · 0%" label
-          above; any other share runs on a light track. */}
+      {/* Every share runs on the same light track; a zero share puts a short stub at 0 on it
+          (with the "0/n건 · 0%" label above) instead of a fill. */}
       <div
         role="img"
         aria-label={
@@ -180,20 +180,17 @@ function ShareBar({
             ? `${title}: 표본 부족`
             : `${title}: ${unit} ${num(total)}건 중 ${num(n)}건, ${pct(share)}`
         }
-        className={cn(
-          'mt-2.5 h-(--size-bar-share) w-full overflow-hidden rounded-pill',
-          empty ? 'flex items-center' : 'bg-chart-track-bar',
-        )}
+        className="mt-2.5 h-(--size-bar-share) w-full overflow-hidden rounded-mark bg-chart-track-bar"
         onPointerMove={(e) => show(e, tip)}
         onPointerLeave={hide}
       >
         {empty ? (
-          <span aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-pill bg-gray-2" />
+          <div aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-mark bg-gray-2" />
         ) : null}
         {sampleShort || empty ? null : (
           <div
             className={cn(
-              'board-grow board-first h-full rounded-pill',
+              'board-grow board-first h-full rounded-mark',
               fill === 'death' ? 'bg-chart-death' : 'bg-chart-actual',
             )}
             style={{ width: `${Math.max(0, Math.min(1, share)) * 100}%`, transition: SLIDE }}

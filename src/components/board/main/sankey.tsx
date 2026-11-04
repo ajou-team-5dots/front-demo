@@ -443,7 +443,7 @@ export function Sankey({ width: W, columns, rows, pick, onToggle }: SankeyProps)
                   y={-3.5}
                   width={NODE_W + 2 * ring}
                   height={n.h + 7}
-                  rx={RADIUS.focus}
+                  rx={RADIUS.mark}
                   fill="none"
                   stroke="var(--ink)"
                   strokeWidth={STROKE.width.focus}

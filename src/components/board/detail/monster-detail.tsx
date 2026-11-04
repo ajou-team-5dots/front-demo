@@ -151,7 +151,7 @@ export function MonsterDetail({
           />
         }
       />
-      <div className="flex h-[340px] gap-(--space-panel-gap)">
+      <div className="flex h-(--size-detail-row) gap-(--space-panel-gap)">
         <div className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]">
           <Pentagon
             axes={detail.pentagon}

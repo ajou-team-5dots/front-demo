@@ -55,7 +55,7 @@ function Segment<T extends string>({ label, value, options, onChange }: SegmentP
       {pill ? (
         <span
           aria-hidden
-          className="absolute top-(--space-segment-inset) h-6 rounded-pill bg-panel transition-[left,width] duration-(--duration-base) ease-(--ease-board)"
+          className="absolute top-(--space-segment-inset) h-6 rounded-control bg-panel transition-[left,width] duration-(--duration-base) ease-(--ease-board)"
           style={{ left: pill.left, width: pill.width }}
         />
       ) : null}
@@ -73,7 +73,7 @@ function Segment<T extends string>({ label, value, options, onChange }: SegmentP
             onChange(o.value);
           }}
           className={cn(
-            'board-control relative h-6 rounded-pill px-3 text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
+            'board-control relative h-6 rounded-control px-3 text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
             picked === o.value ? 'text-ink' : 'text-gray-1 hover:text-ink',
             // Before the first measure the pill is drawn by the button itself.
             !pill && picked === o.value && 'bg-panel',
@@ -194,7 +194,7 @@ export function FilterBar({
             onChange={(e) => setQ(e.target.value)}
             placeholder="몬스터 검색"
             aria-label="몬스터 검색"
-            className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-[9px] pl-[29px] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
+            className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-[9px] pl-[calc(9px+var(--size-icon-search)+6px)] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
           />
         </div>
       ) : null}

@@ -69,7 +69,7 @@ export function BoardSelect({
           <SelectItem
             key={o.value}
             value={o.value}
-            className="h-8 rounded-pill pr-8 pl-[13px] text-(length:--font-size-label) font-medium text-gray-1 focus:bg-gray-3 focus:text-ink data-selected:text-ink"
+            className="h-8 rounded-control pr-8 pl-[13px] text-(length:--font-size-label) font-medium text-gray-1 focus:bg-gray-3 focus:text-ink data-selected:text-ink"
           >
             {o.label}
           </SelectItem>

@@ -89,11 +89,7 @@ export function MainSkeleton() {
   return (
     <div className="board-skeleton-late" aria-busy="true" aria-label="화면을 불러오는 중">
       <FilterSkeleton />
-      {/* The context line (context-bar.tsx) between the filter bar and the board. */}
-      <div className="flex h-[34px] items-center px-4">
-        <Block className="h-3 w-[420px]" />
-      </div>
-      <div className="flex gap-(--space-panel-gap)">
+      <div className="mt-(--space-panel-gap) flex gap-(--space-panel-gap)">
         <SidebarSkeleton />
         <div className="flex min-w-0 flex-1 flex-col gap-(--space-panel-gap)">
           <SkeletonPanel className="h-[678px]">
@@ -124,7 +120,7 @@ export function DetailSkeleton() {
         <Block className="h-[29px] w-56" />
         <Block className="h-(--size-kpi-box-h) w-(--size-kpi-box-w) shrink-0 rounded-panel" />
       </div>
-      <div className="flex h-[340px] gap-(--space-panel-gap)">
+      <div className="flex h-(--size-detail-row) gap-(--space-panel-gap)">
         <SkeletonPanel className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]" />
         <SkeletonPanel className="h-full min-w-0 flex-1" />
       </div>

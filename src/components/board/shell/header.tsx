@@ -4,7 +4,7 @@ import Link from 'next/link';
 export function BoardHeader() {
   return (
     <header className="flex h-[60px] items-center">
-      <Link href="/" className="flex items-center rounded-pill focus-visible:outline-2">
+      <Link href="/" className="flex items-center rounded-control focus-visible:outline-2">
         <span className="text-(length:--font-size-heading) leading-none font-semibold tracking-[2.6px] text-brand">
           AKKADIA
         </span>

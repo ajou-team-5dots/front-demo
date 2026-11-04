@@ -19,7 +19,7 @@ import { MainWidthProvider, useMeasuredWidth } from '@/components/board/shell/ma
 import { boardHref, monsterOfHref, toggleHref } from '@/lib/board-filters';
 import { pickChips } from '@/lib/board-rows';
 import { cn } from '@/lib/utils';
-import { SPACE } from '@/styles/tokens';
+import { MOTION, SPACE } from '@/styles/tokens';
 import type { BoardFilters, FlowData, FlowKey, FlowPick } from '@/types/board';
 import type { MonsterMainRow } from '@/types/monsters';
 
@@ -47,8 +47,8 @@ interface SharedHover {
   from: HoverSource;
 }
 
-// Below the filter bar and the context line, as one board. Panel content starts at 52 (top 12 +
-// the 30px shared header + 10).
+// Below the filter bar, as one board. Panel content starts 10px under the shared header
+// (space.panel-top + size.panel-header + 10).
 //   left: the explorer list ("위험 높은 순"), a 320-wide sidebar running the full board height.
 //   main: the rest of the frame (1066 at the 1440 frame, 1506 at 1920), measured. It holds the
 //   overview (scatter 678, gap 14, flow 440) and, when a monster is open, its detail, side by
@@ -77,6 +77,7 @@ const SLOT_W = `calc(50% - ${GAP / 2}px)`;
 const DETAIL_X = `calc(50% + ${GAP / 2}px)`;
 const TRACK_OPEN = `translateX(calc(-50% - ${GAP / 2}px))`;
 const SLIDE = 'transform var(--duration-slow) var(--ease-board)';
+const GROW = 'height var(--duration-slow) var(--ease-board)';
 
 /** Attribute-selector-safe monster id (ids look like elderroot_stage_1). */
 const attr = (s: string) => s.replace(/["\\]/g, '\\$&');
@@ -208,6 +209,54 @@ export function MainBoard({
     }
   }, [monster]);
 
+  // Opening or closing glides the board's height from the outgoing slot's to the incoming one's
+  // (same duration and curve as the slide), then hands it back to the content (auto). The
+  // sidebar stretches to the main column every frame, so the two bottoms stay level throughout
+  // and nothing moves once the slide ends. lastH is the height before this commit's layout.
+  const lastH = useRef(0);
+  const sliding = useRef(false);
+  useLayoutEffect(() => {
+    const el = mainRef.current;
+    if (!el) return undefined;
+    lastH.current = el.getBoundingClientRect().height;
+    const ro = new ResizeObserver(() => {
+      if (!sliding.current) lastH.current = el.getBoundingClientRect().height;
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const wasOpen = useRef(open);
+  useLayoutEffect(() => {
+    const el = mainRef.current;
+    if (!el || wasOpen.current === open) return undefined;
+    wasOpen.current = open;
+    const from = lastH.current;
+    const to = el.getBoundingClientRect().height;
+    if (!from || Math.abs(from - to) < 1 || reducedMotion()) return undefined;
+    sliding.current = true;
+    el.style.height = `${from}px`;
+    el.getBoundingClientRect(); // commit the start height before the transition
+    el.style.transition = GROW;
+    el.style.height = `${to}px`;
+    const finish = () => {
+      el.style.height = '';
+      el.style.transition = '';
+      sliding.current = false;
+      lastH.current = el.getBoundingClientRect().height;
+    };
+    const onEnd = (e: TransitionEvent) => {
+      if (e.target === el && e.propertyName === 'height') finish();
+    };
+    el.addEventListener('transitionend', onEnd);
+    // Transitions are off while the board is still settling (data-board-still): finish anyway.
+    const timer = setTimeout(finish, MOTION.duration.slow + 80);
+    return () => {
+      el.removeEventListener('transitionend', onEnd);
+      clearTimeout(timer);
+      if (sliding.current) finish();
+    };
+  }, [open]);
+
   // Keep the open monster visible in the sidebar (e.g. opened from the scatter).
   useEffect(() => {
     if (monster) revealRow(sidebarRef.current, monster);
@@ -234,7 +283,7 @@ export function MainBoard({
           className="h-full"
           enter={0}
         >
-          <div className="absolute inset-x-2 top-[52px] bottom-3">
+          <div className="absolute inset-x-2 top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] bottom-3">
             {ranked.length ? (
               <RiskList
                 rows={ranked}
@@ -282,7 +331,7 @@ export function MainBoard({
                 className="h-[678px] shrink-0"
                 enter={1}
               >
-                <div className="absolute inset-x-4 top-[52px] h-[597px]">
+                <div className="absolute inset-x-4 top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] h-[597px]">
                   {rows.length ? (
                     <FocusScatter
                       rows={rows}
@@ -312,7 +361,7 @@ export function MainBoard({
                 enter={2}
               >
                 <div
-                  className="absolute top-[52px] left-4"
+                  className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] left-4"
                   style={{ right: SANKEY_REST - PANEL_X, height: SANKEY_H }}
                 >
                   {hasFlow ? (
@@ -328,7 +377,7 @@ export function MainBoard({
                   )}
                 </div>
                 <div
-                  className="absolute top-[52px] right-3"
+                  className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] right-3"
                   style={{ width: SUMMARY_W, height: SANKEY_H }}
                 >
                   <FlowSummary

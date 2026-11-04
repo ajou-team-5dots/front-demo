@@ -88,7 +88,8 @@ interface LineSwatchProps {
   dash?: string;
 }
 
-/** A short line key for line-chart legends (solid or dashed). */
+/** A short line key for line-chart legends: solid data lines get round caps like the lines they
+ * stand for; dashed guide lines keep butt caps so the dash pattern reads as drawn. */
 export function LineSwatch({ color, width, dash }: LineSwatchProps) {
   return (
     <svg aria-hidden width={SIZE.legend.swatchW} height={4} className="shrink-0">
@@ -100,6 +101,7 @@ export function LineSwatch({ color, width, dash }: LineSwatchProps) {
         stroke={color}
         strokeWidth={width}
         strokeDasharray={dash}
+        strokeLinecap={dash ? undefined : 'round'}
       />
     </svg>
   );

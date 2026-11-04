@@ -65,8 +65,10 @@ const R = 90;
  */
 const Z_MAX = 3;
 const RINGS = [-2, -1, 0, 1, 2];
-const ringLabel = (z: number) => {
-  if (z === 0) return '중앙값';
+/** Ticks of the scale ruler: the center (−3) to the spoke end (+3). */
+const SCALE_TICKS = [-3, -2, -1, 0, 1, 2, 3];
+const tickLabel = (z: number) => {
+  if (z === 0) return '0';
   return z > 0 ? `+${z}` : `−${-z}`;
 };
 const CAPTION =
@@ -77,10 +79,14 @@ const isNum = (v: number | null | undefined): v is number =>
 /** Beyond the scale end, so the vertex is pinned at ±Z_MAX. */
 const isOut = (z: number | null | undefined) => isNum(z) && Math.abs(z) > Z_MAX;
 
-/** Ring labels sit this far beside the top spoke, clear of its (hovered) vertex dot. */
-const LABEL_DX = STROKE.point.vertexHover + 3;
-/** Rough label box: 10px text, Hangul full width, signs and digits about 0.6em. */
-const labelBox = (z: number) => ({ w: z === 0 ? 30 : 13, h: 12 });
+/**
+ * The ring scale is a small ruler outside the drawing, centered under the shape between the two
+ * bottom axis labels (where no line ever runs): one radius long, center (−3) on the left, spoke
+ * end (+3) on the right. Tick labels on the rings themselves would always cross the outline or a
+ * ring edge somewhere.
+ */
+const SCALE_Y = 228;
+const SCALE_X0 = CX - R / 2;
 const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / 5;
 const pointAt = (i: number, r: number): [number, number] => [
   round2(CX + r * Math.cos(angle(i))),
@@ -108,23 +114,6 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
   // edges never come apart from the points mid-animation.
   const radii = useTween(rows.map((r) => (has[r.i] ? radiusOf(r.data?.z ?? 0) : 0)));
   const vertex = (i: number) => pointAt(i, radii[i]);
-  // Ring labels go right of the top spoke unless a plotted vertex would land on them there and
-  // the left side is clear (decided on the target radii, so the side does not flicker).
-  const labelHit = (z: number, side: 1 | -1) =>
-    rows.some((r) => {
-      if (!has[r.i]) return false;
-      const [vx, vy] = pointAt(r.i, radiusOf(r.data?.z ?? 0));
-      const { w, h } = labelBox(z);
-      const x0 = side > 0 ? CX + LABEL_DX : CX - LABEL_DX - w;
-      const y1 = CY - radiusOf(z) + 3.5;
-      const p = STROKE.point.vertexHover + 1;
-      return vx + p > x0 && vx - p < x0 + w && vy + p > y1 - h + 2 && vy - p < y1 + 2;
-    });
-  const ringLabelHits = (side: 1 | -1) => RINGS.some((z) => labelHit(z, side));
-  const labelSide = ringLabelHits(1) && !ringLabelHits(-1) ? -1 : 1;
-  // A ring label that would still sit on a vertex on that side is left out (the scale is also
-  // explained in ⓘ), so no tick text is ever drawn over a dot.
-  const ringShown = RINGS.filter((z) => !labelHit(z, labelSide));
   const shown = rows.filter((r) => has[r.i]);
   // A missing axis pulls the fill to the center (a notch, never a 4-gon across the gap) and
   // leaves the outline open on both sides of it.
@@ -156,6 +145,7 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
       info={
         <>
           <p>{CAPTION}</p>
+          <p className="mt-1">아래 눈금자 = 가운데 −3 → 바큇살 끝 +3, 0 = 중앙값(점선 고리)</p>
           <p className="mt-1">바깥쪽 = 비교 집단보다 높음 · 모양만으로 원인을 판단하지 않음</p>
           {note ? <p className="mt-1">{note}</p> : null}
         </>
@@ -280,30 +270,50 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
             })}
           </g>
 
-          {/* Ring labels once, beside the top spoke (clear of its vertex), drawn over the polygon
-              with a panel halo so the fill and outline never cover them. */}
-          <g
-            data-ring-labels
-            fontSize={FONT_SIZE.micro}
-            fontWeight={500}
-            fill="var(--gray-1)"
-            aria-hidden
-          >
-            {ringShown.map((z) => (
-              <text
-                key={z}
-                x={CX + labelSide * LABEL_DX}
-                y={CY - radiusOf(z) + 3.5}
-                textAnchor={labelSide > 0 ? 'start' : 'end'}
-                paintOrder="stroke"
-                stroke="var(--panel)"
-                strokeWidth={STROKE.width.halo}
-                strokeLinejoin="round"
-                className="tabular-nums"
-              >
-                {ringLabel(z)}
-              </text>
-            ))}
+          {/* Ring scale ruler (see SCALE_Y). The 0 tick is the dashed median ring's color. */}
+          <g data-ring-scale aria-hidden>
+            <line
+              x1={SCALE_X0}
+              x2={SCALE_X0 + R}
+              y1={SCALE_Y}
+              y2={SCALE_Y}
+              stroke="var(--gray-2)"
+              strokeWidth={STROKE.width.thin}
+            />
+            {SCALE_TICKS.map((z) => {
+              const x = round2(SCALE_X0 + radiusOf(z));
+              // The ends (±3) get a tick only: their labels would crowd the bottom axis labels.
+              const labelled = Math.abs(z) < Z_MAX;
+              return (
+                <g key={z}>
+                  <line
+                    x1={x}
+                    x2={x}
+                    y1={SCALE_Y - 3}
+                    y2={SCALE_Y + 3}
+                    stroke={z === 0 ? 'var(--chart-comparison)' : 'var(--gray-2)'}
+                    strokeWidth={z === 0 ? STROKE.width.regular : STROKE.width.thin}
+                  />
+                  {labelled ? (
+                    <text
+                      x={x}
+                      y={SCALE_Y + 13}
+                      textAnchor="middle"
+                      fontSize={FONT_SIZE.micro}
+                      fontWeight={z === 0 ? 600 : 500}
+                      fill={z === 0 ? 'var(--ink)' : 'var(--gray-1)'}
+                      paintOrder="stroke"
+                      stroke="var(--panel)"
+                      strokeWidth={STROKE.width.halo}
+                      strokeLinejoin="round"
+                      className="tabular-nums"
+                    >
+                      {tickLabel(z)}
+                    </text>
+                  ) : null}
+                </g>
+              );
+            })}
           </g>
           {/* Axis labels */}
           {rows.map((r) => {

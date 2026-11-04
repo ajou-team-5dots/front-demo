@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { MissingDetail, MonsterDetail } from '@/components/board/detail/monster-detail';
 import { MainBoard } from '@/components/board/main/main-board';
 import { BoardFrame, DetailSkeleton, MainSkeleton } from '@/components/board/shell/board-frame';
-import { ContextBar } from '@/components/board/shell/context-bar';
 import { FilterBar } from '@/components/board/shell/filter-bar';
 import { parseFilters, parseMonster, parsePick } from '@/lib/board-filters';
 import { dayRange, filterRows, stagesOf } from '@/lib/board-rows';
@@ -60,16 +59,13 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
   const filters = parseFilters(query);
   const pick = parsePick(query);
   const asked = parseMonster(query);
-  // getDataRange is the same cached precomputed-meta read the detail already makes.
-  const [all, flow, range] = await Promise.all([
+  const [all, flow] = await Promise.all([
     getMonsterList(filters.heavy, filters.period),
     getFlow(filters.heavy, filters.period),
-    getDataRange(),
   ]);
   // Only a monster of this batch opens (and fetches) a detail; any other ?m= shows the overview,
   // so random strings never reach the detail queries or their cache.
   const monster = asked && all.some((r) => r.monster === asked) ? asked : null;
-  const rows = filterRows(all, filters);
   return (
     <>
       <FilterBar
@@ -80,15 +76,9 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
         monster={monster}
         variant="main"
       />
-      <ContextBar
-        rangeLabel={dayRange(range)}
-        filters={filters}
-        shown={rows.length}
-        monster={monster}
-      />
-      <div>
+      <div className="mt-(--space-panel-gap)">
         <MainBoard
-          rows={rows}
+          rows={filterRows(all, filters)}
           flow={flow}
           filters={filters}
           pick={pick}
