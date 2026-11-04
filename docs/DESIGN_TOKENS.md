@@ -75,39 +75,40 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 
 ### 색
 
-| 토큰                                              | CSS 변수                | 화면 위치                                                                   |
-| ------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------- |
-| `color.base.brand`                                | `--brand`               | 머리글 AKKADIA                                                              |
-| `color.base.ink`                                  | `--ink`                 | 모든 본문 글자, 초점 고리, 1배 기준선                                       |
-| `color.base.gray-1`                               | `--gray-1`              | 보조 글자, 축 눈금, 중앙값 점선                                             |
-| `color.base.gray-2`                               | `--gray-2`              | 선택 상자 테두리, 산점도 0 기준선                                           |
-| `color.base.gray-3`                               | `--gray-3`              | 페이지 바탕, 세그먼트 바탕, 칩, 열린 목록 행                                |
-| `color.base.panel`                                | `--panel`               | 패널 바탕, 차트 글자 뒤 테두리                                              |
-| `color.base.primary-strong/-soft`, `success-soft` | 같은 이름               | shadcn 부품 (보드 화면에서는 거의 안 씀)                                    |
-| `color.base.skeleton-shine`                       | `--skeleton-shine`      | 로딩 뼈대 반짝임                                                            |
-| `color.chart.actual`                              | `--chart-actual`        | 오각형 고른 몬스터 선·면, 패치 추이 선과 점, 위험 배수 점                   |
-| `color.chart.comparison`                          | `--chart-comparison`    | 오각형 비교 고리, 평균 점선, 범위 막대                                      |
-| `color.chart.death`                               | `--chart-death`         | 사망 막대, 사망 점, 산점도 2배 선                                           |
-| `color.chart.survival`                            | `--chart-survival`      | 생존 막대, 처치 점                                                          |
-| `color.chart.track`                               | `--chart-track`         | 격자, 기준선                                                                |
-| `color.chart.track-bar`                           | `--chart-track-bar`     | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)                             |
-| `color.chart.guide`                               | `--chart-guide`         | 준비 조건 공유 눈금의 세로 격자선 (패널 대비 1.15:1 이상)                   |
-| `color.chart.dumbbell-line`                       | `--chart-dumbbell-line` | 준비 조건 덤벨 가운데 연결선 (지금 `chart.accent` 참조, 패널 대비 3:1 이상) |
-| `color.chart.accent/earth/violet`                 | `--chart-accent` 등     | 흐름도 칸 색의 재료. `accent`는 덤벨 연결선도 따라 바뀜                     |
-| `color.chart.neutral`                             | `--chart-neutral`       | 산점도 1배 미만 점, 흐름도 순서 밖 칸                                       |
-| `color.status.*`                                  | `--status-*`            | 배지 글자 (점검 신호, 표본 부족, 가설 지지)                                 |
-| `color.status.*-soft`                             | `--status-*-soft`       | 배지 바탕 (상태색 10%)                                                      |
-| `color.sankey.lv.1–4`                             | `--sankey-lv-1` …       | 흐름도 1열 레벨 칸 (값 순서대로)                                            |
-| `color.sankey.wp.1–4`                             | `--sankey-wp-1` …       | 흐름도 2열 무기 칸                                                          |
-| `color.sankey.ar.1–3`                             | `--sankey-ar-1` …       | 흐름도 3열 방어구 칸                                                        |
-| `color.sankey.grp.1–5`                            | `--sankey-grp-1` …      | 흐름도 4열 몬스터 집단 칸                                                   |
-| `color.sankey.neutral`                            | `--sankey-neutral`      | 정해진 순서 밖의 칸                                                         |
-| `color.scatter.high/mid/below`                    | `--scatter-*`           | 산점도 점 색 (2배 이상 / 1~2배 / 1배 미만)과 범례                           |
-| `color.scatter.zone`                              | `--scatter-zone`        | 산점도 우선 점검 구역 바탕 (사망색 8%)                                      |
-| `color.text-scale.flag`                           | `--text-scale-flag`     | 위험 목록 2배 이상 숫자                                                     |
-| `color.text-scale.sub`                            | `--text-scale-sub`      | 위험 목록 "N단계 · 역할" 줄, 값 없는 숫자                                   |
-| `color.state.row-hover`                           | `--state-row-hover`     | 차트에서 가리킨 몬스터의 목록 행 바탕                                       |
-| `color.state.chip-hover`                          | `--state-chip-hover`    | 흐름 칩 hover 바탕                                                          |
+| 토큰                                              | CSS 변수                | 화면 위치                                                                             |
+| ------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------- |
+| `color.base.brand`                                | `--brand`               | 머리글 AKKADIA                                                                        |
+| `color.base.ink`                                  | `--ink`                 | 모든 본문 글자, 초점 고리, 1배 기준선                                                 |
+| `color.base.gray-1`                               | `--gray-1`              | 보조 글자, 축 눈금, 중앙값 점선                                                       |
+| `color.base.gray-2`                               | `--gray-2`              | 선택 상자 테두리, 산점도 0 기준선                                                     |
+| `color.base.gray-3`                               | `--gray-3`              | 페이지 바탕, 세그먼트 바탕, 칩, 열린 목록 행                                          |
+| `color.base.panel`                                | `--panel`               | 패널 바탕, 차트 글자 뒤 테두리                                                        |
+| `color.base.primary-strong/-soft`, `success-soft` | 같은 이름               | shadcn 부품 (보드 화면에서는 거의 안 씀)                                              |
+| `color.base.skeleton-shine`                       | `--skeleton-shine`      | 로딩 뼈대 반짝임                                                                      |
+| `color.chart.actual`                              | `--chart-actual`        | 오각형 고른 몬스터 선·면, 패치 추이 선과 점, 위험 배수 점                             |
+| `color.chart.comparison`                          | `--chart-comparison`    | 오각형 비교 고리, 평균 점선, 범위 막대                                                |
+| `color.chart.death`                               | `--chart-death`         | 사망 막대, 사망 점, 산점도 2배 선                                                     |
+| `color.chart.survival`                            | `--chart-survival`      | 생존 막대, 처치 점                                                                    |
+| `color.chart.track`                               | `--chart-track`         | 격자, 기준선                                                                          |
+| `color.chart.track-bar`                           | `--chart-track-bar`     | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)                                       |
+| `color.chart.guide`                               | `--chart-guide`         | 준비 조건 공유 눈금의 세로 격자선 (패널 대비 1.15:1 이상)                             |
+| `color.chart.dumbbell-line`                       | `--chart-dumbbell-line` | 준비 조건 덤벨 가운데 연결선 (지금 `chart.accent` 참조, 패널 대비 3:1 이상)           |
+| `color.chart.accent/earth/violet`                 | `--chart-accent` 등     | 흐름도 칸 색의 재료. `accent`는 덤벨 연결선도 따라 바뀜                               |
+| `color.chart.neutral`                             | `--chart-neutral`       | 산점도 1배 미만 점, 흐름도 순서 밖 칸                                                 |
+| `color.status.*`                                  | `--status-*`            | 배지 글자 (점검 신호, 표본 부족, 가설 지지)                                           |
+| `color.status.*-soft`                             | `--status-*-soft`       | 배지 바탕 (상태색 10%)                                                                |
+| `color.sankey.lv.1–4`                             | `--sankey-lv-1` …       | 흐름도 1열 레벨 칸 (값 순서대로)                                                      |
+| `color.sankey.wp.1–4`                             | `--sankey-wp-1` …       | 흐름도 2열 무기 칸                                                                    |
+| `color.sankey.ar.1–3`                             | `--sankey-ar-1` …       | 흐름도 3열 방어구 칸                                                                  |
+| `color.sankey.grp.1–5`                            | `--sankey-grp-1` …      | 흐름도 4열 몬스터 집단 칸                                                             |
+| `color.sankey.neutral`                            | `--sankey-neutral`      | 정해진 순서 밖의 칸                                                                   |
+| `color.scatter.high/mid/below`                    | `--scatter-*`           | 산점도 점 색 (2배 이상 / 1~2배 / 1배 미만)과 범례                                     |
+| `color.scatter.zone`                              | `--scatter-zone`        | 산점도 우선 점검 구역 바탕 (사망색 8%)                                                |
+| `color.text-scale.flag`                           | `--text-scale-flag`     | 위험 목록 2배 이상 숫자                                                               |
+| `color.text-scale.sub`                            | `--text-scale-sub`      | 위험 목록 "N단계 · 역할" 줄, 값 없는 숫자                                             |
+| `color.state.row-hover`                           | `--state-row-hover`     | 차트에서 가리킨 몬스터의 목록 행 바탕                                                 |
+| `color.state.chip-hover`                          | `--state-chip-hover`    | 흐름 칩 hover 바탕                                                                    |
+| `color.state.chip-close`                          | `--state-chip-close`    | 흐름 칩 X 아이콘 기본색 (gray-1을 ink 쪽으로 50%, hover 때 ink. gray-3 대비 3:1 이상) |
 
 ### 불투명도
 
@@ -179,43 +180,49 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 
 ### 크기, 모서리, 간격
 
-| 토큰                                             | 값      | 화면 위치                                                      |
-| ------------------------------------------------ | ------- | -------------------------------------------------------------- |
-| `size.bar.skill`                                 | 15      | 보스 기술 막대 높이                                            |
-| `size.bar.share`                                 | 16      | 준비 패널 비율 막대 높이                                       |
-| `size.bar.interval`                              | 6       | 같은 조건 위험 배수 범위 막대 높이                             |
-| `size.bar.zero-stub`                             | 3       | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)                  |
-| `size.dumbbell.line`                             | 3       | 준비 조건 처치자→사망자 선                                     |
-| `size.dumbbell.dot`                              | 14      | 준비 조건 점 지름                                              |
-| `size.legend.dot`                                | 10      | 준비 패널 범례 동그라미                                        |
-| `size.legend.swatch-w`                           | 16      | 보스 기술 범례 견본 너비                                       |
-| `size.icon.info`                                 | 15      | 패널 제목 줄 ⓘ 설명 단추 아이콘                                |
-| `size.icon.search`                               | 14      | 필터 바 몬스터 검색 돋보기 아이콘                              |
-| `size.panel-header`                              | 30      | 모든 패널 머리 줄 높이                                         |
-| `size.kpi-box.w`                                 | 420     | 상세 KPI 상자 너비                                             |
-| `size.kpi-box.h`                                 | 72      | 상세 KPI 상자 높이 = 제목 줄 높이                              |
-| `size.detail-row`                                | 364     | 상세 첫 줄(전투 양상 + 준비 조건) 높이                         |
-| `size.patch-panel`                               | 288     | 패치 전후 위험 패널 최소 높이 (창이 남으면 늘어남)             |
-| `size.ratio-axis.w`                              | 330     | 같은 조건 위험 배수 범위 축 너비                               |
-| `size.ratio-axis.h-min`, `size.ratio-axis.h-max` | 58 / 96 | 범위 축 높이 (패널이 높아지면 이 범위에서 커짐)                |
-| `size.sankey.node-width`                         | 14      | 흐름도 칸 너비                                                 |
-| `size.sankey.node-min`                           | 18      | 흐름도 칸 최소 높이                                            |
-| `size.sankey.pick-grow`                          | 4       | 고른 칸이 넓어지는 양                                          |
-| `radius.panel`                                   | 10      | 패널, 사이드바, KPI 상자 (`rounded-panel`)                     |
-| `radius.control`                                 | 6       | 입력·조작 요소, 목록 행, 툴팁 (`rounded-control`)              |
-| `radius.pill`                                    | 4       | 칩, 배지 (`rounded-pill`)                                      |
-| `radius.mark`                                    | 2       | 모든 막대·트랙, 흐름도 칸, 산점도 네모 (`rounded-mark`)        |
-| `space.panel-gap`                                | 14      | 패널 사이                                                      |
-| `space.panel-inset`                              | 16      | 패널 안쪽 좌우                                                 |
-| `space.panel-top`                                | 12      | 패널 위 (제목 위)                                              |
-| `space.segment-inset`                            | 3       | 기간, 2초·5초 세그먼트 안쪽                                    |
-| `space.page-bottom`                              | 20      | 보드 아래 끝 ↔ 창 아래 끝 (짧은 화면은 보드가 여기까지 늘어남) |
-| `space.panel-bottom`                             | 20      | 상세 첫 줄 패널의 아래 여백 (제목 위 여백과 같게)              |
-| `space.dumbbell-gap`                             | 14      | 준비 조건 행의 칸 사이 간격                                    |
-| `space.patch-body-top`                           | 12      | 패치 전후 위험 머리 줄 ↔ 추이 차트                             |
-| `space.patch-body-bottom`                        | 16      | 패치 전후 위험 추이 차트 ↔ 패널 아래                           |
-| `space.search-inset`                             | 9       | 검색 입력 좌우 안쪽 여백                                       |
-| `space.search-icon-gap`                          | 6       | 검색 돋보기 ↔ 글자                                             |
+| 토큰                                             | 값      | 화면 위치                                                        |
+| ------------------------------------------------ | ------- | ---------------------------------------------------------------- |
+| `size.bar.skill`                                 | 15      | 보스 기술 막대 높이                                              |
+| `size.bar.share`                                 | 16      | 준비 패널 비율 막대 높이                                         |
+| `size.bar.interval`                              | 6       | 같은 조건 위험 배수 범위 막대 높이                               |
+| `size.bar.zero-stub`                             | 3       | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)                    |
+| `size.dumbbell.line`                             | 3       | 준비 조건 처치자→사망자 선                                       |
+| `size.dumbbell.dot`                              | 14      | 준비 조건 점 지름                                                |
+| `size.legend.dot`                                | 10      | 준비 패널 범례 동그라미                                          |
+| `size.legend.swatch-w`                           | 16      | 보스 기술 범례 견본 너비                                         |
+| `size.icon.info`                                 | 15      | 패널 제목 줄 ⓘ 설명 단추 아이콘                                  |
+| `size.icon.search`                               | 14      | 필터 바 몬스터 검색 돋보기 아이콘                                |
+| `size.icon.chip-close`                           | 14      | 흐름 칩 X(조건 풀기) 아이콘                                      |
+| `size.chip`                                      | 28      | 흐름 칩 높이 (칩 전체가 조건 풀기 단추, 너비는 글자 길이에 맞춤) |
+| `size.panel-header`                              | 30      | 모든 패널 머리 줄 높이                                           |
+| `size.kpi-box.w`                                 | 420     | 상세 KPI 상자 너비                                               |
+| `size.kpi-box.h`                                 | 72      | 상세 KPI 상자 높이 = 제목 줄 높이                                |
+| `size.detail-row`                                | 364     | 상세 첫 줄(전투 양상 + 준비 조건) 높이                           |
+| `size.patch-panel`                               | 288     | 패치 전후 위험 패널 최소 높이 (창이 남으면 늘어남)               |
+| `size.ratio-axis.w`                              | 330     | 같은 조건 위험 배수 범위 축 너비                                 |
+| `size.ratio-axis.h-min`, `size.ratio-axis.h-max` | 58 / 96 | 범위 축 높이 (패널이 높아지면 이 범위에서 커짐)                  |
+| `size.sankey.node-width`                         | 14      | 흐름도 칸 너비                                                   |
+| `size.sankey.node-min`                           | 18      | 흐름도 칸 최소 높이                                              |
+| `size.sankey.pick-grow`                          | 4       | 고른 칸이 넓어지는 양                                            |
+| `radius.panel`                                   | 10      | 패널, 사이드바, KPI 상자 (`rounded-panel`)                       |
+| `radius.control`                                 | 6       | 입력·조작 요소, 목록 행, 툴팁 (`rounded-control`)                |
+| `radius.pill`                                    | 4       | 칩, 배지 (`rounded-pill`)                                        |
+| `radius.mark`                                    | 2       | 모든 막대·트랙, 흐름도 칸, 산점도 네모 (`rounded-mark`)          |
+| `space.panel-gap`                                | 14      | 패널 사이                                                        |
+| `space.panel-inset`                              | 16      | 패널 안쪽 좌우                                                   |
+| `space.panel-top`                                | 12      | 패널 위 (제목 위)                                                |
+| `space.segment-inset`                            | 3       | 기간, 2초·5초 세그먼트 안쪽                                      |
+| `space.page-bottom`                              | 20      | 보드 아래 끝 ↔ 창 아래 끝 (짧은 화면은 보드가 여기까지 늘어남)   |
+| `space.panel-bottom`                             | 20      | 상세 첫 줄 패널의 아래 여백 (제목 위 여백과 같게)                |
+| `space.dumbbell-gap`                             | 14      | 준비 조건 행의 칸 사이 간격                                      |
+| `space.patch-body-top`                           | 12      | 패치 전후 위험 머리 줄 ↔ 추이 차트                               |
+| `space.patch-body-bottom`                        | 16      | 패치 전후 위험 추이 차트 ↔ 패널 아래                             |
+| `space.search-inset`                             | 9       | 검색 입력 좌우 안쪽 여백                                         |
+| `space.search-icon-gap`                          | 6       | 검색 돋보기 ↔ 글자                                               |
+| `space.chip-inset`                               | 10      | 흐름 칩 안 좌우 여백                                             |
+| `space.chip-part-gap`                            | 4       | 흐름 칩 열 이름(옅게) ↔ 값(진하게)                               |
+| `space.chip-close-gap`                           | 6       | 흐름 칩 값 ↔ X 아이콘                                            |
+| `space.chip-gap`                                 | 8       | 흐름 칩끼리 (조건은 AND라 화살표 없이 간격만)                    |
 
 ### 모서리 규칙 (요소 종류 → 토큰)
 
@@ -226,7 +233,7 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | 패널              | `radius.panel` 10px  | `rounded-panel`                                | 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널                                                                                                  |
 | 컨트롤(입력·조작) | `radius.control` 6px | `rounded-control`                              | 선택 상자와 그 목록·항목, 검색 입력, 세그먼트(기간, 고활동 계정, 2초·5초) 바깥과 안 단추, 단추, ⓘ 단추, 목록 행, 패널 안 보조 상자(흐름 요약) |
 | 툴팁              | `radius.control` 6px | `rounded-control`                              | 차트 툴팁, ⓘ 설명 (떠 있는 상자는 선택 목록과 같은 값)                                                                                        |
-| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 선택한 흐름 기준, 흐름 조건 칩                                           |
+| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 흐름 조건 칩                                                             |
 | 막대              | `radius.mark` 2px    | `rounded-mark`, SVG `rx={RADIUS.mark}`         | 비율 막대와 트랙, 기술 막대와 트랙, 0 표시, 범위 막대, 흐름도 칸, 산점도 네모(중간보스), 막대 범례 견본. 트랙과 채움은 항상 같은 값           |
 | 점                | 원                   | `rounded-full`, SVG `<circle>`                 | 산점도 원, 오각형 꼭짓점, 추이 점, 범례 동그라미, 준비 조건 점                                                                                |
 | 선                | 둥근 끝              | `strokeLinecap="round"`, 연결선 `rounded-full` | 데이터 선(추이 선, 오각형 바깥선, 실선 범례 견본), 준비 조건 연결선. 점선 기준선(1배, 평균, 중앙값 고리)은 끝을 둥글게 하지 않음              |

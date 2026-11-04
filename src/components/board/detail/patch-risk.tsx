@@ -52,8 +52,6 @@ interface TrendProps {
   trend: DailyPoint[];
   patch: PatchInfo | undefined;
   h2: H2Patch | undefined;
-  /** The trend is filtered by picked flow cells. */
-  picked: boolean;
   /** SVG width (what the ratio column leaves in the panel). */
   width: number;
   /** SVG height (226 on changed monsters, smaller on unchanged ones). */
@@ -104,7 +102,7 @@ function summarize(trend: DailyPoint[], patch: PatchInfo | undefined, h2: H2Patc
 const avgText = (b: Avg, a: Avg) =>
   `패치 전 ${b.value.toFixed(1)} (${num(b.events)}/${num(b.enc)}) → 패치 후 ${a.value.toFixed(1)} (${num(a.events)}/${num(a.enc)})`;
 
-function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: TrendProps) {
+function Trend({ trend, patch, h2, width: TW, height: TH, show, hide }: TrendProps) {
   // Series key, thin-day key and the average key are in the panel header legend; each average's
   // value is a direct label on its own dashed segment (see placeAvg).
   const days = [...trend].sort((a, b) => a.day.localeCompare(b.day));
@@ -224,7 +222,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         height={TH}
         viewBox={`0 0 ${TW} ${TH}`}
         role="img"
-        aria-label={`100교전당 위험 사건 일별 추이${picked ? ' (선택한 흐름 기준)' : ''}${
+        aria-label={`100교전당 위험 사건 일별 추이${
           before && after
             ? `, 패치 전 ${before.value.toFixed(1)}, 패치 후 ${after.value.toFixed(1)}`
             : ''
@@ -547,7 +545,6 @@ interface SidePanelProps {
   height: number;
   patch: PatchInfo | undefined;
   h2: H2Patch | undefined;
-  picked: boolean;
   show: Show;
   hide: () => void;
 }
@@ -564,7 +561,7 @@ const SIDE_FIXED = SIDE_TOP + 14 + 8 + 24 + 8 + 18;
 const LINE_H = 18;
 const BADGE_ROW = 28;
 
-function SidePanel({ height, patch, h2, picked, show, hide }: SidePanelProps) {
+function SidePanel({ height, patch, h2, show, hide }: SidePanelProps) {
   if (!patch) return <EmptyState>패치 기록 없음</EmptyState>;
   const sc = h2?.sameCondition ?? null;
   let stateText: string | null = null;
@@ -575,7 +572,6 @@ function SidePanel({ height, patch, h2, picked, show, hide }: SidePanelProps) {
   // The axis keeps h-min at the base panel height and grows by a fifth of the extra height a
   // taller panel brings, up to h-max (never more than the block has room for).
   const extraLines =
-    (picked ? 1 : 0) +
     (h2?.netOfComparator !== null && h2?.netOfComparator !== undefined ? 1 : 0) +
     (h2?.state === 'sample_short' && h2.groupReference !== null ? 1 : 0);
   const badges = h2?.state === 'no_comparator' || h2?.intentCheck ? BADGE_ROW : 0;
@@ -647,7 +643,6 @@ function SidePanel({ height, patch, h2, picked, show, hide }: SidePanelProps) {
             </span>
             )
           </p>
-          {picked ? <p>선택 조건과 관계없이 전체 교전 기준</p> : null}
           {h2.netOfComparator !== null ? (
             <p>
               비교군 대비 <span className="text-ink">{times(h2.netOfComparator)}</span>
@@ -678,7 +673,6 @@ export function PatchRisk({
   patches,
   patchList,
   trend,
-  picked,
   width = 1066,
   height = SIZE.patchPanel,
 }: PatchRiskProps) {
@@ -697,8 +691,8 @@ export function PatchRisk({
   const h2 = patches.find((h) => h.patchId === patchId);
   const changed = patch ? patch.changed.includes(monster) : true;
   const hasTrend = !trend.every((d) => d.enc === 0);
-  // Same averages the trend draws (with picked cells they come from the filtered trend).
-  const sum = summarize(trend, patch, picked ? undefined : h2);
+  // Same averages the trend draws.
+  const sum = summarize(trend, patch, h2);
 
   return (
     <div className="shrink-0" style={{ height: panelH }}>
@@ -781,23 +775,14 @@ export function PatchRisk({
           ) : undefined
         }
         chips={
-          changed && !picked ? undefined : (
-            <>
-              {changed ? null : (
-                <SignalBadge
-                  tone="warning"
-                  className="board-pop board-first"
-                  title="수치 미변경 · 패치 효과로 해석하지 않음"
-                >
-                  수치 미변경
-                </SignalBadge>
-              )}
-              {picked ? (
-                <span className="board-pop board-first inline-flex h-5 items-center rounded-pill bg-gray-3 px-1.5 text-(length:--font-size-caption) font-semibold whitespace-nowrap text-ink">
-                  선택한 흐름 기준
-                </span>
-              ) : null}
-            </>
+          changed ? undefined : (
+            <SignalBadge
+              tone="warning"
+              className="board-pop board-first"
+              title="수치 미변경 · 패치 효과로 해석하지 않음"
+            >
+              수치 미변경
+            </SignalBadge>
           )
         }
         controls={
@@ -816,15 +801,12 @@ export function PatchRisk({
         <div className="flex" style={{ gap: COL_GAP, marginTop: BODY_TOP, height: TREND_H }}>
           <div className="flex shrink-0" style={{ width: trendW, height: TREND_H }}>
             {!hasTrend ? (
-              <EmptyState>{picked ? '선택한 조건의 교전 없음' : '일별 기록 없음'}</EmptyState>
+              <EmptyState>일별 기록 없음</EmptyState>
             ) : (
-              // With picked flow cells the H2 periods (all encounters) would not match the
-              // filtered trend, so the averages come from the trend itself.
               <Trend
                 trend={trend}
                 patch={patch}
-                h2={picked ? undefined : h2}
-                picked={picked}
+                h2={h2}
                 width={trendW}
                 height={TREND_H}
                 show={tip.show}
@@ -832,14 +814,7 @@ export function PatchRisk({
               />
             )}
           </div>
-          <SidePanel
-            height={TREND_H}
-            patch={patch}
-            h2={h2}
-            picked={picked}
-            show={tip.show}
-            hide={tip.hide}
-          />
+          <SidePanel height={TREND_H} patch={patch} h2={h2} show={tip.show} hide={tip.hide} />
         </div>
         <DetailMotion />
         {tip.node}

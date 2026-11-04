@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { boardHref } from '@/lib/board-filters';
-import { pickChips, roleLabel } from '@/lib/board-rows';
-import type { BoardFilters, DailyPoint, FlowPick, PatchInfo } from '@/types/board';
+import { roleLabel } from '@/lib/board-rows';
+import type { BoardFilters, DailyPoint, PatchInfo } from '@/types/board';
 import type { H2Patch, MonsterDetail as MonsterDetailData, MonsterMainRow } from '@/types/monsters';
 
 import { EmptyState } from '../shell/empty-state';
@@ -10,12 +9,8 @@ import { KpiRow } from '../shell/kpi-row';
 import { riskLabel } from './format';
 import { PatchRiskFit } from './patch-risk-fit';
 import { Pentagon } from './pentagon';
-import { PickedFlowRow } from './picked-flow-row';
 import { ReadinessPanel } from './readiness-panel';
 import { SkillWindow } from './skill-window';
-
-/** Builds the board href for a pick and an open monster (null = overview). */
-export type BoardHrefFor = (pick: FlowPick, monster: string | null) => string;
 
 interface MonsterDetailProps {
   monster: string;
@@ -27,11 +22,8 @@ interface MonsterDetailProps {
   /** "10/12–10/22" (dayRange) */
   rangeLabel: string;
   filters: BoardFilters;
-  pick: FlowPick;
   /** How many monsters the pentagon rank is out of. */
   rankOf: number;
-  /** Defaults to the real board ('/'); dev previews pass their own path. */
-  hrefFor?: BoardHrefFor;
 }
 
 interface TitleRowProps {
@@ -83,14 +75,9 @@ const riskKpi = (risk: number | null, deaths: number): { value: string; unit?: s
 const defaultPatch = (patches: H2Patch[], patchList: PatchInfo[]): string =>
   patchList.find((p) => patches.some((h) => h.patchId === p.id))?.id ?? patchList[0]?.id ?? '';
 
-const defaultHref =
-  (filters: BoardFilters): BoardHrefFor =>
-  (pick, monster) =>
-    boardHref(filters, pick, monster);
-
 /**
  * Detail of one monster filling the board's main area (1066 at the 1440 frame, 1506 at
- * 1920; Figma detail 38:423 / 38:570, re-flowed): picked flow chips, title with the KPI box at its right end, 전투 양상
+ * 1920; Figma detail 38:423 / 38:570, re-flowed): title with the KPI box at its right end, 전투 양상
  * beside 준비 조건별 비중, 보스 기술 직후 사망 (bosses only), 패치 전후 위험, each full width.
  * The slot is a size container: from 1200 wide 전투 양상 is 360 wide, below 340.
  */
@@ -103,15 +90,12 @@ export function MonsterDetail({
   trend,
   rangeLabel,
   filters,
-  pick,
   rankOf,
-  hrefFor = defaultHref(filters),
 }: MonsterDetailProps) {
   // H3 is computed for bosses only (DATA_SPEC 5장); midbosses get H3_bossSkill null and no
   // panel. A boss with no skill records gets an empty panel that says 기술 기록 없음.
   const skills = detail.H3_bossSkill ?? [];
   const showSkills = row.role === 'boss';
-  const chips = pickChips(pick, (p) => hrefFor(p, monster));
   // Expected risk and the pentagon are precomputed per heavy setting only.
   const periodNote =
     filters.period === 'current' ? undefined : '기대 대비 위험·전투 양상은 현재 수치 기준';
@@ -120,7 +104,6 @@ export function MonsterDetail({
     // Another monster swaps in place: the same charts stay mounted, so marks glide to the new
     // values while the panels come back from the pending dim, and title / KPI text fade in.
     <div data-detail={monster} className="flex w-full flex-1 flex-col gap-(--space-panel-gap)">
-      <PickedFlowRow chips={chips} />
       <TitleRow
         monster={monster}
         meta={`${row.mainStage}단계 · ${roleLabel(row.role)}`}
@@ -182,7 +165,6 @@ export function MonsterDetail({
         patches={patches}
         patchList={patchList}
         trend={trend}
-        picked={chips.length > 0}
       />
     </div>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
 import { SignalBadge } from '@/components/board/detail/signal-badge';
+import { FlowChips } from '@/components/board/shell/chip';
 import { Panel } from '@/components/board/shell/panel';
 import { cn } from '@/lib/utils';
 import { COLOR, OPACITY, RADIUS, SIZE, STROKE, TOKEN_LIST, type TokenEntry } from '@/styles/tokens';
@@ -319,6 +320,12 @@ export function TokenPreview() {
               <SignalBadge tone="warning">표본 부족</SignalBadge>
               <SignalBadge tone="supported">가설 지지</SignalBadge>
             </div>
+            <FlowChips
+              chips={[
+                { label: '레벨 · 1~19', column: '레벨', value: '1~19', removeHref: '/dev/tokens' },
+                { label: '무기 · 철', column: '무기', value: '철', removeHref: '/dev/tokens' },
+              ]}
+            />
             <p className="text-(length:--font-size-body-sm) font-semibold tabular-nums">
               <span style={{ color: COLOR.textScale.flag }}>4.74배</span>{' '}
               <span style={{ color: COLOR.textScale.sub }}>2단계 · 보스</span>

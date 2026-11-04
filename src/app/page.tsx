@@ -9,19 +9,18 @@ import { dayRange, filterRows, stagesOf } from '@/lib/board-rows';
 import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterDetail, getMonsterList, getPatchRisk } from '@/server/data/monsters';
 import { isFixtureMissing } from '@/server/db/query';
-import type { BoardFilters, FlowPick } from '@/types/board';
+import type { BoardFilters } from '@/types/board';
 
 interface DetailContentProps {
   monster: string | null;
   filters: BoardFilters;
-  pick: FlowPick;
 }
 
 // The open monster's detail (Figma detail 38:423 / 38:570), in the board's left slot. Without
 // ?m= it renders nothing, so the slot's Suspense boundary is always mounted and already showing:
 // opening, switching and filtering then keep the current screen until the new detail is ready
 // (inside the navigation's transition) instead of falling back to the skeleton.
-async function DetailContent({ monster, filters, pick }: DetailContentProps) {
+async function DetailContent({ monster, filters }: DetailContentProps) {
   if (!monster) return null;
   let loaded;
   try {
@@ -30,7 +29,8 @@ async function DetailContent({ monster, filters, pick }: DetailContentProps) {
       getMonsterDetail(monster, filters.heavy, filters.period),
       getPatchRisk(monster, filters.heavy),
       getPatches(),
-      getMonsterTrend(monster, filters.heavy, pick),
+      // Flow picks belong to the overview only: the detail trend is always on all encounters.
+      getMonsterTrend(monster, filters.heavy, {}),
       getDataRange(),
     ]);
   } catch (error) {
@@ -57,7 +57,6 @@ async function DetailContent({ monster, filters, pick }: DetailContentProps) {
       trend={trend}
       rangeLabel={dayRange(range)}
       filters={filters}
-      pick={pick}
       rankOf={Math.max(ranks.length, ...ranks)}
     />
   );
@@ -96,7 +95,7 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
           monster={monster}
           detail={
             <Suspense fallback={<DetailSkeleton />}>
-              <DetailContent monster={monster} filters={filters} pick={pick} />
+              <DetailContent monster={monster} filters={filters} />
             </Suspense>
           }
         />

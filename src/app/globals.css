@@ -41,6 +41,7 @@
   --color-status-supported-soft: var(--status-supported-soft);
   --color-state-row-hover: var(--state-row-hover);
   --color-state-chip-hover: var(--state-chip-hover);
+  --color-state-chip-close: var(--state-chip-close);
   --radius-panel: var(--corner-panel);
   --radius-control: var(--corner-control);
   --radius-pill: var(--corner-pill);

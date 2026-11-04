@@ -34,7 +34,7 @@
   --chart-track-bar: color-mix(in oklab, var(--chart-track) 80%, var(--panel));
   /* 준비 조건별 비중 공유 눈금(0·25·50·75·100%)의 세로 격자선. 글자가 아닌 안내선이라 아주 옅게, 그래도 흰 패널 위에서 보이게. 제약: 패널 대비 1.15:1 이상(tokens:contrast), 점·연결선보다 훨씬 옅게 */
   --chart-guide: #e4e9f0;
-  /* 준비 조건별 비중 덤벨의 가운데 연결선(처치 교전 점과 사망자 점 사이 차이). 점(생존 청록·사망 빨강)과 다른 색이라 차이 길이만 따로 읽힘. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사), 점 두 색과 같은 색을 쓰지 않음 */
+  /* 준비 조건별 비중 덤벨의 가운데 연결선(처치 교전 점과 사망자 점 사이 차이). 점(생존 초록·사망 빨강)과 다른 색이라 차이 길이만 따로 읽힘. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사), 점 두 색과 같은 색을 쓰지 않음 */
   --chart-dumbbell-line: var(--chart-accent);
   /* 흐름도 칸 색 재료(호박색), 덤벨 연결선(chart.dumbbell-line 이 참조). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음 */
   --chart-accent: #e0781c;
@@ -106,6 +106,8 @@
   --state-row-hover: color-mix(in oklab, var(--gray-3) 60%, transparent);
   /* 흐름 칩(선택한 조건) hover 바탕 (gray-2 50%, 반투명). 제약: 칩 글자(gray-1→ink)가 읽히게 */
   --state-chip-hover: color-mix(in oklab, var(--gray-2) 50%, transparent);
+  /* 흐름 칩 오른쪽 X(조건 풀기) 아이콘 기본색 (gray-1 을 ink 쪽으로 50%). hover 때는 ink. 칩 안 열 이름(gray-1)보다 진하게 해서 누를 곳이 보이게. 제약: 칩 바탕(gray-3) 위 그래픽 대비 3:1 이상 (tokens:contrast 검사) */
+  --state-chip-close: color-mix(in oklab, var(--gray-1) 50%, var(--ink));
   /* 흐름도 띠: 아무것도 고르거나 가리키지 않았을 때. 제약: dim < default < hover < picked 순서 유지 */
   --opacity-band-default: 0.35;
   /* 흐름도 띠: 가리킨 칸·띠의 레벨 갈래. 제약: default 보다 크고 picked 이하 */
@@ -168,6 +170,14 @@
   --space-search-inset: 9px;
   /* 검색 입력의 돋보기 아이콘 ↔ 글자 사이. 제약: 4–8px */
   --space-search-icon-gap: 6px;
+  /* 흐름 칩 안 좌우 여백. 제약: 칩 너비는 글자 길이에 맞춰지므로 이 값과 글자만으로 정해짐 */
+  --space-chip-inset: 10px;
+  /* 흐름 칩 안 열 이름("레벨", 옅게) ↔ 값("1~19", 진하게) 사이. 제약: chip-close-gap 이하 */
+  --space-chip-part-gap: 4px;
+  /* 흐름 칩 안 값 ↔ X 아이콘 사이. 제약: 값과 X가 붙어 보이지 않게 */
+  --space-chip-close-gap: 6px;
+  /* 흐름 칩끼리 사이. 조건은 모두 AND라 화살표 없이 간격만 둠. 제약: 칩 안 여백(chip-inset) 이하로 줄이면 칩 경계가 흐려짐 */
+  --space-chip-gap: 8px;
   /* 오각형 눈금 숫자(+1, -2). 제약: 10px 미만 금지 */
   --font-size-micro: 10px;
   /* 패널 설명, 축 눈금, 배지, 목록 보조 줄, 산점도 점 이름. 제약: 11px 미만 금지. 키우면 산점도 이름 겹침 회피·목록 줄이 바뀜 */
@@ -250,6 +260,10 @@
   --size-icon-info: 15px;
   /* 필터 바 "몬스터 검색" 입력 안 왼쪽 돋보기 아이콘 크기(색은 gray-1). 제약: 입력 높이(30px) 안, 글자(font-size.label)와 비슷하게 */
   --size-icon-search: 14px;
+  /* 흐름 칩 오른쪽 X(조건 풀기) 아이콘 크기(lucide X). 누르는 영역은 칩 전체. 제약: 칩 높이(size.chip) 안, 글자(font-size.label)와 비슷하게 */
+  --size-icon-chip-close: 14px;
+  /* 흐름 칩(전체 교전 흐름 아래 고른 조건) 높이. 칩 전체가 조건 풀기 단추. 제약: 패널 아래 여백 안, 글자(font-size.label)와 X 아이콘이 들어가야 함 */
+  --size-chip: 28px;
   /* 모든 패널 머리 줄 높이(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤). 제약: 컨트롤(선택 상자·세그먼트 30px)이 들어가는 높이, 레이아웃 영향(패널 내용 시작 위치) */
   --size-panel-header: 30px;
   /* 상세 제목 줄 오른쪽 KPI 상자 너비(세 칸 균등). 제약: 한 칸에 "4,429건"(font-size.kpi + kpi-unit)이 들어가야 함, 레이아웃 영향(몬스터 이름 칸이 줄어듦) */

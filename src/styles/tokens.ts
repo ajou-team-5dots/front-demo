@@ -62,6 +62,7 @@ export const COLOR = {
   state: {
     rowHover: 'var(--state-row-hover)',
     chipHover: 'var(--state-chip-hover)',
+    chipClose: 'var(--state-chip-close)',
   },
 } as const;
 
@@ -116,6 +117,10 @@ export const SPACE = {
   patchBodyBottom: 16,
   searchInset: 9,
   searchIconGap: 6,
+  chipInset: 10,
+  chipPartGap: 4,
+  chipCloseGap: 6,
+  chipGap: 8,
 } as const;
 
 /** Font size, px. */
@@ -186,7 +191,9 @@ export const SIZE = {
   icon: {
     info: 15,
     search: 14,
+    chipClose: 14,
   },
+  chip: 28,
   panelHeader: 30,
   kpiBox: {
     w: 420,
@@ -380,7 +387,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: 'var(--chart-accent)',
     value: '#e0781c',
     description:
-      '준비 조건별 비중 덤벨의 가운데 연결선(처치 교전 점과 사망자 점 사이 차이). 점(생존 청록·사망 빨강)과 다른 색이라 차이 길이만 따로 읽힘. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사), 점 두 색과 같은 색을 쓰지 않음',
+      '준비 조건별 비중 덤벨의 가운데 연결선(처치 교전 점과 사망자 점 사이 차이). 점(생존 초록·사망 빨강)과 다른 색이라 차이 길이만 따로 읽힘. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사), 점 두 색과 같은 색을 쓰지 않음',
   },
   {
     path: 'color.chart.accent',
@@ -698,6 +705,15 @@ export const TOKEN_LIST: TokenEntry[] = [
       '흐름 칩(선택한 조건) hover 바탕 (gray-2 50%, 반투명). 제약: 칩 글자(gray-1→ink)가 읽히게',
   },
   {
+    path: 'color.state.chip-close',
+    type: 'color',
+    cssVar: '--state-chip-close',
+    css: 'color-mix(in oklab, var(--gray-1) 50%, var(--ink))',
+    value: '#4f5b6e',
+    description:
+      '흐름 칩 오른쪽 X(조건 풀기) 아이콘 기본색 (gray-1 을 ink 쪽으로 50%). hover 때는 ink. 칩 안 열 이름(gray-1)보다 진하게 해서 누를 곳이 보이게. 제약: 칩 바탕(gray-3) 위 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
+  },
+  {
     path: 'opacity.band.default',
     type: 'number',
     cssVar: '--opacity-band-default',
@@ -962,6 +978,41 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '6px',
     value: 6,
     description: '검색 입력의 돋보기 아이콘 ↔ 글자 사이. 제약: 4–8px',
+  },
+  {
+    path: 'space.chip-inset',
+    type: 'dimension',
+    cssVar: '--space-chip-inset',
+    css: '10px',
+    value: 10,
+    description:
+      '흐름 칩 안 좌우 여백. 제약: 칩 너비는 글자 길이에 맞춰지므로 이 값과 글자만으로 정해짐',
+  },
+  {
+    path: 'space.chip-part-gap',
+    type: 'dimension',
+    cssVar: '--space-chip-part-gap',
+    css: '4px',
+    value: 4,
+    description:
+      '흐름 칩 안 열 이름("레벨", 옅게) ↔ 값("1~19", 진하게) 사이. 제약: chip-close-gap 이하',
+  },
+  {
+    path: 'space.chip-close-gap',
+    type: 'dimension',
+    cssVar: '--space-chip-close-gap',
+    css: '6px',
+    value: 6,
+    description: '흐름 칩 안 값 ↔ X 아이콘 사이. 제약: 값과 X가 붙어 보이지 않게',
+  },
+  {
+    path: 'space.chip-gap',
+    type: 'dimension',
+    cssVar: '--space-chip-gap',
+    css: '8px',
+    value: 8,
+    description:
+      '흐름 칩끼리 사이. 조건은 모두 AND라 화살표 없이 간격만 둠. 제약: 칩 안 여백(chip-inset) 이하로 줄이면 칩 경계가 흐려짐',
   },
   {
     path: 'font-size.micro',
@@ -1309,6 +1360,24 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 14,
     description:
       '필터 바 "몬스터 검색" 입력 안 왼쪽 돋보기 아이콘 크기(색은 gray-1). 제약: 입력 높이(30px) 안, 글자(font-size.label)와 비슷하게',
+  },
+  {
+    path: 'size.icon.chip-close',
+    type: 'dimension',
+    cssVar: '--size-icon-chip-close',
+    css: '14px',
+    value: 14,
+    description:
+      '흐름 칩 오른쪽 X(조건 풀기) 아이콘 크기(lucide X). 누르는 영역은 칩 전체. 제약: 칩 높이(size.chip) 안, 글자(font-size.label)와 비슷하게',
+  },
+  {
+    path: 'size.chip',
+    type: 'dimension',
+    cssVar: '--size-chip',
+    css: '28px',
+    value: 28,
+    description:
+      '흐름 칩(전체 교전 흐름 아래 고른 조건) 높이. 칩 전체가 조건 풀기 단추. 제약: 패널 아래 여백 안, 글자(font-size.label)와 X 아이콘이 들어가야 함',
   },
   {
     path: 'size.panel-header',

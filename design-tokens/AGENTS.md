@@ -104,7 +104,7 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 | 패널              | `radius.panel` 10px  | `rounded-panel`                                | 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널                                                                                                  |
 | 컨트롤(입력·조작) | `radius.control` 6px | `rounded-control`                              | 선택 상자와 그 목록·항목, 검색 입력, 세그먼트(기간, 고활동 계정, 2초·5초) 바깥과 안 단추, 단추, ⓘ 단추, 목록 행, 패널 안 보조 상자(흐름 요약) |
 | 툴팁              | `radius.control` 6px | `rounded-control`                              | 차트 툴팁, ⓘ 설명 (떠 있는 상자는 선택 목록과 같은 값)                                                                                        |
-| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 선택한 흐름 기준, 흐름 조건 칩                                           |
+| 칩·배지           | `radius.pill` 4px    | `rounded-pill`                                 | 점검 신호, 표본 부족, 수치 미변경, 비교군 확인 필요, 현재 수치 기준, 흐름 조건 칩                                                             |
 | 막대              | `radius.mark` 2px    | `rounded-mark`, SVG `rx={RADIUS.mark}`         | 비율 막대와 트랙, 기술 막대와 트랙, 0 표시, 범위 막대, 흐름도 칸, 산점도 네모(중간보스), 막대 범례 견본. 트랙과 채움은 항상 같은 값           |
 | 점                | 원                   | `rounded-full`, SVG `<circle>`                 | 산점도 원, 오각형 꼭짓점, 추이 점, 범례 동그라미, 준비 조건 점                                                                                |
 | 선                | 둥근 끝              | `strokeLinecap="round"`, 연결선 `rounded-full` | 데이터 선(추이 선, 오각형 바깥선, 실선 범례 견본), 준비 조건 연결선. 점선 기준선(1배, 평균, 중앙값 고리)은 끝을 둥글게 하지 않음              |
@@ -136,6 +136,9 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 | `space.search-inset` / `space.search-icon-gap`                                   | 검색 입력 안쪽 여백 / 돋보기 ↔ 글자                           | 입력 너비 244px 안                                                                                                                  |
 | `color.chart.track-bar`                                                          | 비율·기술 막대의 빈 부분(트랙)                                | 값 막대보다 눈에 띄지 않게                                                                                                          |
 | `color.chart.guide`                                                              | 준비 조건 공유 눈금(0–100%) 세로 격자선                       | 패널 대비 1.15:1 이상(검사 있음)                                                                                                    |
+| `size.chip` / `size.icon.chip-close`                                             | 전체 교전 흐름 아래 흐름 칩 높이 / X 아이콘                   | 칩 너비는 글자 길이에 맞춤. 칩 전체가 조건 풀기 단추                                                                                |
+| `space.chip-inset` / `-part-gap` / `-close-gap` / `space.chip-gap`               | 칩 안 좌우 여백 / 열 이름 ↔ 값 / 값 ↔ X / 칩끼리              | 조건은 모두 AND라 칩 사이에 화살표를 두지 않음                                                                                      |
+| `color.state.chip-close`                                                         | 흐름 칩 X 아이콘 기본색(hover 때 ink)                         | 칩 안 열 이름(gray-1)보다 진하게, gray-3 대비 3:1(검사 있음)                                                                        |
 | `color.chart.dumbbell-line`                                                      | 준비 조건 덤벨의 가운데 연결선(처치 교전 점 ↔ 사망자 점)      | 지금 `{color.chart.accent}` 참조. 다른 색은 hex로 직접 넣음. 점 두 색(`survival`, `death`)과 같은 색 금지, 패널 대비 3:1(검사 있음) |
 | `font-weight.risk-value`                                                         | 위험 높은 순 목록 오른쪽 배수 숫자                            | 이름(500, 선택 행 600)보다 굵게. 72px 칸 안에서 "12.34배"가 줄바꿈 없이                                                             |
 | `stroke.width.bold`, `stroke.point.*`                                            | 데이터 선 굵기, 산점도·오각형·추이 점                         | `bold`가 가장 굵게, 점 크기 순서 유지                                                                                               |
@@ -151,7 +154,7 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 | `color.sankey`     | 메인 화면 "전체 교전 흐름" 칸과 띠                                                  | 같은 열 안 색 구분                                       |
 | `color.scatter`    | 메인 화면 "사망 수 × 기대 대비 위험" 점, 범례, 구역 바탕                            | 2배 이상(high)은 위험 의미                               |
 | `color.text-scale` | 왼쪽 위험 목록의 2배 이상 숫자, 보조 줄                                             | 작은 글자(11–13px) 대비 4.5:1                            |
-| `color.state`      | 목록 행·칩 hover 바탕                                                               | 거의 없음                                                |
+| `color.state`      | 목록 행·칩 hover 바탕, 칩 X 아이콘                                                  | 거의 없음                                                |
 | `opacity`          | 흐름도 띠, 흐린 점·칸, 기준선, 오각형 면                                            | `band` 네 단계 순서(dim < default < hover < picked)      |
 | `font-size`        | 해당 크기의 모든 글자                                                               | **레이아웃이 밀리거나 글자가 잘림.** 고정 높이 칸이 많음 |
 | `font-weight`      | 토큰이 붙은 글자만 (지금은 목록 배수 숫자)                                          | 굵게 하면 글자 폭이 늘어 고정 폭 칸에서 잘릴 수 있음     |
