@@ -194,6 +194,11 @@ export const SIZE = {
     chipClose: 14,
   },
   chip: 28,
+  select: {
+    group: 124,
+    stage: 104,
+    patch: 150,
+  },
   panelHeader: 30,
   kpiBox: {
     w: 420,
@@ -1378,6 +1383,33 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 28,
     description:
       '흐름 칩(전체 교전 흐름 아래 고른 조건) 높이. 칩 전체가 조건 풀기 단추. 제약: 패널 아래 여백 안, 글자(font-size.label)와 X 아이콘이 들어가야 함',
+  },
+  {
+    path: 'size.select.group',
+    type: 'dimension',
+    cssVar: '--size-select-group',
+    css: '124px',
+    value: 124,
+    description:
+      '필터 바 "역할·등급" 선택 상자 폭(고정, 값을 바꿔도 필터 바가 출렁이지 않게). 안쪽 왼쪽 17 + 글자 + 간격 4 + 화살표 16 + 오른쪽 8 + 테두리 4. 제약: 가장 긴 옵션("일반·medium", "일반·strong") 안 잘림, 1440 폭에서 필터 바 한 줄 유지(검색칸 244px과 겹치지 않게)',
+  },
+  {
+    path: 'size.select.stage',
+    type: 'dimension',
+    cssVar: '--size-select-stage',
+    css: '104px',
+    value: 104,
+    description:
+      '필터 바 "던전 단계" 선택 상자 폭(고정). 제약: 가장 긴 옵션("던전 단계", "10단계") 안 잘림, 1440 폭에서 필터 바 한 줄 유지',
+  },
+  {
+    path: 'size.select.patch',
+    type: 'dimension',
+    cssVar: '--size-select-patch',
+    css: '150px',
+    value: 150,
+    description:
+      '패치 전후 위험 머리 줄 오른쪽 패치 선택 상자 폭(고정). 제약: 가장 긴 패치 이름 안 잘림, 머리 줄 한 줄 유지',
   },
   {
     path: 'size.panel-header',

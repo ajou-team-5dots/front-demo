@@ -793,7 +793,7 @@ export function PatchRisk({
               value={patchId}
               options={patchList.map((p) => ({ value: p.id, label: patchOption(p) }))}
               onChange={setChosen}
-              widthClass="w-[150px]"
+              widthClass="w-(--size-select-patch)"
             />
           ) : undefined
         }

@@ -131,6 +131,7 @@ export function FilterBar({
         ...MONSTER_GROUPS.map((g) => ({ value: g, label: g })),
       ]}
       onChange={(v) => go({ group: MONSTER_GROUPS.find((g) => g === v) ?? null })}
+      widthClass="w-(--size-select-group)"
     />
   );
   const stageSelect = (
@@ -143,6 +144,7 @@ export function FilterBar({
         ...stages.map((s) => ({ value: String(s), label: `${s}단계` })),
       ]}
       onChange={(v) => go({ stage: v ? Number(v) : null })}
+      widthClass="w-(--size-select-stage)"
     />
   );
 
