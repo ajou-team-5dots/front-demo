@@ -4,7 +4,17 @@
 
 ## 0. 처음 시작할 때와 작업 흐름
 
-- 처음: `pnpm install` → `pnpm dev` → `/dev/tokens`와 세 화면 `/`, `/?m=elderroot_stage_1`, `/?m=small_zombie`를 엽니다. Node 24.22.2, pnpm만.
+- 처음: 저장소 루트에 `.env.local`을 만들고 **`DATA_SOURCE=fixture` 한 줄만** 넣습니다. DB 접속 정보나 AWS 자격 증명은 필요 없습니다(녹화해 둔 예시 데이터로 화면이 뜹니다). 그다음 `pnpm install` → `pnpm dev` → `/dev/tokens`와 아래 예시 화면을 엽니다. Node 24.22.2, pnpm만.
+- 예시 화면 목록 (스크린샷 비교는 이 화면으로 합니다)
+  - `/` 개요: 위험 목록, 산점도, 교전 흐름
+  - `/?heavy=exclude` 고활동 제외 개요
+  - `/?lv=1~19` 교전 흐름에서 레벨 첫 칸을 고른 상태(선택 강조, 조건 칩)
+  - `/?m=elderroot_stage_1` 보스: 보스 기술 2초·5초, 점검 신호, 패치 패널
+  - `/?m=small_zombie` 일반 몬스터
+  - `/?m=rift_stalker_strong` 비교군 확인 필요 배지, 넓은 범위
+  - `/?m=iron_guardian_weak` 중간보스, 표본 부족
+  - `/?period=all&m=elderroot_stage_1` "현재 수치 기준" 칩
+  - 다른 몬스터와 기간·고활동 필터도 뜹니다. 흐름 칸을 고른 상세는 위 4종의 레벨 1~19만 녹화되어 있고, 그 밖의 칸을 고르면 "디자인 예시 데이터에는 없는 화면입니다"가 나옵니다(정상).
 - 흐름: 이슈 → 브랜치 → 커밋 → PR. 규칙은 `docs/ISSUE_PR_GUIDE.md`와 저장소 루트 `AGENTS.md`가 기준입니다.
   - 브랜치는 `dev`에서 `<type>/<이슈번호>-<설명>`. type은 Conventional Commits 값만(`design/`은 없음). 색·크기 변경은 `style/41-warm-tone`처럼.
   - PR은 `dev`로, 본문 첫 줄 `Closes #<이슈번호>`, 리뷰어는 작성자가 아닌 사람 1명 이상.

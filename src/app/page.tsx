@@ -8,6 +8,7 @@ import { parseFilters, parseMonster, parsePick } from '@/lib/board-filters';
 import { dayRange, filterRows, stagesOf } from '@/lib/board-rows';
 import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterDetail, getMonsterList, getPatchRisk } from '@/server/data/monsters';
+import { isFixtureMissing } from '@/server/db/query';
 import type { BoardFilters, FlowPick } from '@/types/board';
 
 interface DetailContentProps {
@@ -22,14 +23,24 @@ interface DetailContentProps {
 // (inside the navigation's transition) instead of falling back to the skeleton.
 async function DetailContent({ monster, filters, pick }: DetailContentProps) {
   if (!monster) return null;
-  const [all, detail, patches, patchList, trend, range] = await Promise.all([
-    getMonsterList(filters.heavy, filters.period),
-    getMonsterDetail(monster, filters.heavy, filters.period),
-    getPatchRisk(monster, filters.heavy),
-    getPatches(),
-    getMonsterTrend(monster, filters.heavy, pick),
-    getDataRange(),
-  ]);
+  let loaded;
+  try {
+    loaded = await Promise.all([
+      getMonsterList(filters.heavy, filters.period),
+      getMonsterDetail(monster, filters.heavy, filters.period),
+      getPatchRisk(monster, filters.heavy),
+      getPatches(),
+      getMonsterTrend(monster, filters.heavy, pick),
+      getDataRange(),
+    ]);
+  } catch (error) {
+    // DATA_SOURCE=fixture records only some screens (e.g. no flow pick on most monsters).
+    if (isFixtureMissing(error)) {
+      return <MissingDetail monster={monster} message="디자인 예시 데이터에는 없는 화면입니다" />;
+    }
+    throw error;
+  }
+  const [all, detail, patches, patchList, trend, range] = loaded;
   const row = all.find((r) => r.monster === monster);
   if (!row || !detail) {
     return <MissingDetail monster={monster} />;

@@ -190,15 +190,20 @@ export function MonsterDetail({
 
 interface MissingDetailProps {
   monster: string;
+  /** Set when DATA_SOURCE=fixture has no recording for this screen (design example data). */
+  message?: string;
 }
 
 /** ?m= names a monster the batch does not have: say so in place, keep the board. */
-export function MissingDetail({ monster }: MissingDetailProps) {
+export function MissingDetail({
+  monster,
+  message = '이 몬스터의 기록이 없습니다 · Esc로 개요',
+}: MissingDetailProps) {
   return (
     <div className="flex w-full flex-col gap-(--space-panel-gap)">
       <TitleRow monster={monster} />
       <div className="flex h-[200px] rounded-panel bg-panel">
-        <EmptyState>이 몬스터의 기록이 없습니다 · Esc로 개요</EmptyState>
+        <EmptyState>{message}</EmptyState>
       </div>
     </div>
   );
