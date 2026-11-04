@@ -10,6 +10,7 @@ import { useTween } from '../shell/use-tween';
 import type { PentagonProps } from './contracts';
 import { DetailMotion } from './detail-motion';
 import { pct, round2 } from './format';
+import { SignalBadge } from './signal-badge';
 
 interface AxisMeta {
   label: string;
@@ -115,7 +116,8 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
         const { w, h } = labelBox(z);
         const x0 = side > 0 ? CX + LABEL_DX : CX - LABEL_DX - w;
         const y1 = CY - radiusOf(z) + 3.5;
-        return vx + 7 > x0 && vx - 7 < x0 + w && vy + 7 > y1 - h + 2 && vy - 7 < y1 + 2;
+        const p = STROKE.point.vertexHover + 1;
+        return vx + p > x0 && vx - p < x0 + w && vy + p > y1 - h + 2 && vy - p < y1 + 2;
       });
     });
   const labelSide = ringLabelHits(1) && !ringLabelHits(-1) ? -1 : 1;
@@ -133,16 +135,23 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
     <Panel
       title="전투 양상"
       className="h-full"
-      actions={
+      meta={
         rank !== null ? (
-          <span className="ml-auto text-(length:--font-size-label) font-semibold text-ink tabular-nums">
-            종합 {rank}위 <span className="text-gray-1">/ {rankOf}종</span>
-          </span>
-        ) : null
+          <>
+            종합 <span className="text-ink">{rank}위</span> / {rankOf}종
+          </>
+        ) : undefined
+      }
+      info={
+        <>
+          <p>{CAPTION}</p>
+          <p className="mt-1">바깥쪽 = 비교 집단보다 높음 · 모양만으로 원인을 판단하지 않음</p>
+          {note ? <p className="mt-1">{note}</p> : null}
+        </>
       }
     >
       <DetailMotion />
-      <div className="mt-[10px] ml-[3px] h-[260px] w-[302px]">
+      <div className="my-auto ml-[3px] h-[260px] w-[302px] shrink-0">
         <svg
           width={W}
           height={H}
@@ -384,11 +393,15 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
           ))}
         </svg>
       </div>
-      <div className="mt-auto pb-3 text-(length:--font-size-caption) leading-[13px] font-semibold text-gray-1">
-        <p>{CAPTION}</p>
-        <p className="mt-0.5">바깥쪽 = 비교 집단보다 높음 · 모양만으로 원인을 판단하지 않음</p>
-        {note ? <p className="mt-0.5">{note}</p> : null}
-      </div>
+      {/* The period note changes how the shape reads, so a short chip stays visible (full text
+          in ⓘ). */}
+      {note ? (
+        <div className="pb-3">
+          <SignalBadge tone="warning" title={note}>
+            현재 수치 기준
+          </SignalBadge>
+        </div>
+      ) : null}
       {tip.node}
     </Panel>
   );

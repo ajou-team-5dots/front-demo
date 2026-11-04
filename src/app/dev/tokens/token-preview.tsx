@@ -122,7 +122,7 @@ function ColorCard({ t, prefix, m }: { t: TokenEntry; prefix: string; m?: Measur
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <Panel title={title} hint={hint} className="pb-4">
+    <Panel title={title} meta={hint} className="pb-4">
       <div className="mt-3">{children}</div>
     </Panel>
   );

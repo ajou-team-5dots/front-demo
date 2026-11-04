@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { boardHref } from '@/lib/board-filters';
-import { pickChips, roleLabel } from '@/lib/board-rows';
+import { pickChips, roleLabel, type KpiRanks } from '@/lib/board-rows';
 import type { BoardFilters, DailyPoint, FlowPick, PatchInfo } from '@/types/board';
 import type { H2Patch, MonsterDetail as MonsterDetailData, MonsterMainRow } from '@/types/monsters';
 
@@ -32,6 +32,8 @@ interface MonsterDetailProps {
   rankOf: number;
   /** Defaults to the real board ('/'); dev previews pass their own path. */
   hrefFor?: BoardHrefFor;
+  /** Where the monster stands in the batch per KPI (the KPI box's comparison line). */
+  ranks?: KpiRanks;
 }
 
 interface TitleRowProps {
@@ -46,7 +48,7 @@ interface TitleRowProps {
 // button: the open row in the sidebar (or Esc) returns to the overview.
 function TitleRow({ monster, meta, sub, kpi }: TitleRowProps) {
   return (
-    <div className="flex h-[66px] shrink-0 items-center justify-between gap-6 pl-4">
+    <div className="flex h-[88px] shrink-0 items-center justify-between gap-6 pl-4">
       <div className="flex min-w-0 items-center gap-[22px]">
         <h1
           tabIndex={-1}
@@ -72,6 +74,12 @@ function TitleRow({ monster, meta, sub, kpi }: TitleRowProps) {
     </div>
   );
 }
+
+/** "4.74배" as number + unit; "사망 0건" and "–" stay whole words. */
+const riskKpi = (risk: number | null, deaths: number): { value: string; unit?: string } => {
+  const text = riskLabel(risk, deaths);
+  return text.endsWith('배') ? { value: text.slice(0, -1), unit: '배' } : { value: text };
+};
 
 /** PatchRisk's default patch: the first in the list that has numbers for this monster. */
 const defaultPatch = (patches: H2Patch[], patchList: PatchInfo[]): string =>
@@ -100,6 +108,7 @@ export function MonsterDetail({
   pick,
   rankOf,
   hrefFor = defaultHref(filters),
+  ranks,
 }: MonsterDetailProps) {
   // H3 is computed for bosses only (DATA_SPEC 5장); midbosses get H3_bossSkill null and no
   // panel. A boss with no skill records gets an empty panel that says 기술 기록 없음.
@@ -122,11 +131,22 @@ export function MonsterDetail({
         kpi={
           <KpiRow
             items={[
-              { label: '사망', value: row.deaths.toLocaleString('ko-KR') },
-              { label: '교전', value: row.enc.toLocaleString('ko-KR') },
+              {
+                label: '사망',
+                value: row.deaths.toLocaleString('ko-KR'),
+                unit: '건',
+                sub: ranks ? `${ranks.of}종 중 ${ranks.deaths}위` : undefined,
+              },
+              {
+                label: '교전',
+                value: row.enc.toLocaleString('ko-KR'),
+                unit: '건',
+                sub: ranks ? `${ranks.of}종 중 ${ranks.enc}위` : undefined,
+              },
               {
                 label: '기대 대비 위험',
-                value: riskLabel(row.riskVsExpected, row.deaths),
+                ...riskKpi(row.riskVsExpected, row.deaths),
+                sub: ranks && ranks.risk !== null ? `${ranks.of}종 중 ${ranks.risk}위` : undefined,
                 title: `기대 대비 위험 (던전 단계 반영). 1배보다 크면 같은 단계 기대보다 위험이 높습니다.${
                   row.riskVsExpected === 0 && row.deaths === 0
                     ? ' 사망이 없어 배수를 계산하지 않습니다.'

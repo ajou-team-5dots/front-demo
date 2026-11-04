@@ -30,6 +30,7 @@
   --color-chart-death: var(--chart-death);
   --color-chart-survival: var(--chart-survival);
   --color-chart-track: var(--chart-track);
+  --color-chart-track-bar: var(--chart-track-bar);
   --color-status-warning: var(--status-warning);
   --color-status-danger: var(--status-danger);
   --color-status-supported: var(--status-supported);

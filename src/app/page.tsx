@@ -3,9 +3,10 @@ import { Suspense } from 'react';
 import { MissingDetail, MonsterDetail } from '@/components/board/detail/monster-detail';
 import { MainBoard } from '@/components/board/main/main-board';
 import { BoardFrame, DetailSkeleton, MainSkeleton } from '@/components/board/shell/board-frame';
+import { ContextBar } from '@/components/board/shell/context-bar';
 import { FilterBar } from '@/components/board/shell/filter-bar';
 import { parseFilters, parseMonster, parsePick } from '@/lib/board-filters';
-import { filterRows, shortDay, stagesOf } from '@/lib/board-rows';
+import { filterRows, kpiRanks, shortDay, stagesOf } from '@/lib/board-rows';
 import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterDetail, getMonsterList, getPatchRisk } from '@/server/data/monsters';
 import type { BoardFilters, FlowPick } from '@/types/board';
@@ -48,6 +49,7 @@ async function DetailContent({ monster, filters, pick }: DetailContentProps) {
       filters={filters}
       pick={pick}
       rankOf={Math.max(ranks.length, ...ranks)}
+      ranks={kpiRanks(all, row)}
     />
   );
 }
@@ -59,13 +61,16 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
   const filters = parseFilters(query);
   const pick = parsePick(query);
   const asked = parseMonster(query);
-  const [all, flow] = await Promise.all([
+  // getDataRange is the same cached precomputed-meta read the detail already makes.
+  const [all, flow, range] = await Promise.all([
     getMonsterList(filters.heavy, filters.period),
     getFlow(filters.heavy, filters.period),
+    getDataRange(),
   ]);
   // Only a monster of this batch opens (and fetches) a detail; any other ?m= shows the overview,
   // so random strings never reach the detail queries or their cache.
   const monster = asked && all.some((r) => r.monster === asked) ? asked : null;
+  const rows = filterRows(all, filters);
   return (
     <>
       <FilterBar
@@ -76,9 +81,15 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
         monster={monster}
         variant="main"
       />
-      <div className="mt-(--space-panel-gap)">
+      <ContextBar
+        rangeLabel={`${shortDay(range.from)}–${shortDay(range.to)}`}
+        filters={filters}
+        shown={rows.length}
+        monster={monster}
+      />
+      <div>
         <MainBoard
-          rows={filterRows(all, filters)}
+          rows={rows}
           flow={flow}
           filters={filters}
           pick={pick}

@@ -8,6 +8,7 @@ import type { BossSkill, H3Window } from '@/types/monsters';
 import { useChartTooltip } from '../shell/chart-tooltip';
 import { EmptyState } from '../shell/empty-state';
 import { Panel } from '../shell/panel';
+import { LegendItem } from '../shell/panel-header';
 import type { SkillWindowProps } from './contracts';
 import { DetailMotion } from './detail-motion';
 import { num, pct, signedPP, times } from './format';
@@ -43,12 +44,22 @@ function Bars({ w }: { w: H3Window }) {
         },
       ].map((b) => (
         <div key={b.key} className="flex items-center gap-2">
-          {/* The track takes the column width left of the count label (0% → 100%). */}
-          <div className="h-(--size-bar-skill) min-w-0 flex-1 rounded-pill bg-chart-track">
-            <div
-              className={cn('board-grow board-first board-mark h-full rounded-pill', b.fill)}
-              style={{ width: `${Math.max(0, Math.min(1, b.share)) * 100}%` }}
-            />
+          {/* The light track takes the column width left of the count label (0% → 100%); a zero
+              share shows only a short stub, no empty track. */}
+          <div
+            className={cn(
+              'h-(--size-bar-skill) min-w-0 flex-1 rounded-pill',
+              b.share > 0 && 'bg-chart-track-bar',
+            )}
+          >
+            {b.share > 0 ? (
+              <div
+                className={cn('board-grow board-first board-mark h-full rounded-pill', b.fill)}
+                style={{ width: `${Math.min(1, b.share) * 100}%` }}
+              />
+            ) : (
+              <div aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-pill bg-gray-2" />
+            )}
           </div>
           <span className="w-[92px] shrink-0 text-(length:--font-size-label) leading-[14px] font-medium whitespace-nowrap text-gray-1 tabular-nums">
             {b.label}
@@ -74,8 +85,6 @@ function stateBadge(s: BossSkill, win: Win) {
 
 /** Chart height that fits the 365 panel (Figma 38:642): rows share it up to ROW_MAX each. */
 const CHART_H = 281;
-const LEGEND_H = 24;
-const NOTE_H = 18;
 const ROW_MAX = 56;
 /** Two bar lines (14 + 4 + 14) with room around them; the badge (20) fits beside. */
 const ROW_MIN = 44;
@@ -91,78 +100,90 @@ export function SkillWindow({ skills }: SkillWindowProps) {
       b.windows[5].deathShare - a.windows[5].deathShare || a.ability.localeCompare(b.ability),
   );
   const diff = skills.filter((s) => s.criterionEffect);
-  const rowH = Math.max(
-    ROW_MIN,
-    Math.min(
-      ROW_MAX,
-      Math.floor((CHART_H - LEGEND_H - (diff.length ? NOTE_H : 0)) / Math.max(1, rows.length)),
-    ),
-  );
+  const rowH = Math.max(ROW_MIN, Math.min(ROW_MAX, Math.floor(CHART_H / Math.max(1, rows.length))));
 
   return (
     <Panel
       title="보스 기술 직후 사망"
       className="min-h-[365px] pb-4"
       enter={2}
-      actions={
+      legend={
         skills.length > 0 ? (
-          <div className="flex items-center gap-3">
-            <div
-              role="radiogroup"
-              aria-label="기술 사용 후 시간 기준"
-              className="relative -my-1 flex h-[30px] gap-1 rounded-control bg-gray-3 p-(--space-segment-inset)"
+          <>
+            <LegendItem
+              swatch={
+                <span
+                  aria-hidden
+                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-pill bg-chart-death"
+                />
+              }
             >
-              {/* Active pill slides between the two 44px buttons (gap 4). */}
-              <span
-                aria-hidden
-                className="board-mark absolute top-(--space-segment-inset) left-(--space-segment-inset) h-6 w-11 rounded-pill bg-panel"
-                style={{ transform: `translateX(${win === 5 ? 48 : 0}px)` }}
-              />
-              {([2, 5] as const).map((w) => (
-                <button
-                  key={w}
-                  type="button"
-                  role="radio"
-                  aria-checked={win === w}
-                  onClick={() => setWin(w)}
-                  className={cn(
-                    'board-control relative h-6 w-11 rounded-pill text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
-                    win === w ? 'text-ink' : 'text-gray-1 hover:text-ink',
-                  )}
-                >
-                  {w}초
-                </button>
-              ))}
-            </div>
-            <span className="text-(length:--font-size-caption) font-semibold text-gray-1">
-              사망 직전 {win}초 안에 그 기술이 있었던 비율
-            </span>
+              사망 (기술 있음/전체 사망)
+            </LegendItem>
+            <LegendItem
+              swatch={
+                <span
+                  aria-hidden
+                  className="h-(--size-legend-dot) w-(--size-legend-swatch-w) rounded-pill bg-chart-survival"
+                />
+              }
+            >
+              살아남은 교전 (가장 큰 피해 직전 {win}초 · 기술 있음/전체)
+            </LegendItem>
+          </>
+        ) : undefined
+      }
+      info={
+        skills.length > 0 ? (
+          <>
+            <p>사망 직전 {win}초 안에 그 기술이 있었던 비율</p>
+            {diff.length > 0 ? (
+              <p className="mt-1">
+                {diff.map((s) => s.ability).join(', ')}: 2초와 5초 기준에서 점검 신호가 다르게
+                나타납니다. 시간 기준에 따라 함께 나타나는 정도가 달라집니다.
+              </p>
+            ) : null}
+          </>
+        ) : undefined
+      }
+      controls={
+        skills.length > 0 ? (
+          <div
+            role="radiogroup"
+            aria-label="기술 사용 후 시간 기준"
+            className="relative flex h-[30px] gap-1 rounded-control bg-gray-3 p-(--space-segment-inset)"
+          >
+            {/* Active pill slides between the two 44px buttons (gap 4). */}
+            <span
+              aria-hidden
+              className="board-mark absolute top-(--space-segment-inset) left-(--space-segment-inset) h-6 w-11 rounded-pill bg-panel"
+              style={{ transform: `translateX(${win === 5 ? 48 : 0}px)` }}
+            />
+            {([2, 5] as const).map((w) => (
+              <button
+                key={w}
+                type="button"
+                role="radio"
+                aria-checked={win === w}
+                onClick={() => setWin(w)}
+                className={cn(
+                  'board-control relative h-6 w-11 rounded-pill text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
+                  win === w ? 'text-ink' : 'text-gray-1 hover:text-ink',
+                )}
+              >
+                {w}초
+              </button>
+            ))}
           </div>
-        ) : null
+        ) : undefined
       }
     >
       <DetailMotion />
       {skills.length === 0 ? (
         <EmptyState>기술 기록 없음</EmptyState>
       ) : (
-        <div className="mt-[22px] flex w-full flex-col">
-          <div className="flex h-5 items-center gap-4 pl-[160px] text-(length:--font-size-caption) font-semibold text-gray-1">
-            <span className="flex items-center gap-1.5">
-              <span
-                aria-hidden
-                className="h-(--size-bar-skill) w-(--size-legend-swatch-w) rounded-pill bg-chart-death"
-              />
-              사망 (기술 있음/전체 사망)
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span
-                aria-hidden
-                className="h-(--size-bar-skill) w-(--size-legend-swatch-w) rounded-pill bg-chart-survival"
-              />
-              살아남은 교전 (가장 큰 피해 직전 {win}초 · 기술 있음/전체)
-            </span>
-          </div>
-          <ul aria-label="기술별 사망과 생존 교전 비중" className="mt-1">
+        <div className="mt-3 flex w-full flex-col">
+          <ul aria-label="기술별 사망과 생존 교전 비중">
             {rows.map((s) => {
               const w = s.windows[win];
               return (
@@ -217,12 +238,6 @@ export function SkillWindow({ skills }: SkillWindowProps) {
               );
             })}
           </ul>
-          {diff.length > 0 ? (
-            <p className="mt-1 text-(length:--font-size-caption) leading-[13px] font-semibold text-gray-1">
-              {diff.map((s) => s.ability).join(', ')}: 2초와 5초 기준에서 점검 신호가 다르게
-              나타납니다. 시간 기준에 따라 함께 나타나는 정도가 달라집니다.
-            </p>
-          ) : null}
         </div>
       )}
       {tip.node}

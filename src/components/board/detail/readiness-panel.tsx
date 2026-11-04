@@ -7,6 +7,7 @@ import type { H1Condition, H1Readiness } from '@/types/monsters';
 
 import { useChartTooltip } from '../shell/chart-tooltip';
 import { Panel } from '../shell/panel';
+import { LegendItem } from '../shell/panel-header';
 import { useTween } from '../shell/use-tween';
 import type { ReadinessPanelProps } from './contracts';
 import { DetailMotion, EASE, SLOW } from './detail-motion';
@@ -85,7 +86,7 @@ function DumbbellRow({ label, meaning, row, totalDeaths, show, hide }: DumbbellR
           <>
             <div
               data-dumbbell="bar"
-              className="board-slide-w board-first absolute top-[5px] h-(--size-dumbbell-line) bg-chart-comparison"
+              className="board-slide-w board-first absolute top-[calc(6px-var(--size-dumbbell-line)/2)] h-(--size-dumbbell-line) rounded-full bg-chart-comparison"
               style={{ left: `${lo * 100}%`, width: `${(hi - lo) * 100}%` }}
             />
             <span
@@ -150,6 +151,7 @@ function ShareBar({
   show,
   hide,
 }: ShareBarProps) {
+  const empty = !sampleShort && n === 0;
   return (
     <div className={className}>
       <div className="flex h-[19px] w-full items-baseline justify-between">
@@ -169,6 +171,8 @@ function ShareBar({
           )}
         </span>
       </div>
+      {/* A zero share draws no empty track, only a short stub at 0 beside the "0/n건 · 0%" label
+          above; any other share runs on a light track. */}
       <div
         role="img"
         aria-label={
@@ -176,11 +180,17 @@ function ShareBar({
             ? `${title}: 표본 부족`
             : `${title}: ${unit} ${num(total)}건 중 ${num(n)}건, ${pct(share)}`
         }
-        className="mt-3 h-(--size-bar-share) w-full overflow-hidden rounded-pill bg-chart-track"
+        className={cn(
+          'mt-2.5 h-(--size-bar-share) w-full overflow-hidden rounded-pill',
+          empty ? 'flex items-center' : 'bg-chart-track-bar',
+        )}
         onPointerMove={(e) => show(e, tip)}
         onPointerLeave={hide}
       >
-        {sampleShort ? null : (
+        {empty ? (
+          <span aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-pill bg-gray-2" />
+        ) : null}
+        {sampleShort || empty ? null : (
           <div
             className={cn(
               'board-grow board-first h-full rounded-pill',
@@ -206,18 +216,49 @@ export function ReadinessPanel({ h1, aux1, aux2 }: ReadinessPanelProps) {
       title="준비 조건별 비중"
       className="h-full"
       enter={1}
-      actions={
-        <div className="ml-auto flex items-center gap-3 pr-3 text-(length:--font-size-caption) font-semibold text-gray-1">
-          <span className="flex items-center gap-1">
-            <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-survival" />
+      meta={
+        <>
+          사망 <span className="text-ink">{num(totalDeaths)}건</span> 중
+        </>
+      }
+      legend={
+        <>
+          <LegendItem
+            swatch={
+              <span
+                aria-hidden
+                className="size-(--size-legend-dot) rounded-full bg-chart-survival"
+              />
+            }
+          >
             처치 교전
-          </span>
-          <span className="flex items-center gap-1">
-            <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-death" />
+          </LegendItem>
+          <LegendItem
+            swatch={
+              <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-death" />
+            }
+          >
             사망
-          </span>
-          <span className="text-ink tabular-nums">사망 {num(totalDeaths)}건 중</span>
-        </div>
+          </LegendItem>
+        </>
+      }
+      info={
+        <>
+          {CONDITIONS.map((c) => (
+            <p key={c.key}>
+              <span className="font-semibold">{c.label}</span>{' '}
+              <span className="text-gray-1">· {c.meaning}</span>
+            </p>
+          ))}
+          <p className="mt-1">
+            <span className="font-semibold">반격하지 못한 사망</span>{' '}
+            <span className="text-gray-1">· 한 번도 치지 못하고 사망한 경우</span>
+          </p>
+          <p>
+            <span className="font-semibold">한 번에 큰 피해를 받은 교전</span>{' '}
+            <span className="text-gray-1">· 가장 큰 한 번의 피해가 최대 HP 기준값 이상인 교전</span>
+          </p>
+        </>
       }
     >
       <DetailMotion />

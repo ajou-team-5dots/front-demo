@@ -42,3 +42,43 @@ export function roleLabel(role: string): string {
 
 /** "2026-10-12" → "10/12" */
 export const shortDay = (d: string) => d.slice(5).replace('-', '/');
+
+/** Where one monster stands among the batch on each KPI (1 = highest), for the detail's KPI box. */
+export interface KpiRanks {
+  deaths: number;
+  enc: number;
+  /** null when the monster has no risk value (or no deaths, shown as "사망 0건"). */
+  risk: number | null;
+  /** How many monsters the ranks are out of (those without a risk value rank after the rest). */
+  of: number;
+}
+
+const hasRisk = (r: MonsterMainRow): r is MonsterMainRow & { riskVsExpected: number } =>
+  r.riskVsExpected !== null &&
+  Number.isFinite(r.riskVsExpected) &&
+  !(r.riskVsExpected === 0 && r.deaths === 0);
+
+/** 1 + how many are strictly higher, so ties share a rank. */
+const rankAmong = (values: number[], v: number) => 1 + values.filter((x) => x > v).length;
+
+/** Ranks of `row` within `all` (the whole batch the board reads), from fields already loaded. */
+export function kpiRanks(all: MonsterMainRow[], row: MonsterMainRow): KpiRanks {
+  const valued = all.filter(hasRisk);
+  return {
+    deaths: rankAmong(
+      all.map((r) => r.deaths),
+      row.deaths,
+    ),
+    enc: rankAmong(
+      all.map((r) => r.enc),
+      row.enc,
+    ),
+    risk: hasRisk(row)
+      ? rankAmong(
+          valued.map((r) => r.riskVsExpected),
+          row.riskVsExpected,
+        )
+      : null,
+    of: all.length,
+  };
+}

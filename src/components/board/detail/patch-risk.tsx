@@ -478,17 +478,10 @@ function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
 
   return (
     <div className="flex flex-col" style={{ width: SIDE_W }}>
-      <h3
-        className="text-(length:--font-size-body) leading-[17px] font-semibold text-ink"
-        title={compact ? HINT : undefined}
-      >
+      {/* What the ratio means (HINT) is in the panel's ⓘ. */}
+      <h3 className="text-(length:--font-size-body) leading-[17px] font-semibold text-ink">
         같은 조건 위험 배수
       </h3>
-      {compact ? null : (
-        <p className="mt-0.5 text-(length:--font-size-caption) leading-[13px] font-medium text-gray-1">
-          {HINT}
-        </p>
-      )}
       {sc ? (
         <div
           className="mt-2"
@@ -614,34 +607,41 @@ export function PatchRisk({
         title="패치 전후 위험"
         className="h-full overflow-hidden"
         enter={1}
-        actions={
+        meta={patch ? patch.label : undefined}
+        info={
+          <>
+            {changed ? null : <p>수치 미변경 · 패치 효과로 해석하지 않음</p>}
+            <p className={changed ? undefined : 'mt-1'}>
+              <span className="font-semibold">같은 조건 위험 배수</span>{' '}
+              <span className="text-gray-1">· {HINT}</span>
+            </p>
+          </>
+        }
+        chips={
+          changed ? undefined : (
+            <SignalBadge
+              tone="warning"
+              className="board-pop board-first"
+              title="수치 미변경 · 패치 효과로 해석하지 않음"
+            >
+              수치 미변경
+            </SignalBadge>
+          )
+        }
+        controls={
           patchList.length > 0 ? (
-            <>
-              <div className="-my-1">
-                <BoardSelect
-                  id="patch-select"
-                  label="패치 선택"
-                  value={patchId}
-                  options={patchList.map((p) => ({ value: p.id, label: patchOption(p) }))}
-                  onChange={setChosen}
-                  widthClass="w-[150px]"
-                />
-              </div>
-              {changed ? null : (
-                <span className="board-pop board-first text-(length:--font-size-label) font-semibold text-gray-1">
-                  수치 미변경 · 패치 효과로 해석하지 않음
-                </span>
-              )}
-            </>
-          ) : null
+            <BoardSelect
+              id="patch-select"
+              label="패치 선택"
+              value={patchId}
+              options={patchList.map((p) => ({ value: p.id, label: patchOption(p) }))}
+              onChange={setChosen}
+              widthClass="w-[150px]"
+            />
+          ) : undefined
         }
       >
-        {patch ? (
-          <p className="mt-1 text-(length:--font-size-caption) leading-[13px] font-semibold text-gray-1">
-            {patch.label}
-          </p>
-        ) : null}
-        <div className="mt-2 flex" style={{ gap: COL_GAP }}>
+        <div className="mt-3 flex" style={{ gap: COL_GAP }}>
           <div className="flex shrink-0" style={{ width: trendW }}>
             {trend.every((d) => d.enc === 0) ? (
               <EmptyState>{picked ? '선택한 조건의 교전 없음' : '일별 기록 없음'}</EmptyState>

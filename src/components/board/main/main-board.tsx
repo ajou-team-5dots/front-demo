@@ -46,7 +46,8 @@ interface SharedHover {
   from: HoverSource;
 }
 
-// Below the filter bar, as one board:
+// Below the filter bar and the context line, as one board. Panel content starts at 52 (top 12 +
+// the 30px shared header + 10).
 //   left: the explorer list ("위험 높은 순"), a 320-wide sidebar running the full board height.
 //   main: the rest of the frame (1066 at the 1440 frame, 1506 at 1920), measured. It holds the
 //   overview (scatter 678, gap 14, flow 440) and, when a monster is open, its detail, side by
@@ -222,11 +223,16 @@ export function MainBoard({
       <div ref={sidebarRef} data-board-sidebar className="shrink-0" style={{ width: SIDEBAR_W }}>
         <Panel
           title="위험 높은 순"
-          hint="누르면 상세 · 다시 누르면 개요"
+          meta={
+            <>
+              <span className="text-ink">{ranked.length}</span>종
+            </>
+          }
+          info="기대 대비 위험이 높은 순서입니다. 누르면 상세 · 다시 누르면 개요"
           className="h-full"
           enter={0}
         >
-          <div className="absolute inset-x-2 top-[59px] bottom-3">
+          <div className="absolute inset-x-2 top-[52px] bottom-3">
             {ranked.length ? (
               <RiskList
                 rows={ranked}
@@ -269,11 +275,16 @@ export function MainBoard({
             >
               <Panel
                 title="사망 수 × 기대 대비 위험"
-                hint="오른쪽 위 옅은 영역 = 우선 점검 · 점을 누르면 상세"
+                meta={
+                  <>
+                    <span className="text-ink">{rows.length}</span>종
+                  </>
+                }
+                info="오른쪽 위 옅은 영역 = 우선 점검 · 점을 누르면 상세"
                 className="h-[678px] shrink-0"
                 enter={1}
               >
-                <div className="absolute inset-x-4 top-[59px] h-[597px]">
+                <div className="absolute inset-x-4 top-[52px] h-[597px]">
                   {rows.length ? (
                     <FocusScatter
                       rows={rows}
@@ -291,12 +302,19 @@ export function MainBoard({
               </Panel>
               <Panel
                 title="전체 교전 흐름"
-                hint="칸을 차례로 눌러보세요."
+                info={
+                  <>
+                    <p>칸을 차례로 눌러보세요.</p>
+                    <p>
+                      고른 칸이 패널 아래에 차례로 쌓이고, 몬스터 상세에도 같은 조건으로 이어집니다.
+                    </p>
+                  </>
+                }
                 className="h-[440px] shrink-0"
                 enter={2}
               >
                 <div
-                  className="absolute top-[59px] left-4"
+                  className="absolute top-[52px] left-4"
                   style={{ right: SANKEY_REST - PANEL_X, height: SANKEY_H }}
                 >
                   {hasFlow ? (
@@ -312,7 +330,7 @@ export function MainBoard({
                   )}
                 </div>
                 <div
-                  className="absolute top-[59px] right-3"
+                  className="absolute top-[52px] right-3"
                   style={{ width: SUMMARY_W, height: SANKEY_H }}
                 >
                   <FlowSummary
@@ -322,15 +340,11 @@ export function MainBoard({
                     excludedDeaths={flow.excluded?.deaths ?? 0}
                   />
                 </div>
-                <div className="absolute bottom-3 left-3">
-                  {chips.length ? (
+                {chips.length ? (
+                  <div className="absolute bottom-3 left-3">
                     <FlowChips chips={chips} />
-                  ) : (
-                    <p className="flex h-7 items-center text-(length:--font-size-label) font-medium text-gray-1">
-                      고른 칸이 여기에 차례로 쌓이고, 몬스터 상세에도 같은 조건으로 이어집니다.
-                    </p>
-                  )}
-                </div>
+                  </div>
+                ) : null}
               </Panel>
             </div>
             {/* A size container: the detail switches to its wide arrangement from 1200. */}

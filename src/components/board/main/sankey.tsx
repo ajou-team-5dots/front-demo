@@ -453,6 +453,7 @@ export function Sankey({ width: W, columns, rows, pick, onToggle }: SankeyProps)
                 <g className="board-mark" style={translate(NODE_W + grow + LABEL_PAD, n.h / 2 + 4)}>
                   <text
                     fontSize={LABEL_FONT}
+                    className="tabular-nums"
                     stroke="var(--panel)"
                     strokeWidth={STROKE.width.halo}
                     strokeLinejoin="round"

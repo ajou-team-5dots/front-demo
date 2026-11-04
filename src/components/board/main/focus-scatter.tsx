@@ -267,7 +267,7 @@ export function FocusScatter({
       fill: 'var(--gray-1)',
     })),
   ];
-  const itemW = legendItems.map((it) => 14 + textWidth(it.text, 12));
+  const itemW = legendItems.map((it) => 2 * STROKE.point.legend + 4 + textWidth(it.text, 12));
   const GROUP_GAP = 22;
   const ITEM_GAP = 14;
   const legendW =
@@ -298,10 +298,10 @@ export function FocusScatter({
         <g {...legend}>
           {legendItems.map((it, i) => (
             <g key={it.key} transform={`translate(${r2(legendX[i])} 0)`}>
-              <g transform="translate(5 10)">
+              <g transform={`translate(${STROKE.point.legend} 10)`}>
                 <Shape role={it.role} r={STROKE.point.legend} fill={it.fill} />
               </g>
-              <text x={14} y={14}>
+              <text x={2 * STROKE.point.legend + 4} y={14}>
                 {it.text}
               </text>
             </g>

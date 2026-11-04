@@ -89,7 +89,8 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `color.chart.comparison`                          | `--chart-comparison` | 오각형 비교 고리, 평균 점선, 준비 조건 선, 범위 막대      |
 | `color.chart.death`                               | `--chart-death`      | 사망 막대, 사망 점, 산점도 2배 선                         |
 | `color.chart.survival`                            | `--chart-survival`   | 생존 막대, 처치 점                                        |
-| `color.chart.track`                               | `--chart-track`      | 막대의 빈 부분, 격자                                      |
+| `color.chart.track`                               | `--chart-track`      | 격자, 기준선                                              |
+| `color.chart.track-bar`                           | `--chart-track-bar`  | 비율·기술 막대의 빈 부분 (track 55%, 더 옅게)             |
 | `color.chart.accent/earth/violet`                 | `--chart-accent` 등  | 흐름도 칸 색의 재료                                       |
 | `color.chart.neutral`                             | `--chart-neutral`    | 산점도 1배 미만 점, 흐름도 순서 밖 칸                     |
 | `color.status.*`                                  | `--status-*`         | 배지 글자 (점검 신호, 표본 부족, 가설 지지)               |
@@ -137,9 +138,10 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `font-size.body-sm`  | 13  | 목록 위험 배수, 준비 조건 수치                         |
 | `font-size.body`     | 14  | 목록 몬스터 이름, 준비 조건 이름, 기술 이름            |
 | `font-size.subtitle` | 16  | 패널 안 소제목, 상세 단계·역할, 흐름 요약 숫자         |
-| `font-size.title`    | 18  | 패널 제목                                              |
+| `font-size.title`    | 20  | 패널 제목 (공통 머리 줄 `shell/panel-header.tsx`)      |
 | `font-size.heading`  | 20  | 머리글, 같은 조건 위험 배수                            |
-| `font-size.kpi`      | 22  | KPI 숫자 (사망, 교전, 기대 대비 위험)                  |
+| `font-size.kpi`      | 32  | KPI 숫자 (사망, 교전, 기대 대비 위험)                  |
+| `font-size.kpi-unit` | 16  | KPI 숫자 뒤 단위 (건, 배)                              |
 | `font-size.display`  | 24  | 상세 몬스터 이름                                       |
 
 줄 높이(`leading-[…]`)는 아직 토큰이 아닙니다.
@@ -152,30 +154,32 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `stroke.width.thin`            | 1    | 0 기준선, 2배 선, 중앙값 점선, 격자, 오각형 고리         |
 | `stroke.width.ring`            | 1.25 | 오각형: 축 끝(±3)을 넘은 값의 점선 고리                  |
 | `stroke.width.regular`         | 1.5  | 비교 고리, 평균 점선, 1배 기준선, 패치 날짜선, 초점 고리 |
-| `stroke.width.bold`            | 2    | 오각형 고른 몬스터 선, 패치 추이 선, 범례 선             |
+| `stroke.width.bold`            | 2.5  | 오각형 고른 몬스터 선, 패치 추이 선, 범례 선             |
 | `stroke.width.focus`           | 2    | 흐름도 칸 키보드 초점 고리                               |
 | `stroke.width.halo`            | 3    | 차트 글자 뒤 패널색 테두리                               |
-| `stroke.point.mark`            | 6    | 산점도 점                                                |
+| `stroke.point.mark`            | 8    | 산점도 점                                                |
 | `stroke.point.mark-hover-grow` | 1.5  | 산점도 가리킨 점이 커지는 양                             |
-| `stroke.point.legend`          | 4.5  | 산점도 범례 점                                           |
-| `stroke.point.vertex`          | 4    | 오각형 꼭짓점                                            |
-| `stroke.point.vertex-hover`    | 5.5  | 오각형 가리킨 꼭짓점                                     |
-| `stroke.point.vertex-ring`     | 8    | 오각형 축 끝을 넘은 값 고리                              |
-| `stroke.point.trend`           | 3.5  | 패치 추이 점                                             |
-| `stroke.point.trend-thin`      | 2.5  | 패치 추이 빈 점 (교전 적은 날)                           |
-| `stroke.point.estimate`        | 6    | 같은 조건 위험 배수 점                                   |
+| `stroke.point.legend`          | 6    | 산점도 범례 점                                           |
+| `stroke.point.vertex`          | 6    | 오각형 꼭짓점                                            |
+| `stroke.point.vertex-hover`    | 7.5  | 오각형 가리킨 꼭짓점                                     |
+| `stroke.point.vertex-ring`     | 10   | 오각형 축 끝을 넘은 값 고리                              |
+| `stroke.point.trend`           | 4.5  | 패치 추이 점                                             |
+| `stroke.point.trend-thin`      | 3.5  | 패치 추이 빈 점 (교전 적은 날)                           |
+| `stroke.point.estimate`        | 7    | 같은 조건 위험 배수 점                                   |
 
 ### 크기, 모서리, 간격
 
 | 토큰                     | 값  | 화면 위치                                        |
 | ------------------------ | --- | ------------------------------------------------ |
-| `size.bar.skill`         | 10  | 보스 기술 막대 높이, 범례 견본 높이              |
-| `size.bar.share`         | 25  | 준비 패널 비율 막대 높이                         |
-| `size.bar.interval`      | 4   | 같은 조건 위험 배수 범위 막대 높이               |
-| `size.dumbbell.line`     | 2   | 준비 조건 처치자→사망자 선                       |
+| `size.bar.skill`         | 15  | 보스 기술 막대 높이                              |
+| `size.bar.share`         | 16  | 준비 패널 비율 막대 높이                         |
+| `size.bar.interval`      | 6   | 같은 조건 위험 배수 범위 막대 높이               |
+| `size.bar.zero-stub`     | 3   | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)    |
+| `size.dumbbell.line`     | 3   | 준비 조건 처치자→사망자 선                       |
 | `size.dumbbell.dot`      | 14  | 준비 조건 점 지름                                |
 | `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                          |
 | `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                         |
+| `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                  |
 | `size.sankey.node-width` | 14  | 흐름도 칸 너비                                   |
 | `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                              |
 | `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                            |
