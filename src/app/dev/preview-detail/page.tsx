@@ -35,7 +35,6 @@ async function PreviewContent({ searchParams }: Pick<Props, 'searchParams'>) {
         stages={stagesOf(PREVIEW_ROWS)}
         basePath={BASE}
         monster={monster}
-        variant="main"
       />
       <div className="mt-(--space-panel-gap)">
         <MainBoard

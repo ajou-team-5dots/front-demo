@@ -32,7 +32,7 @@ export function pickChips(pick: FlowPick, hrefWithout: (p: FlowPick) => string) 
     delete rest[k];
     const column = FLOW_LABELS[k];
     const value = pick[k] ?? '';
-    return { label: `${column} · ${value}`, column, value, removeHref: hrefWithout(rest) };
+    return { column, value, removeHref: hrefWithout(rest) };
   });
 }
 

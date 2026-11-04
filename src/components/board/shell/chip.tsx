@@ -5,8 +5,6 @@ import { X } from 'lucide-react';
 import { useBoardPending } from './board-pending';
 
 interface FlowChipItem {
-  /** "레벨 · 1~19", for the accessible name. */
-  label: string;
   /** Column name, drawn light ("레벨"). */
   column: string;
   /** Picked value, drawn dark ("1~19"). */
@@ -17,9 +15,10 @@ interface FlowChipItem {
 
 // One picked flow cell: gray-3 fill, radius pill, as wide as its text. The whole chip is the
 // remove button; the X icon (state.chip-close, ink on hover) only marks it. Column name light,
-// value dark. Pops in when added.
-export function FlowChip({ label, column, value, removeHref }: FlowChipItem) {
+// value dark; on hover the whole chip goes ink. Pops in when added.
+export function FlowChip({ column, value, removeHref }: FlowChipItem) {
   const { navigate } = useBoardPending();
+  const label = `${column} · ${value}`;
   return (
     <button
       type="button"
@@ -27,7 +26,7 @@ export function FlowChip({ label, column, value, removeHref }: FlowChipItem) {
       aria-label={`${label} 조건 풀기`}
       className="group board-pop board-first board-control inline-flex h-(--size-chip) items-center rounded-pill bg-gray-3 px-(--space-chip-inset) text-(length:--font-size-label) whitespace-nowrap hover:bg-state-chip-hover focus-visible:outline-2 focus-visible:outline-ink"
     >
-      <span className="font-medium text-gray-1">{column}</span>
+      <span className="font-medium text-gray-1 group-hover:text-ink">{column}</span>
       <span className="ml-(--space-chip-part-gap) font-semibold text-ink">{value}</span>
       <X
         aria-hidden
@@ -48,7 +47,7 @@ export function FlowChips({ chips }: FlowChipsProps) {
   return (
     <div className="flex flex-wrap gap-(--space-chip-gap)">
       {chips.map((c) => (
-        <FlowChip key={c.label} {...c} />
+        <FlowChip key={c.column} {...c} />
       ))}
     </div>
   );

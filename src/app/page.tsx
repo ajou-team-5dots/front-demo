@@ -84,7 +84,6 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
         stages={stagesOf(all)}
         basePath="/"
         monster={monster}
-        variant="main"
       />
       <div className="mt-(--space-panel-gap)">
         <MainBoard

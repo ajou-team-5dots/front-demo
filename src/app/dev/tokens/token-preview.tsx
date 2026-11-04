@@ -322,8 +322,8 @@ export function TokenPreview() {
             </div>
             <FlowChips
               chips={[
-                { label: '레벨 · 1~19', column: '레벨', value: '1~19', removeHref: '/dev/tokens' },
-                { label: '무기 · 철', column: '무기', value: '철', removeHref: '/dev/tokens' },
+                { column: '레벨', value: '1~19', removeHref: '/dev/tokens' },
+                { column: '무기', value: '철', removeHref: '/dev/tokens' },
               ]}
             />
             <p className="text-(length:--font-size-body-sm) font-semibold tabular-nums">
