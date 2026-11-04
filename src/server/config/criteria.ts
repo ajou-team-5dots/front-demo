@@ -11,6 +11,9 @@ export const NEAR_HP = 0.2;
 export const HEAVY_Q = 0.99;
 /** Minimum encounters for a monster to appear in the main table. */
 export const MIN_ENC_MAIN = 20;
+/** Main table: Poisson cumulative probability cutoffs for elevated deaths. */
+export const DEATH_SIGNAL_QUANTILE = 0.95;
+export const DEATH_STRONG_QUANTILE = 0.998;
 /** Minimum deaths for H1, H3 and aux 1. */
 export const MIN_DEATHS = 5;
 

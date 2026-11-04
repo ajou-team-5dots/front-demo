@@ -1,6 +1,16 @@
 # 백엔드 가이드: 데이터 함수 작성
 
 **백엔드는 `src/server/data/`의 SQL과 로직만 쓴다. 연결(`query()`, `readPrecomputed()`)은 건드리지 않는다.**
+
+현재 화면 함수 4개는 구현되어 있다. `monsters.ts`가 응답을 조합하고,
+`monster-counts.ts`는 집계·H1, `monster-skills.ts`는 H3,
+`monster-patches.ts`는 H2를 기초 표에서 계산한다. Materialized View는 사용하지 않는다.
+
+`pnpm test`는 `.env.local`의 실제 DB와 JSON으로 기대값을 검증한다(Node 24 필요).
+Node 테스트에서만 Next의 서버 경계·캐시 메타데이터 호출을 대체하며, DB 조회와 JSON 읽기는 대체하지 않는다.
+통합 테스트는 한 프로세스에서 실행해 `.env.local`과 DB 연결을 공유한다.
+상세 오각형의 순위는 몬스터 단위 `pentagonRank`이며, 축의 결측 값은 JSON 그대로 `null`이다.
+H2 `groupReference`는 제공된 명세·JSON에 계산 정의가 없어 `null`을 반환한다.
 Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 붙어 데이터 함수를 만들고, curl로 확인하고, 화면에서 쓰는 법까지 따라 할 수 있게 정리했다.
 
 ## 0. 구조
@@ -23,14 +33,14 @@ Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 �
 - 기초 표는 분석 배치가 만든다. 그 규칙을 SQL로 대조한 결과(SQL로 재현되는 것 / 분석 배치가 맡는 것)는 [`docs/CALC_SQL.md`](CALC_SQL.md)에 있다.
 - 계산 명세 원문: 분석 담당 저장소 `DataSet/beta_analysis/explore/API_SPEC.md` (팀 사본: 분석 저장소 `information-design-5dots/DataSet/beta_analysis/explore/API_SPEC.md`). 분석 허브 아티팩트 **x_api 페이지**에도 있다. 이하 "계산 명세".
 
-| 파일                                                                     | 누가      | 역할                                                                                      |
-| ------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------- |
-| `src/server/data/monsters.ts`                                            | 백엔드    | 화면 함수 4개 골격 + TODO (getMonsterList, getMonsterDetail, getBossSkills, getPatchRisk) |
-| `src/server/data/game-events.ts`                                         | 백엔드    | 원본 `game_events` 조회 예시 함수 5개 (참고용, 동작함)                                    |
-| `src/types/monsters.ts`                                                  | 백엔드    | 반환 타입 (계산 명세 5장·3장 이름 그대로)                                                 |
-| `src/server/config/criteria.ts`                                          | 기획·분석 | 기준값 (계산 명세 1장)                                                                    |
-| `tests/expected.test.ts`                                                 | 백엔드    | 검증 기대값 (계산 명세 6장). 구현하면 skip을 푼다                                         |
-| `src/server/db/*`, `src/server/data/precomputed.ts`, `src/server/env.ts` | 프론트    | 연결. 건드리지 않는다                                                                     |
+| 파일                                                                     | 누가      | 역할                                                                          |
+| ------------------------------------------------------------------------ | --------- | ----------------------------------------------------------------------------- |
+| `src/server/data/monsters.ts`                                            | 백엔드    | 화면 함수 4개 (getMonsterList, getMonsterDetail, getBossSkills, getPatchRisk) |
+| `src/server/data/game-events.ts`                                         | 백엔드    | 원본 `game_events` 조회 예시 함수 5개 (참고용, 동작함)                        |
+| `src/types/monsters.ts`                                                  | 백엔드    | 반환 타입 (계산 명세 5장·3장 이름 그대로)                                     |
+| `src/server/config/criteria.ts`                                          | 기획·분석 | 기준값 (계산 명세 1장)                                                        |
+| `tests/expected.test.ts`                                                 | 백엔드    | 실제 기초 표·JSON을 읽는 기대값 검증 (계산 명세 6장)                          |
+| `src/server/db/*`, `src/server/data/precomputed.ts`, `src/server/env.ts` | 프론트    | 연결. 건드리지 않는다                                                         |
 
 ## 1. 꼭 지킬 것
 
@@ -87,8 +97,8 @@ Lambda는 `SELECT`/`WITH` 한 문장만 받고, SQL 텍스트 어디에든(주�
 ## 3. 함수 만들기
 
 1. 계산 명세에서 그 값의 절을 찾는다 (예: H1은 3-2, H3은 3-4)
-2. `src/types/monsters.ts`의 반환 타입을 확인한다. **TODO 표시 칸은 추측한 이름**이라 분석 담당과 맞춘다 (명세 5장은 상세 응답을 `out/screen_data/detail_<monster>.json`과 같게 하라고만 적혀 있다)
-3. `src/server/data/monsters.ts`의 TODO 주석에 `query`로 계산할 값과 `readPrecomputed`에서 오는 값이 나뉘어 있다. 그대로 구현한다
+2. `src/types/monsters.ts`의 반환 타입과 실제 JSON을 확인한다. 오각형 축의 결측 값은 `null`, 순위는 몬스터 단위다
+3. 기초 표 집계는 `monster-counts.ts`, H3는 `monster-skills.ts`, H2는 `monster-patches.ts`를 수정하고 `monsters.ts`에서 조합한다
 4. 함수 첫 줄에 캐시를 단다
 
    ```ts
@@ -96,13 +106,14 @@ Lambda는 `SELECT`/`WITH` 한 문장만 받고, SQL 텍스트 어디에든(주�
      'use cache';
      cacheTag(GAME_EVENTS_TAG);
      cacheLife('hours');
-     const rows = await query<...>(`WITH ${BASE_CTES} SELECT ...`, { heavy, minEnc: MIN_ENC_MAIN });
-     const risk = await readPrecomputed<Record<string, number>>('risk_vs_expected'); // TODO: 파일 이름은 분석과 맞춘다
+     const rows = await query<...>('SELECT ... FROM encounters WHERE ...', { heavy });
+     const risk = await readPrecomputed<HeavyResults<number | null>>('expected-risk');
+     // risk[heavy][monster]로 SQL 결과와 합친다.
      ...
    }
    ```
 
-5. `tests/expected.test.ts`에서 해당 테스트의 `skip`을 풀고 기대값과 비교한다. 교전 수가 1% 넘게 다르면 계산 명세 2장(교전 나누기, 피해 붙이기)부터 확인한다
+5. `tests/expected.test.ts`에서 기대값과 비교한다. 교전 수가 1% 넘게 다르면 조회 필터와 기초 표 생성 규칙(계산 명세 2장)을 확인한다
 6. `src/app/api/dev/[fn]/route.ts`의 `switch`에 한 줄 더해 curl로 확인한다
 7. `pnpm check`, `pnpm test`
 
@@ -126,6 +137,10 @@ pnpm dev            # http://localhost:3000
 curl 'http://localhost:3000/api/dev/raw-monsters'                        # 예시 함수 (동작함)
 curl 'http://localhost:3000/api/dev/raw-abilities?id=elderroot_stage_1'
 curl 'http://localhost:3000/api/dev/help'                                # 사용법
+curl 'http://localhost:3000/api/dev/monsters?heavy=include&period=all'   # period: current(기본)|all
+curl 'http://localhost:3000/api/dev/monster-detail?id=small_zombie'
+curl 'http://localhost:3000/api/dev/boss-skills?id=elderroot_stage_1&heavy=exclude'
+curl 'http://localhost:3000/api/dev/patch-risk?id=rift_stalker_strong'
 ```
 
 `/api/dev/*`는 개발 모드 전용이다(프로덕션 404). 화면은 이 주소를 부르지 않는다.
