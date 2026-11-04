@@ -4,7 +4,7 @@ import { appFont } from '@/lib/fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '5dots 행동 데이터 데모',
+  title: '몬스터 밸런스 보드',
   description: 'Akkadia 플레이어의 콘텐츠 실행 직후 행동 분석',
 };
 

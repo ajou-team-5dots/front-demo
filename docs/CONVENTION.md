@@ -2,13 +2,15 @@
 
 이 저장소는 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)와 [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)를 기준으로 한다. 사람이 외우지 않아도 되도록 대부분은 도구가 강제한다.
 
-| 도구                                     | 역할                                         | 설정 파일                  |
-| ---------------------------------------- | -------------------------------------------- | -------------------------- |
-| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript) | `eslint.config.mjs`        |
-| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)  | `.prettierrc.json`         |
-| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format           | `.husky/pre-commit`        |
-| commitlint                               | 커밋 메시지 형식 검사                        | `commitlint.config.mjs`    |
-| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`           | `.github/workflows/ci.yml` |
+| 도구                                     | 역할                                                         | 설정 파일                    |
+| ---------------------------------------- | ------------------------------------------------------------ | ---------------------------- |
+| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`          |
+| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`           |
+| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`          |
+| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`      |
+| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs`   |
+| `pnpm tokens:contrast`                   | 토큰 색 대비(글자 4.5:1, 그래픽 3:1)와 흐름도 열 안 색 구분  | `scripts/check-contrast.mjs` |
+| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml`   |
 
 PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
@@ -32,13 +34,14 @@ PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
 Airbnb 원칙과 Next.js/shadcn 관례가 충돌하는 곳만 끈다. 새 예외를 추가하면 이 표에 이유를 적는다.
 
-| 규칙                             | 상태 | 이유                                                                 |
-| -------------------------------- | ---- | -------------------------------------------------------------------- |
-| `import-x/prefer-default-export` | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export |
-| `react/react-in-jsx-scope`       | off  | React 17+ JSX 변환                                                   |
-| `react/jsx-props-no-spreading`   | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                            |
-| `react/require-default-props`    | off  | TypeScript 타입이 prop-types를 대체                                  |
-| `src/components/ui/**` 일부 규칙 | off  | shadcn이 생성한 코드는 원본과 가깝게 유지                            |
+| 규칙                                                                         | 상태 | 이유                                                                 |
+| ---------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------- |
+| `import-x/prefer-default-export`                                             | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export |
+| `react/react-in-jsx-scope`                                                   | off  | React 17+ JSX 변환                                                   |
+| `react/jsx-props-no-spreading`                                               | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                            |
+| `react/require-default-props`                                                | off  | TypeScript 타입이 prop-types를 대체                                  |
+| `src/components/ui/**` 일부 규칙                                             | off  | shadcn이 생성한 코드는 원본과 가깝게 유지                            |
+| `@typescript-eslint/no-use-before-define` (`src/components/ui/select.tsx`만) | off  | shadcn 원본이 스크롤 버튼을 `SelectContent` 아래에 정의              |
 
 ## 4. 폴더 구조
 
@@ -50,6 +53,7 @@ src/
     <feature>/         # 기능별 컴포넌트 (예: blueprint/, charts/)
   hooks/               # use 로 시작하는 커스텀 훅
   lib/                 # 순수 함수, 데이터 변환, utils.ts(cn). 클라이언트에서도 import 가능
+  styles/              # tokens.css, tokens.ts (design-tokens/tokens.json 에서 pnpm tokens 로 생성, 직접 수정 금지)
   server/
     data/              # 데이터 읽기 (Data Access Layer). 'server-only'
     actions/           # 데이터 쓰기 (Server Action). 'use server'
@@ -171,6 +175,7 @@ export default async function BlueprintsPage() {
 - `src/components/ui/` 파일은 가능한 한 수정하지 않는다. 변형이 필요하면 감싸는 컴포넌트를 `components/<feature>/`에 만든다
 - 조건부 클래스는 `cn()` 사용, 문자열 이어붙이기 금지
 - 색은 `globals.css`의 CSS 변수 토큰(`bg-background`, `text-muted-foreground` 등)만 사용. `bg-[#123456]` 같은 하드코딩 금지
+- 색, 불투명도, 글자 크기, 선 두께, 점·막대 크기, 모서리, 간격, 모션 값의 원본은 `design-tokens/tokens.json` 하나다. 컴포넌트에 숫자나 `color-mix(...)`를 새로 적지 말고 토큰을 추가한 뒤 `pnpm tokens`로 생성한다. 글자 크기는 `text-(length:--font-size-…)`, SVG는 `@/styles/tokens`의 `STROKE`, `OPACITY` 등을 쓴다. 자세한 것은 `docs/DESIGN_TOKENS.md`
 - 다크 모드는 토큰으로 처리되므로 `dark:` 를 남발하지 않는다
 
 ## 10. 데이터 취급 (Akkadia 프로젝트 공통)
