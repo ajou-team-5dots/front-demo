@@ -2,13 +2,14 @@
 
 이 저장소는 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)와 [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)를 기준으로 한다. 사람이 외우지 않아도 되도록 대부분은 도구가 강제한다.
 
-| 도구                                     | 역할                                         | 설정 파일                  |
-| ---------------------------------------- | -------------------------------------------- | -------------------------- |
-| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript) | `eslint.config.mjs`        |
-| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)  | `.prettierrc.json`         |
-| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format           | `.husky/pre-commit`        |
-| commitlint                               | 커밋 메시지 형식 검사                        | `commitlint.config.mjs`    |
-| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`           | `.github/workflows/ci.yml` |
+| 도구                                     | 역할                                                         | 설정 파일                  |
+| ---------------------------------------- | ------------------------------------------------------------ | -------------------------- |
+| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`        |
+| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`         |
+| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`        |
+| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`    |
+| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs` |
+| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml` |
 
 PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
@@ -32,13 +33,14 @@ PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
 Airbnb 원칙과 Next.js/shadcn 관례가 충돌하는 곳만 끈다. 새 예외를 추가하면 이 표에 이유를 적는다.
 
-| 규칙                             | 상태 | 이유                                                                    |
-| -------------------------------- | ---- | ----------------------------------------------------------------------- |
-| `import-x/prefer-default-export` | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export    |
-| `react/react-in-jsx-scope`       | off  | React 17+ JSX 변환                                                      |
-| `react/jsx-props-no-spreading`   | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                               |
-| `react/require-default-props`    | off  | TypeScript 타입이 prop-types를 대체                                     |
-| `src/components/ui/**` 일부 규칙 | off  | shadcn이 생성한 코드는 원본과 가깝게 유지 (select.tsx의 정의 순서 포함) |
+| 규칙                                                                         | 상태 | 이유                                                                 |
+| ---------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------- |
+| `import-x/prefer-default-export`                                             | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export |
+| `react/react-in-jsx-scope`                                                   | off  | React 17+ JSX 변환                                                   |
+| `react/jsx-props-no-spreading`                                               | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                            |
+| `react/require-default-props`                                                | off  | TypeScript 타입이 prop-types를 대체                                  |
+| `src/components/ui/**` 일부 규칙                                             | off  | shadcn이 생성한 코드는 원본과 가깝게 유지                            |
+| `@typescript-eslint/no-use-before-define` (`src/components/ui/select.tsx`만) | off  | shadcn 원본이 스크롤 버튼을 `SelectContent` 아래에 정의              |
 
 ## 4. 폴더 구조
 

@@ -41,7 +41,12 @@ export default defineConfig([
       'import-x/no-extraneous-dependencies': 'off',
       'react/function-component-definition': 'off',
       'no-restricted-exports': 'off',
-      // select.tsx defines its scroll buttons below SelectContent, as upstream does.
+    },
+  },
+  {
+    // select.tsx defines its scroll buttons below SelectContent, as upstream does.
+    files: ['src/components/ui/select.tsx'],
+    rules: {
       '@typescript-eslint/no-use-before-define': 'off',
     },
   },

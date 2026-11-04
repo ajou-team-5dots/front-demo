@@ -18,7 +18,8 @@ AI 코딩 에이전트(Codex 등)를 위한 작업 규칙. 사람용 상세 규�
 
 ```bash
 pnpm dev            # 개발 서버
-pnpm check          # lint + format:check + typecheck. 작업 끝나면 반드시 실행
+pnpm check          # lint + format:check + typecheck + tokens:check. 작업 끝나면 반드시 실행
+pnpm tokens         # design-tokens/tokens.json → src/styles/tokens.{css,ts} 생성
 pnpm build          # 프로덕션 빌드
 pnpm lint:fix       # ESLint 자동 수정
 pnpm format         # Prettier 적용
