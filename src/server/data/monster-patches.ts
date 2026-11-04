@@ -7,7 +7,8 @@ import { query } from '@/server/db/query';
 import type { H2Daily, H2Patch, H2Period, H2State, Heavy, MonsterRole } from '@/types/monsters';
 
 import { GAME_EVENTS_TAG } from './game-events';
-import type { HeavyResults, MonsterPatch, PatchModel } from './monster-precomputed';
+import type { HeavyResults, PatchModel } from './monster-precomputed';
+import { readMonsterPatches } from './monster-precomputed';
 import { PRECOMPUTED_TAG, readPrecomputed } from './precomputed';
 
 interface PatchCounts extends H2Period {
@@ -142,13 +143,10 @@ export async function getMonsterPatches(heavy: Heavy): Promise<MonsterPatchRisk[
   cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
   cacheLife('hours');
 
-  const [patchList, models] = await Promise.all([
-    readPrecomputed<MonsterPatch[]>('patches'),
+  const [patches, models] = await Promise.all([
+    readMonsterPatches(),
     readPrecomputed<HeavyResults<Record<string, PatchModel | null>>>('h2-same-condition'),
   ]);
-  const patches = patchList
-    .filter((patch) => patch.kind === 'monster')
-    .sort((a, b) => Date.parse(a.ts) - Date.parse(b.ts));
   const results = await Promise.all(
     patches.map(async (patch, index): Promise<MonsterPatchRisk[]> => {
       const from = index === 0 ? Number.MIN_SAFE_INTEGER : Date.parse(patches[index - 1].ts);

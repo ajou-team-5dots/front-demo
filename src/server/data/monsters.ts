@@ -20,7 +20,7 @@ import { getBossState, getMonsterSkills } from './monster-skills';
 import { PRECOMPUTED_TAG, readPrecomputed } from './precomputed';
 
 /** Monster ids are lowercase snake case. Anything else is unknown before any lookup. */
-const isMonsterId = (id: string): boolean => /^[a-z0-9_]{1,60}$/.test(id);
+export const isMonsterId = (id: string): boolean => /^[a-z0-9_]{1,60}$/.test(id);
 
 /** Cheap counts come from base tables; models come from batch JSON. H2 ignores `period`. */
 export async function getMonsterList(

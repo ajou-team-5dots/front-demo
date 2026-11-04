@@ -6,6 +6,7 @@
 import assert from 'node:assert/strict';
 import { before, describe, it } from 'node:test';
 
+import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterSkills } from '@/server/data/monster-skills';
 import {
   getBossSkills,
@@ -266,5 +267,40 @@ describe('계산 명세 6장 기대값', () => {
     const current = included.find((row) => row.monster === 'rift_stalker_strong');
     const whole = all.find((row) => row.monster === 'rift_stalker_strong');
     assert.ok(current && whole && whole.enc > current.enc, '패치 전 개체가 더해져야 함');
+  });
+
+  it('흐름(getFlow, 전체 기간) 교전 합 + 레벨 미상 = 교전 전체 61,759', async () => {
+    const flow = await getFlow('include', 'all');
+    const enc = flow.rows.reduce((sum, row) => sum + row.enc, 0);
+    assert.ok(flow.excluded);
+    assert.equal(enc + flow.excluded.enc, EXPECTED.encounters.all);
+    assert.deepEqual(
+      flow.columns.map((column) => column.key),
+      ['lv', 'wp', 'ar', 'grp'],
+    );
+  });
+
+  it('일별 추이 합 = 전체 기간 교전·사망, 기간 매일 포함 (getMonsterTrend)', async () => {
+    const [trend, range, patches] = await Promise.all([
+      getMonsterTrend('small_zombie', 'include', {}),
+      getDataRange(),
+      getPatches(),
+    ]);
+    const all = (await getMonsterList('include', 'all')).find(
+      (row) => row.monster === 'small_zombie',
+    );
+    assert.ok(all);
+    assert.equal(
+      trend.reduce((sum, day) => sum + day.enc, 0),
+      all.enc,
+    );
+    assert.equal(
+      trend.reduce((sum, day) => sum + day.deaths, 0),
+      all.deaths,
+    );
+    assert.equal(trend[0].day, range.from);
+    assert.equal(trend.at(-1)?.day, range.to);
+    assert.ok(patches.length > 0 && patches.every((p, i) => i === 0 || patches[i - 1].ts <= p.ts));
+    assert.deepEqual(await getMonsterTrend("x' OR 1 = 1", 'include', {}), []);
   });
 });
