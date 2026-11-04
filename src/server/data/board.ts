@@ -136,6 +136,10 @@ export async function getMonsterTrend(
   cacheLife('hours');
 
   const [counts, meta] = await Promise.all([getMonsterCounts(heavy, 'all'), readMeta()]);
+  // Group comes from monsters with encounters in this heavy scope. A monster with none (only in
+  // player_deaths, or only heavy-account encounters under exclude) gives zeros on a group pick,
+  // where the board's catalog counted its deaths. The screen opens only listed monsters
+  // (enc >= MIN_ENC_MAIN in this scope), so it never reaches that case.
   const entry = counts.find((row) => row.monster === monster);
   const groupMatches =
     !pick.grp || (entry !== undefined && groupOfRow(entry.role, entry.grade) === pick.grp);
