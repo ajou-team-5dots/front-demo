@@ -13,7 +13,9 @@
 3. `/dev/tokens`에서 견본과 대비를 확인하고, `/`, `/?m=elderroot_stage_1`, `/?m=small_zombie`를 봅니다
 4. `pnpm check`를 통과시키고 `tokens.json`과 생성 파일 두 개를 함께 커밋합니다
 
-`pnpm tokens:check`는 생성 파일이 `tokens.json`과 맞지 않으면 실패합니다.
+`pnpm tokens:check`는 생성 파일이 `tokens.json`과 맞지 않으면 실패합니다. `pnpm tokens:contrast`는 아래 대비 기준을 계산해 미달이면 실패합니다. 둘 다 `pnpm check`에 들어 있습니다.
+
+AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/AGENTS.md`에 있습니다. 토큰마다 `$description`에 화면 위치와 제약이 적혀 있습니다.
 
 ### 값 적는 법
 
@@ -53,6 +55,8 @@
 - **그래픽(점, 선, 막대, 칸): 3:1 이상**. 3:1이 안 되는 색은 그 자리에 글자나 모양을 함께 둡니다 (예: 흐름도 `accent` 칸은 칸마다 이름이 붙음, `chart.neutral` 점은 1배 미만이라는 범례 글자와 함께)
 - 상태색(`color.status`)은 색만으로 뜻을 전하지 않고 항상 글자 배지로 씁니다
 - `/dev/tokens`의 대비 숫자는 브라우저가 실제로 칠한 색을 재서 계산합니다. 섞은 색도 그대로 확인됩니다
+- 자동 검사 `pnpm tokens:contrast`: 규칙은 `tokens.json` 안 각 토큰의 `$extensions["org.5dots.contrast"]`(바탕과 최소 대비)와 `color.sankey`의 `$extensions["org.5dots.distinct"]`(열 안 색 사이 OKLab 거리, 정상 0.10 이상, 색약 시뮬레이션 0.05 이상)에 있습니다. 섞은 색은 브라우저처럼 OKLab으로 섞어 계산하므로 `/dev/tokens` 숫자와 같습니다
+- 색약 구분 하한 0.05는 지금 팔레트에서 가장 가까운 쌍(몬스터 집단 열 일반·약함 파랑과 중간보스 보라, 적색맹 시뮬레이션 0.054) 바로 아래로 잡았습니다. 지금보다 나빠지는 것을 막는 하한입니다
 - 흐름도 칸 색(`color.sankey`)은 한 칸(열) 안에서 색약 구분 검사를 통과한 조합입니다. 순서를 바꾸거나 새 색을 넣으면 같은 칸 안에서 이웃 색과 구분되는지 다시 확인합니다
 
 2026-11-04 측정값 (흰 바탕 / gray-3 바탕):

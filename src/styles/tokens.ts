@@ -199,7 +199,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--brand',
     css: '#a97b1e',
     value: '#a97b1e',
-    description: '브랜드(AKKADIA 로고). 디자이너 원안 #c3ab6a 를 대비 때문에 진하게',
+    description:
+      '머리글 AKKADIA 로고 글자(20px 굵게). 제약: 큰 글자라 패널·gray-3 바탕 3:1 이상 (검사). 디자이너 원안 #c3ab6a 는 대비 부족',
   },
   {
     path: 'color.base.ink',
@@ -207,7 +208,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--ink',
     css: '#0b1220',
     value: '#0b1220',
-    description: '모든 본문 글자',
+    description:
+      '모든 본문 글자, 차트 이름표, 키보드 초점 고리, 산점도 1배 기준 점선. 제약: 패널(흰)·gray-3 바탕 모두 글자 대비 4.5:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.base.gray-1',
@@ -215,7 +217,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--gray-1',
     css: '#4f5b6e',
     value: '#4f5b6e',
-    description: '보조 글자, 축 눈금',
+    description:
+      '보조 글자(패널 설명, 축 눈금, 범례), 중앙값 점선. 제약: 패널(흰)·gray-3 바탕 모두 글자 대비 4.5:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.base.gray-2',
@@ -223,7 +226,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--gray-2',
     css: '#bfc8d6',
     value: '#bfc8d6',
-    description: '컨트롤 테두리, 0 기준선',
+    description:
+      '선택 상자·검색칸 테두리, 산점도 0 기준선, 머리글 구분선. 제약: 없음(장식선). 너무 진하게 하면 컨트롤이 무거워 보임',
   },
   {
     path: 'color.base.gray-3',
@@ -231,7 +235,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--gray-3',
     css: '#e9eef5',
     value: '#e9eef5',
-    description: '페이지 바탕, 세그먼트 바탕, 칩',
+    description:
+      '페이지 바탕, 세그먼트 바탕, 칩 바탕, 열린 목록 행 바탕. 제약: 글자 토큰들이 이 위에서 4.5:1 을 넘어야 하므로 바꾸면 tokens:contrast 로 전체 확인',
   },
   {
     path: 'color.base.panel',
@@ -239,7 +244,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--panel',
     css: '#ffffff',
     value: '#ffffff',
-    description: '패널 바탕',
+    description:
+      '모든 패널 바탕, 차트 글자 뒤 테두리(halo). 제약: 글자·그래픽 대비 검사의 기준 바탕. 바꾸면 tokens:contrast 로 전체 확인',
   },
   {
     path: 'color.base.primary-strong',
@@ -247,7 +253,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--primary-strong',
     css: '#a8904f',
     value: '#a8904f',
-    description: 'shadcn primary 진한 쪽',
+    description: 'shadcn 부품의 primary 진한 쪽 (보드 화면에서는 거의 안 보임). 제약: 없음',
   },
   {
     path: 'color.base.primary-soft',
@@ -255,7 +261,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--primary-soft',
     css: '#f4efe1',
     value: '#f4efe1',
-    description: 'shadcn primary 옅은 쪽',
+    description: 'shadcn 부품의 primary 옅은 쪽 (보드 화면에서는 거의 안 보임). 제약: 없음',
   },
   {
     path: 'color.base.success-soft',
@@ -263,7 +269,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--success-soft',
     css: '#e6f0f1',
     value: '#e6f0f1',
-    description: 'shadcn success 옅은 쪽',
+    description: 'shadcn 부품의 success 옅은 쪽 (보드 화면에서는 거의 안 보임). 제약: 없음',
   },
   {
     path: 'color.base.skeleton-shine',
@@ -271,7 +277,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--skeleton-shine',
     css: '#f8fafc',
     value: '#f8fafc',
-    description: '로딩 뼈대가 반짝이는 가운데 색',
+    description: '로딩 뼈대(회색 상자)가 반짝일 때 가운데 색. 제약: gray-3 보다 밝게',
   },
   {
     path: 'color.chart.actual',
@@ -279,7 +285,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-actual',
     css: '#22448f',
     value: '#22448f',
-    description: '고른 몬스터 자신의 값',
+    description:
+      '고른 몬스터 자신의 값: 오각형 선·면·꼭짓점, 패치 추이 선과 점, 같은 조건 위험 배수 점, 준비 패널 막대. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.comparison',
@@ -287,7 +294,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-comparison',
     css: '#2f6fe0',
     value: '#2f6fe0',
-    description: '비교 집단, 평균, 중앙값',
+    description:
+      '비교 집단: 오각형 중앙값 고리, 패치 평균 점선, 준비 조건 선, 위험 배수 범위 막대. 흐름도 칸 색 재료, 산점도 1~2배(scatter.mid). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.death',
@@ -295,7 +303,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-death',
     css: '#d64a5f',
     value: '#d64a5f',
-    description: '사망 쪽',
+    description:
+      '사망·위험 의미 전용: 사망 막대, 사망자 점, 산점도 2배 이상 점(scatter.high)과 2배 선, 우선 점검 구역(scatter.zone), 2배 이상 숫자(text-scale.flag)의 재료. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). 위험이 아닌 범주에 쓰지 않음',
   },
   {
     path: 'color.chart.survival',
@@ -303,7 +312,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-survival',
     css: '#0f9a8f',
     value: '#0f9a8f',
-    description: '생존, 처치 쪽',
+    description:
+      '생존·처치 쪽: 살아남은 교전 막대, 처치자 점. 흐름도 칸 색 재료. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.track',
@@ -311,7 +321,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-track',
     css: '#e7ecf3',
     value: '#e7ecf3',
-    description: '막대의 빈 부분, 비교 범위, 격자',
+    description:
+      '막대의 빈 부분, 격자선, 0이 아닌 기준선. 제약: 패널 위에서 보일 만큼만 (그래픽 대비 대상 아님)',
   },
   {
     path: 'color.chart.accent',
@@ -319,7 +330,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-accent',
     css: '#c0850f',
     value: '#c0850f',
-    description: '추가 범주 색 (흐름도). 흰 바탕 3:1 미만이라 칸마다 글자를 붙인다',
+    description:
+      '흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에는 쓰지 않음(2.73:1), 칸마다 이름 글자가 붙음',
   },
   {
     path: 'color.chart.earth',
@@ -327,7 +339,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-earth',
     css: '#9b5f2e',
     value: '#9b5f2e',
-    description: '추가 범주 색 (흐름도)',
+    description:
+      '흐름도 칸 색 재료(갈색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.violet',
@@ -335,7 +348,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--chart-violet',
     css: '#b04fc0',
     value: '#b04fc0',
-    description: '추가 범주 색 (흐름도)',
+    description:
+      '흐름도 칸 색 재료(보라, 중간보스 칸). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.neutral',
@@ -344,7 +358,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: 'color-mix(in oklab, var(--gray-2) 70%, var(--gray-1))',
     value: '#bfc8d6',
     description:
-      '조용한 중립. gray-2 를 gray-1 쪽으로 30% (#9ca6b6, 흰 바탕 2.46:1). 점 모양으로만 쓰고 글자에는 쓰지 않는다',
+      '조용한 중립: 산점도 1배 미만 점, 흐름도 순서 밖 칸. gray-2 를 gray-1 쪽으로 30%. 제약: 패널 바탕 2.2:1 이상 (검사). 3:1 미만이라 항상 범례 글자와 함께 쓰고, 글자색으로 쓰지 않음',
   },
   {
     path: 'color.status.warning',
@@ -352,7 +366,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-warning',
     css: '#985a00',
     value: '#985a00',
-    description: '점검 필요',
+    description:
+      '배지 "표본 부족"류 글자색. 제약: 패널과 자기 -soft 바탕 위 글자 대비 4.5:1 이상 (검사). 색만으로 뜻을 전하지 않고 항상 글자와 함께',
   },
   {
     path: 'color.status.danger',
@@ -360,7 +375,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-danger',
     css: '#c2334f',
     value: '#c2334f',
-    description: '강한 신호, 오류',
+    description:
+      '배지 "점검 신호"류 글자색. 제약: 패널과 자기 -soft 바탕 위 글자 대비 4.5:1 이상 (검사). 색만으로 뜻을 전하지 않고 항상 글자와 함께',
   },
   {
     path: 'color.status.supported',
@@ -368,7 +384,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-supported',
     css: '#1e4f9a',
     value: '#1e4f9a',
-    description: '가설 지지',
+    description:
+      '배지 "가설 지지" 글자색. 제약: 패널과 자기 -soft 바탕 위 글자 대비 4.5:1 이상 (검사). 비교 파랑(chart.comparison)과 구분되게',
   },
   {
     path: 'color.status.warning-soft',
@@ -376,7 +393,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-warning-soft',
     css: 'color-mix(in oklab, var(--status-warning) 10%, var(--panel))',
     value: '#985a00',
-    description: '배지 바탕: 상태색 10% + 패널',
+    description:
+      'warning 배지 바탕 (상태색 10% + 패널). 제약: status.warning 글자가 이 위에서 4.5:1 (검사). amount 를 올리면 글자 대비가 떨어짐',
   },
   {
     path: 'color.status.danger-soft',
@@ -384,7 +402,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-danger-soft',
     css: 'color-mix(in oklab, var(--status-danger) 10%, var(--panel))',
     value: '#c2334f',
-    description: '배지 바탕: 상태색 10% + 패널',
+    description:
+      'danger 배지 바탕 (상태색 10% + 패널). 제약: status.danger 글자가 이 위에서 4.5:1 (검사). amount 를 올리면 글자 대비가 떨어짐',
   },
   {
     path: 'color.status.supported-soft',
@@ -392,7 +411,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--status-supported-soft',
     css: 'color-mix(in oklab, var(--status-supported) 10%, var(--panel))',
     value: '#1e4f9a',
-    description: '배지 바탕: 상태색 10% + 패널',
+    description:
+      'supported 배지 바탕 (상태색 10% + 패널). 제약: status.supported 글자가 이 위에서 4.5:1 (검사)',
   },
   {
     path: 'color.sankey.lv.1',
@@ -400,7 +420,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-lv-1',
     css: 'var(--chart-accent)',
     value: '#c0850f',
-    description: '',
+    description:
+      '흐름도 1열 레벨 "1~19" 칸과 그 칸에서 나가는 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.lv.2',
@@ -408,7 +429,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-lv-2',
     css: 'var(--chart-survival)',
     value: '#0f9a8f',
-    description: '',
+    description:
+      '흐름도 1열 레벨 "20~39" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.lv.3',
@@ -416,7 +438,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-lv-3',
     css: 'var(--chart-comparison)',
     value: '#2f6fe0',
-    description: '',
+    description:
+      '흐름도 1열 레벨 "40~69" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.lv.4',
@@ -424,7 +447,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-lv-4',
     css: 'var(--chart-earth)',
     value: '#9b5f2e',
-    description: '',
+    description:
+      '흐름도 1열 레벨 "70+" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.wp.1',
@@ -432,7 +456,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-wp-1',
     css: 'var(--chart-survival)',
     value: '#0f9a8f',
-    description: '',
+    description:
+      '흐름도 2열 무기 "없음·나무" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.wp.2',
@@ -440,7 +465,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-wp-2',
     css: 'var(--chart-earth)',
     value: '#9b5f2e',
-    description: '',
+    description:
+      '흐름도 2열 무기 "돌" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.wp.3',
@@ -448,7 +474,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-wp-3',
     css: 'var(--chart-comparison)',
     value: '#2f6fe0',
-    description: '',
+    description:
+      '흐름도 2열 무기 "철" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.wp.4',
@@ -456,7 +483,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-wp-4',
     css: 'var(--chart-accent)',
     value: '#c0850f',
-    description: '',
+    description:
+      '흐름도 2열 무기 "금·다이아" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.ar.1',
@@ -464,7 +492,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-ar-1',
     css: 'var(--chart-accent)',
     value: '#c0850f',
-    description: '',
+    description:
+      '흐름도 3열 방어구 "없음" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.ar.2',
@@ -472,7 +501,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-ar-2',
     css: 'var(--chart-comparison)',
     value: '#2f6fe0',
-    description: '',
+    description:
+      '흐름도 3열 방어구 "일부" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.ar.3',
@@ -480,7 +510,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-ar-3',
     css: 'var(--chart-survival)',
     value: '#0f9a8f',
-    description: '',
+    description:
+      '흐름도 3열 방어구 "6부위" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.grp.1',
@@ -488,7 +519,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-grp-1',
     css: 'var(--chart-comparison)',
     value: '#2f6fe0',
-    description: '',
+    description:
+      '흐름도 4열 몬스터 집단 "일반·약함" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.grp.2',
@@ -496,7 +528,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-grp-2',
     css: 'var(--chart-survival)',
     value: '#0f9a8f',
-    description: '',
+    description:
+      '흐름도 4열 "일반·medium" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.grp.3',
@@ -504,7 +537,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-grp-3',
     css: 'var(--chart-accent)',
     value: '#c0850f',
-    description: '',
+    description:
+      '흐름도 4열 "일반·strong" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.grp.4',
@@ -512,7 +546,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-grp-4',
     css: 'var(--chart-violet)',
     value: '#b04fc0',
-    description: '',
+    description:
+      '흐름도 4열 "중간보스" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.grp.5',
@@ -520,7 +555,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-grp-5',
     css: 'var(--chart-earth)',
     value: '#9b5f2e',
-    description: '',
+    description:
+      '흐름도 4열 "던전 보스" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
   {
     path: 'color.sankey.neutral',
@@ -528,7 +564,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--sankey-neutral',
     css: 'var(--chart-neutral)',
     value: '#bfc8d6',
-    description: '정해진 순서 밖의 값 (예: 모르는 레벨)',
+    description:
+      '흐름도에서 정해진 순서 밖의 값(예: 모르는 레벨) 칸. 제약: chart.neutral 과 같은 규칙, 범주 색과 구분되는 회색 유지',
   },
   {
     path: 'color.scatter.high',
@@ -536,7 +573,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--scatter-high',
     css: 'var(--chart-death)',
     value: '#d64a5f',
-    description: '기대 대비 2배 이상',
+    description:
+      '산점도 기대 대비 2배 이상 점과 범례 "2배 이상". 위험 의미라 chart.death 를 가리킴. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.scatter.mid',
@@ -544,7 +582,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--scatter-mid',
     css: 'var(--chart-comparison)',
     value: '#2f6fe0',
-    description: '1~2배',
+    description:
+      '산점도 1~2배 점과 범례 "1~2배". 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.scatter.below',
@@ -552,7 +591,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--scatter-below',
     css: 'var(--chart-neutral)',
     value: '#bfc8d6',
-    description: '1배 미만',
+    description:
+      '산점도 1배 미만 점과 범례 "1배 미만". 제약: chart.neutral 규칙(2.2:1, 범례 동반). high·mid 보다 조용해야 함',
   },
   {
     path: 'color.scatter.zone',
@@ -560,7 +600,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--scatter-zone',
     css: 'color-mix(in oklab, var(--chart-death) 8%, var(--panel))',
     value: '#d64a5f',
-    description: '우선 점검 구역 바탕: 사망색 8% + 패널',
+    description:
+      '산점도 오른쪽 위 "우선 점검" 구역 바탕 (사망색 8% + 패널). 그 위 구역 이름 글자 뒤 테두리로도 쓰임. 제약: gray-1 글자가 이 위에서 읽혀야 하므로 amount 는 0.15 이하 권장',
   },
   {
     path: 'color.text-scale.flag',
@@ -569,7 +610,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: 'color-mix(in oklab, var(--chart-death) 85%, var(--ink))',
     value: '#d64a5f',
     description:
-      '위험 2배 이상 숫자 (13px). 사망색(흰 바탕 4.20:1)을 ink 쪽으로 15%: 흰 바탕 5.42:1, gray-3 위 4.65:1',
+      '위험 목록 2배 이상 숫자(13px), 사망색을 ink 쪽으로 15%. 제약: 패널(흰)·gray-3 바탕 모두 글자 대비 4.5:1 이상 (tokens:contrast 검사). hover·열린 행이 gray-3',
   },
   {
     path: 'color.text-scale.sub',
@@ -577,7 +618,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--text-scale-sub',
     css: 'color-mix(in oklab, var(--gray-1) 95%, var(--ink))',
     value: '#4f5b6e',
-    description: '목록 보조 글자. gray-1 을 ink 쪽으로 5%: 흰 바탕 7.32:1, gray-3 위 6.28:1',
+    description:
+      '위험 목록 "N단계 · 역할" 줄(11px)과 값 없는 숫자, gray-1 을 ink 쪽으로 5%. 제약: 패널(흰)·gray-3 바탕 모두 글자 대비 4.5:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.state.row-hover',
@@ -585,7 +627,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--state-row-hover',
     css: 'color-mix(in oklab, var(--gray-3) 60%, transparent)',
     value: '#e9eef5',
-    description: '목록 행: 다른 차트에서 가리킬 때 바탕 (gray-3 60%)',
+    description:
+      '위험 목록 행: 산점도·흐름도에서 그 몬스터를 가리킬 때 바탕 (gray-3 60%, 반투명). 제약: 열린 행(gray-3)보다 옅게',
   },
   {
     path: 'color.state.chip-hover',
@@ -593,7 +636,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--state-chip-hover',
     css: 'color-mix(in oklab, var(--gray-2) 50%, transparent)',
     value: '#bfc8d6',
-    description: '흐름 칩 hover 바탕 (gray-2 50%)',
+    description:
+      '흐름 칩(선택한 조건) hover 바탕 (gray-2 50%, 반투명). 제약: 칩 글자(gray-1→ink)가 읽히게',
   },
   {
     path: 'opacity.band.default',
@@ -601,7 +645,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-band-default',
     css: '0.35',
     value: 0.35,
-    description: '아무것도 고르지 않았을 때',
+    description:
+      '흐름도 띠: 아무것도 고르거나 가리키지 않았을 때. 제약: dim < default < hover < picked 순서 유지',
   },
   {
     path: 'opacity.band.hover',
@@ -609,7 +654,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-band-hover',
     css: '0.75',
     value: 0.75,
-    description: '가리킨 레벨 갈래',
+    description: '흐름도 띠: 가리킨 칸·띠의 레벨 갈래. 제약: default 보다 크고 picked 이하',
   },
   {
     path: 'opacity.band.picked',
@@ -617,7 +662,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-band-picked',
     css: '0.85',
     value: 0.85,
-    description: '고른 칸을 지나는 띠',
+    description: '흐름도 띠: 고른 칸을 모두 지나는 띠. 제약: 가장 진한 단계, 1 이하',
   },
   {
     path: 'opacity.band.dim',
@@ -625,7 +670,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-band-dim',
     css: '0.08',
     value: 0.08,
-    description: '물러난 띠',
+    description:
+      '흐름도 띠: 고름·가리킴에서 물러난 띠. 제약: 가장 옅은 단계, 띠가 거의 사라질 정도(0.05–0.15)',
   },
   {
     path: 'opacity.dim.node',
@@ -633,7 +679,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-dim-node',
     css: '0.35',
     value: 0.35,
-    description: '흐름도: 맞는 흐름이 없는 칸',
+    description:
+      '흐름도 칸: 고른 조건이나 가리킨 갈래에 맞는 흐름이 없을 때. 제약: 칸 이름 글자는 흐려지지 않으므로 0.2 이상 권장',
   },
   {
     path: 'opacity.dim.mark',
@@ -641,7 +688,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-dim-mark',
     css: '0.4',
     value: 0.4,
-    description: '산점도: 다른 점을 가리킬 때 나머지 점',
+    description:
+      '산점도: 한 점을 가리킬 때 나머지 점. 제약: 0.2–0.6, 너무 낮으면 위치 비교가 안 됨',
   },
   {
     path: 'opacity.dim.label',
@@ -649,7 +697,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-dim-label',
     css: '0.45',
     value: 0.45,
-    description: '오각형: 다른 축을 가리킬 때 나머지 축 이름',
+    description:
+      '오각형: 한 축을 가리킬 때 나머지 축 이름·값 글자. 제약: 흐린 글자라도 읽혀야 하므로 0.4 이상',
   },
   {
     path: 'opacity.dim.line',
@@ -657,7 +706,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-dim-line',
     css: '0.35',
     value: 0.35,
-    description: '패치 추이: 교전이 적은 날이 섞인 선 전체',
+    description:
+      '패치 추이: 교전 10건 미만인 날이 섞였을 때 선 전체(진한 부분은 따로 그림). 제약: 0.2–0.5',
   },
   {
     path: 'opacity.line.grid',
@@ -665,7 +715,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-line-grid',
     css: '0.7',
     value: 0.7,
-    description: '격자선 (패치 추이 가로선, 오각형 바큇살)',
+    description: '패치 추이 가로 격자, 오각형 바큇살. 제약: 0.4–1',
   },
   {
     path: 'opacity.line.ring',
@@ -673,7 +723,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-line-ring',
     css: '0.8',
     value: 0.8,
-    description: '오각형 눈금 고리',
+    description: '오각형 눈금 고리(±1, ±2). 제약: 0.4–1',
   },
   {
     path: 'opacity.line.reference',
@@ -681,7 +731,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-line-reference',
     css: '0.7',
     value: 0.7,
-    description: '산점도 기대 = 1배 점선',
+    description: '산점도 "기대 = 1배" 점선(ink). 제약: 기준선이라 격자보다 진하게',
   },
   {
     path: 'opacity.line.flag',
@@ -689,7 +739,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-line-flag',
     css: '0.55',
     value: 0.55,
-    description: '산점도 2배 선',
+    description: '산점도 2배 선(사망색). 제약: 구역 경계로 보일 만큼, 점보다 흐리게',
   },
   {
     path: 'opacity.line.median',
@@ -697,7 +747,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-line-median',
     css: '0.6',
     value: 0.6,
-    description: '산점도 사망 수 중앙값 점선',
+    description: '산점도 사망 수 중앙값 세로 점선(gray-1). 제약: 1배 점선보다 흐리게',
   },
   {
     path: 'opacity.fill.area',
@@ -705,7 +755,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-fill-area',
     css: '0.18',
     value: 0.18,
-    description: '오각형 안쪽 면',
+    description: '오각형 고른 몬스터 면. 제약: 0.1–0.3, 비교 고리가 비쳐 보여야 함',
   },
   {
     path: 'opacity.point.thin',
@@ -713,7 +763,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-point-thin',
     css: '0.6',
     value: 0.6,
-    description: '패치 추이: 교전이 적은 날 빈 점 테두리',
+    description: '패치 추이: 교전 10건 미만인 날의 빈 점 테두리. 제약: 0.4–0.8',
   },
   {
     path: 'opacity.pending',
@@ -721,7 +771,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--opacity-pending',
     css: '0.6',
     value: 0.6,
-    description: '필터를 바꾸는 동안 내용 흐림',
+    description: '필터·선택을 바꾸는 동안 내용 전체 흐림. 제약: 0.4–0.8, 내용이 읽힐 만큼',
   },
   {
     path: 'radius.panel',
@@ -729,7 +779,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-panel',
     css: '10px',
     value: 10,
-    description: '패널, KPI 상자',
+    description: '패널, KPI 상자, 필터 바 (rounded-panel). 제약: 레이아웃에 영향 없음',
   },
   {
     path: 'radius.control',
@@ -737,7 +787,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-control',
     css: '6px',
     value: 6,
-    description: '선택 상자, 칩, 목록 행, 툴팁',
+    description: '선택 상자, 칩, 목록 행, 툴팁, 세그먼트 바깥 (rounded-control). 제약: panel 이하',
   },
   {
     path: 'radius.pill',
@@ -745,7 +795,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-pill',
     css: '4px',
     value: 4,
-    description: '배지, 세그먼트 단추, 막대',
+    description:
+      '배지, 세그먼트 단추, 기술·비율 막대 끝 (rounded-pill). 제약: 막대 높이(size.bar.skill 10px)의 절반 이하가 자연스러움',
   },
   {
     path: 'radius.focus',
@@ -753,7 +804,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-focus',
     css: '4px',
     value: 4,
-    description: '흐름도 칸 키보드 초점 고리',
+    description: '흐름도 칸 키보드 초점 고리 모서리. 제약: 없음',
   },
   {
     path: 'radius.mark',
@@ -761,7 +812,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-mark',
     css: '2px',
     value: 2,
-    description: '흐름도 칸, 범위 막대',
+    description: '흐름도 칸, 같은 조건 위험 배수 범위 막대 모서리. 제약: 칸 너비(14px)의 1/4 이하',
   },
   {
     path: 'radius.mark-sm',
@@ -769,7 +820,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-mark-sm',
     css: '1px',
     value: 1,
-    description: '산점도 네모 점',
+    description: '산점도 네모(중간보스) 점 모서리. 제약: 2px 이하, 크면 원과 구분이 어려움',
   },
   {
     path: 'space.panel-gap',
@@ -777,7 +828,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--space-panel-gap',
     css: '14px',
     value: 14,
-    description: '패널 사이 간격',
+    description:
+      '패널 사이 간격(가로·세로), 필터 바 아래 간격. 제약: 레이아웃 변경. 1440 화면 높이 맞춤이 깨질 수 있어 바꾸지 않는 것이 기본',
   },
   {
     path: 'space.panel-inset',
@@ -785,7 +837,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--space-panel-inset',
     css: '16px',
     value: 16,
-    description: '패널 안쪽 좌우 여백',
+    description:
+      '패널 안쪽 좌우 여백, 차트 그리는 폭 계산에도 쓰임. 제약: 레이아웃 변경. 바꾸지 않는 것이 기본',
   },
   {
     path: 'space.panel-top',
@@ -793,7 +846,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--space-panel-top',
     css: '12px',
     value: 12,
-    description: '패널 위 여백 (제목 위)',
+    description: '패널 위 여백(제목 위). 제약: 레이아웃 변경. 바꾸지 않는 것이 기본',
   },
   {
     path: 'space.segment-inset',
@@ -801,7 +854,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--space-segment-inset',
     css: '3px',
     value: 3,
-    description: '세그먼트(기간, 2초·5초) 안쪽 여백',
+    description:
+      '세그먼트 컨트롤(기간, 2초·5초) 안쪽 여백. 제약: 단추 높이 24px 와 바깥 30px 에 맞춘 값(30 = 24 + 2×3)',
   },
   {
     path: 'font-size.micro',
@@ -809,7 +863,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-micro',
     css: '10px',
     value: 10,
-    description: '오각형 눈금 숫자',
+    description: '오각형 눈금 숫자(+1, -2). 제약: 10px 미만 금지',
   },
   {
     path: 'font-size.caption',
@@ -817,7 +871,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-caption',
     css: '11px',
     value: 11,
-    description: '캡션, 축 눈금, 배지, 목록 보조 줄',
+    description:
+      '패널 설명, 축 눈금, 배지, 목록 보조 줄, 산점도 점 이름. 제약: 11px 미만 금지. 키우면 산점도 이름 겹침 회피·목록 줄이 바뀜',
   },
   {
     path: 'font-size.label',
@@ -825,7 +880,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-label',
     css: '12px',
     value: 12,
-    description: '라벨, 컨트롤, 범례, 툴팁, 흐름도 칸 이름',
+    description:
+      '필터 라벨, 컨트롤, 범례, 툴팁, 흐름도 칸 이름. 제약: 흐름도 칸 이름 폭 계산에 쓰여 키우면 이름이 겹칠 수 있음',
   },
   {
     path: 'font-size.body-sm',
@@ -833,7 +889,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-body-sm',
     css: '13px',
     value: 13,
-    description: '목록 위험 배수, 준비 조건 수치',
+    description:
+      '위험 목록 배수 숫자, 준비 조건 수치. 제약: 목록 숫자 칸 72px 안에 "4.99배" 가 들어가야 함',
   },
   {
     path: 'font-size.body',
@@ -841,7 +898,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-body',
     css: '14px',
     value: 14,
-    description: '목록 몬스터 이름, 행 이름',
+    description:
+      '위험 목록 몬스터 이름, 준비 조건 이름, 보스 기술 이름. 제약: 목록 행 높이 44px 안에 두 줄이 들어가야 함',
   },
   {
     path: 'font-size.subtitle',
@@ -849,7 +907,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-subtitle',
     css: '16px',
     value: 16,
-    description: '패널 안 소제목, 상세 단계·역할',
+    description: '패널 안 소제목, 상세 단계·역할, 흐름 요약 숫자. 제약: title 보다 작게',
   },
   {
     path: 'font-size.title',
@@ -857,7 +915,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-title',
     css: '18px',
     value: 18,
-    description: '패널 제목',
+    description: '패널 제목. 제약: 제목 줄 높이 22px, 키우면 패널 안 차트 위치가 밀림',
   },
   {
     path: 'font-size.heading',
@@ -865,7 +923,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-heading',
     css: '20px',
     value: 20,
-    description: '머리글, 같은 조건 위험 배수',
+    description:
+      '머리글(AKKADIA, 몬스터 밸런스 보드), 같은 조건 위험 배수 숫자. 제약: 머리글 높이 60px 안',
   },
   {
     path: 'font-size.kpi',
@@ -873,7 +932,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-kpi',
     css: '22px',
     value: 22,
-    description: 'KPI 숫자',
+    description: '상세 KPI 숫자(사망, 교전, 기대 대비 위험). 제약: KPI 상자 높이 66px 안',
   },
   {
     path: 'font-size.display',
@@ -881,7 +940,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--font-size-display',
     css: '24px',
     value: 24,
-    description: '상세 몬스터 이름',
+    description: '상세 화면 몬스터 이름. 제약: 긴 이름은 말줄임, 줄 높이 29px',
   },
   {
     path: 'stroke.width.hairline',
@@ -889,7 +948,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-hairline',
     css: '0.75px',
     value: 0.75,
-    description: '산점도 격자',
+    description: '산점도 격자선. 제약: thin 이하',
   },
   {
     path: 'stroke.width.thin',
@@ -897,7 +956,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-thin',
     css: '1px',
     value: 1,
-    description: '기준선, 격자, 고리',
+    description:
+      '0 기준선, 2배 선, 중앙값 점선, 패치 격자, 오각형 눈금 고리·바큇살. 제약: hairline 이상 regular 이하',
   },
   {
     path: 'stroke.width.ring',
@@ -905,7 +965,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-ring',
     css: '1.25px',
     value: 1.25,
-    description: '오각형: 축 끝(±3)을 넘은 값의 점선 고리',
+    description: '오각형: 축 끝(±3)을 넘은 값의 점선 고리. 제약: 없음',
   },
   {
     path: 'stroke.width.regular',
@@ -913,7 +973,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-regular',
     css: '1.5px',
     value: 1.5,
-    description: '비교선, 평균선, 점선 기준, 초점 고리',
+    description:
+      '비교 고리, 패치 평균 점선, 1배 기준 점선, 패치 날짜선, 산점도 초점 고리. 제약: bold 보다 가늘게(고른 몬스터 선이 가장 굵어야 함)',
   },
   {
     path: 'stroke.width.bold',
@@ -921,7 +982,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-bold',
     css: '2px',
     value: 2,
-    description: '고른 몬스터 선, 범례 선',
+    description: '오각형 고른 몬스터 선, 패치 추이 선, 범례 선. 제약: 차트 선 중 가장 굵게',
   },
   {
     path: 'stroke.width.focus',
@@ -929,7 +990,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-focus',
     css: '2px',
     value: 2,
-    description: '흐름도 칸 키보드 초점 고리',
+    description: '흐름도 칸 키보드 초점 고리. 제약: 2px 이상(접근성)',
   },
   {
     path: 'stroke.width.halo',
@@ -937,7 +998,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-width-halo',
     css: '3px',
     value: 3,
-    description: '차트 글자 뒤 패널색 테두리 (선 위에서도 읽히게)',
+    description: '차트 글자 뒤 패널색 테두리(선·면 위에서도 글자가 읽히게). 제약: 2–4px',
   },
   {
     path: 'stroke.point.mark',
@@ -945,7 +1006,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-mark',
     css: '6px',
     value: 6,
-    description: '산점도 점 (모든 모양이 이 반지름 원과 같은 넓이)',
+    description:
+      '산점도 점 반지름(모든 모양이 이 반지름 원과 같은 넓이). 제약: 키우면 점 겹침이 늘고 겹침 회피 간격도 함께 바뀜',
   },
   {
     path: 'stroke.point.mark-hover-grow',
@@ -953,7 +1015,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-mark-hover-grow',
     css: '1.5px',
     value: 1.5,
-    description: '산점도 가리킨 점이 커지는 양',
+    description: '산점도 가리킨 점이 커지는 양. 제약: 0–3px',
   },
   {
     path: 'stroke.point.legend',
@@ -961,7 +1023,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-legend',
     css: '4.5px',
     value: 4.5,
-    description: '산점도 범례 점',
+    description: '산점도 범례 점 반지름. 제약: mark 이하',
   },
   {
     path: 'stroke.point.vertex',
@@ -969,7 +1031,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-vertex',
     css: '4px',
     value: 4,
-    description: '오각형 꼭짓점',
+    description: '오각형 꼭짓점 반지름. 제약: vertex-hover 보다 작게',
   },
   {
     path: 'stroke.point.vertex-hover',
@@ -977,7 +1039,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-vertex-hover',
     css: '5.5px',
     value: 5.5,
-    description: '오각형: 가리킨 축의 꼭짓점',
+    description: '오각형 가리킨 축의 꼭짓점 반지름. 제약: vertex 보다 크고 vertex-ring 보다 작게',
   },
   {
     path: 'stroke.point.vertex-ring',
@@ -985,7 +1047,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-vertex-ring',
     css: '8px',
     value: 8,
-    description: '오각형: 축 끝(±3)을 넘은 값의 점선 고리',
+    description: '오각형 축 끝을 넘은 값 표시 점선 고리 반지름. 제약: vertex-hover 보다 크게',
   },
   {
     path: 'stroke.point.trend',
@@ -993,7 +1055,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-trend',
     css: '3.5px',
     value: 3.5,
-    description: '패치 추이 점',
+    description: '패치 추이 점 반지름(교전 10건 이상인 날). 제약: trend-thin 보다 크게',
   },
   {
     path: 'stroke.point.trend-thin',
@@ -1001,7 +1063,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-trend-thin',
     css: '2.5px',
     value: 2.5,
-    description: '패치 추이: 교전이 적은 날 빈 점',
+    description: '패치 추이 빈 점 반지름(교전 10건 미만인 날). 제약: trend 보다 작게',
   },
   {
     path: 'stroke.point.estimate',
@@ -1009,7 +1071,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--stroke-point-estimate',
     css: '6px',
     value: 6,
-    description: '같은 조건 위험 배수 점',
+    description: '같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval)보다 크게',
   },
   {
     path: 'size.bar.skill',
@@ -1017,7 +1079,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-bar-skill',
     css: '10px',
     value: 10,
-    description: '보스 기술 막대 높이',
+    description:
+      '보스 기술 막대 높이, 기술 범례 견본 높이. 제약: 기술 행 높이(44–56px) 안에 막대 두 개',
   },
   {
     path: 'size.bar.share',
@@ -1025,7 +1088,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-bar-share',
     css: '25px',
     value: 25,
-    description: '준비 패널 비율 막대 높이',
+    description:
+      '준비 패널 "반격하지 못한 사망"·"큰 피해" 비율 막대 높이. 제약: 레이아웃 영향, 25px 기준으로 패널 높이를 맞춤',
   },
   {
     path: 'size.bar.interval',
@@ -1033,7 +1097,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-bar-interval',
     css: '4px',
     value: 4,
-    description: '같은 조건 위험 배수 범위 막대 높이',
+    description: '같은 조건 위험 배수 95% 범위 막대 높이. 제약: estimate 점 지름보다 작게',
   },
   {
     path: 'size.dumbbell.line',
@@ -1041,7 +1105,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-dumbbell-line',
     css: '2px',
     value: 2,
-    description: '준비 조건 처치자→사망자 선 두께',
+    description: '준비 조건 처치자→사망자 연결선 두께. 제약: dot 보다 훨씬 가늘게',
   },
   {
     path: 'size.dumbbell.dot',
@@ -1049,7 +1113,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-dumbbell-dot',
     css: '14px',
     value: 14,
-    description: '준비 조건 점 지름',
+    description: '준비 조건 처치자·사망자 점 지름. 제약: 행 높이 안, 14px 기준으로 위치를 맞춤',
   },
   {
     path: 'size.legend.dot',
@@ -1057,7 +1121,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-legend-dot',
     css: '10px',
     value: 10,
-    description: '범례 동그라미 지름',
+    description: '준비 패널 범례 동그라미 지름. 제약: dumbbell.dot 이하',
   },
   {
     path: 'size.legend.swatch-w',
@@ -1065,7 +1129,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-legend-swatch-w',
     css: '16px',
     value: 16,
-    description: '범례 막대 견본 너비 (높이는 bar.skill)',
+    description: '보스 기술 범례 막대 견본 너비(높이는 bar.skill). 제약: 없음',
   },
   {
     path: 'size.sankey.node-width',
@@ -1073,7 +1137,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-sankey-node-width',
     css: '14px',
     value: 14,
-    description: '흐름도 칸 너비',
+    description: '흐름도 칸 너비. 제약: 레이아웃 영향(열 위치·이름 위치 계산)',
   },
   {
     path: 'size.sankey.node-min',
@@ -1081,7 +1145,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-sankey-node-min',
     css: '18px',
     value: 18,
-    description: '흐름도 칸 최소 높이 (글자가 겹치지 않게)',
+    description:
+      '흐름도 칸 최소 높이(작은 칸의 이름이 겹치지 않게). 제약: 이름 글자(font-size.label) 높이 이상',
   },
   {
     path: 'size.sankey.pick-grow',
@@ -1089,7 +1154,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--size-sankey-pick-grow',
     css: '4px',
     value: 4,
-    description: '고른 칸이 넓어지는 양',
+    description: '고른 칸이 양옆으로 넓어지는 양. 제약: 0–6px',
   },
   {
     path: 'motion.ease.board',
@@ -1097,7 +1162,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--ease-board',
     css: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
     value: [0.2, 0.7, 0.2, 1],
-    description: '보드 전체 한 가지 가속',
+    description:
+      '보드의 모든 움직임 가속 곡선(CSS 전환, 숫자 트윈, 목록 재정렬). 제약: 네 값 모두 0–1 범위의 x, 튀는 곡선 금지',
   },
   {
     path: 'motion.duration.fast',
@@ -1105,7 +1171,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--duration-fast',
     css: '120ms',
     value: 120,
-    description: '컨트롤 색, hover',
+    description: '컨트롤 색 변화, 꼭짓점 크기. 제약: base 보다 짧게, 200ms 이하',
   },
   {
     path: 'motion.duration.base',
@@ -1113,7 +1179,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--duration-base',
     css: '200ms',
     value: 200,
-    description: '패널 등장, 흐림',
+    description: '패널 등장, 흐림, 칩 등장. 제약: fast 와 slow 사이',
   },
   {
     path: 'motion.duration.slow',
@@ -1121,6 +1187,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--duration-slow',
     css: '320ms',
     value: 320,
-    description: '차트 모양 이동, 목록 재정렬',
+    description:
+      '차트 모양 이동, 목록 재정렬, 상세 열기. 제약: 500ms 이하. prefers-reduced-motion 이면 모두 꺼짐',
   },
 ];
