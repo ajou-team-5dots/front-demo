@@ -6,12 +6,15 @@ interface SignalBadgeProps {
   tone: 'danger' | 'warning' | 'supported';
   children: ReactNode;
   className?: string;
+  /** Hover title with the full wording when the badge is a short form. */
+  title?: string;
 }
 
 // Status color only ever comes with a text label (never color alone).
-export function SignalBadge({ tone, children, className }: SignalBadgeProps) {
+export function SignalBadge({ tone, children, className, title }: SignalBadgeProps) {
   return (
     <span
+      title={title}
       className={cn(
         'inline-flex h-5 items-center rounded-pill px-1.5 text-(length:--font-size-caption) leading-none font-semibold whitespace-nowrap',
         tone === 'danger' && 'bg-status-danger-soft text-status-danger',

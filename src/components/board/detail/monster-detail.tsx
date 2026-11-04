@@ -24,7 +24,7 @@ interface MonsterDetailProps {
   patches: H2Patch[];
   patchList: PatchInfo[];
   trend: DailyPoint[];
-  /** "10/12 - 10/22" */
+  /** "10/12–10/22" (dayRange) */
   rangeLabel: string;
   filters: BoardFilters;
   pick: FlowPick;
@@ -42,11 +42,11 @@ interface TitleRowProps {
   kpi?: ReactNode;
 }
 
-// Name and meta on the left, the 380×66 KPI box at the right end of the same row. No close
+// Name and meta on the left, the KPI box (size.kpi-box) at the right end of the same row. No close
 // button: the open row in the sidebar (or Esc) returns to the overview.
 function TitleRow({ monster, meta, sub, kpi }: TitleRowProps) {
   return (
-    <div className="flex h-[66px] shrink-0 items-center justify-between gap-6 pl-4">
+    <div className="flex h-(--size-kpi-box-h) shrink-0 items-center justify-between gap-6 pl-4">
       <div className="flex min-w-0 items-center gap-[22px]">
         <h1
           tabIndex={-1}
@@ -72,6 +72,12 @@ function TitleRow({ monster, meta, sub, kpi }: TitleRowProps) {
     </div>
   );
 }
+
+/** "4.74배" as number + unit; "사망 0건" and "–" stay whole words. */
+const riskKpi = (risk: number | null, deaths: number): { value: string; unit?: string } => {
+  const text = riskLabel(risk, deaths);
+  return text.endsWith('배') ? { value: text.slice(0, -1), unit: '배' } : { value: text };
+};
 
 /** PatchRisk's default patch: the first in the list that has numbers for this monster. */
 const defaultPatch = (patches: H2Patch[], patchList: PatchInfo[]): string =>
@@ -113,7 +119,7 @@ export function MonsterDetail({
   return (
     // Another monster swaps in place: the same charts stay mounted, so marks glide to the new
     // values while the panels come back from the pending dim, and title / KPI text fade in.
-    <div data-detail={monster} className="flex w-full flex-col gap-(--space-panel-gap)">
+    <div data-detail={monster} className="flex w-full flex-1 flex-col gap-(--space-panel-gap)">
       <PickedFlowRow chips={chips} />
       <TitleRow
         monster={monster}
@@ -122,11 +128,19 @@ export function MonsterDetail({
         kpi={
           <KpiRow
             items={[
-              { label: '사망', value: row.deaths.toLocaleString('ko-KR') },
-              { label: '교전', value: row.enc.toLocaleString('ko-KR') },
+              {
+                label: '사망',
+                value: row.deaths.toLocaleString('ko-KR'),
+                unit: '건',
+              },
+              {
+                label: '교전',
+                value: row.enc.toLocaleString('ko-KR'),
+                unit: '건',
+              },
               {
                 label: '기대 대비 위험',
-                value: riskLabel(row.riskVsExpected, row.deaths),
+                ...riskKpi(row.riskVsExpected, row.deaths),
                 title: `기대 대비 위험 (던전 단계 반영). 1배보다 크면 같은 단계 기대보다 위험이 높습니다.${
                   row.riskVsExpected === 0 && row.deaths === 0
                     ? ' 사망이 없어 배수를 계산하지 않습니다.'
@@ -137,7 +151,7 @@ export function MonsterDetail({
           />
         }
       />
-      <div className="flex h-[380px] gap-(--space-panel-gap)">
+      <div className="flex h-(--size-detail-row) gap-(--space-panel-gap)">
         <div className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]">
           <Pentagon
             axes={detail.pentagon}

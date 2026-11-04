@@ -1,5 +1,6 @@
 'use client';
 
+import { Search } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { MONSTER_GROUPS, toQuery } from '@/lib/board-filters';
@@ -54,7 +55,7 @@ function Segment<T extends string>({ label, value, options, onChange }: SegmentP
       {pill ? (
         <span
           aria-hidden
-          className="absolute top-(--space-segment-inset) h-6 rounded-pill bg-panel transition-[left,width] duration-(--duration-base) ease-(--ease-board)"
+          className="absolute top-(--space-segment-inset) h-6 rounded-control bg-panel transition-[left,width] duration-(--duration-base) ease-(--ease-board)"
           style={{ left: pill.left, width: pill.width }}
         />
       ) : null}
@@ -72,7 +73,7 @@ function Segment<T extends string>({ label, value, options, onChange }: SegmentP
             onChange(o.value);
           }}
           className={cn(
-            'board-control relative h-6 rounded-pill px-3 text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
+            'board-control relative h-6 rounded-control px-3 text-(length:--font-size-label) leading-none font-medium focus-visible:outline-2 focus-visible:outline-ink',
             picked === o.value ? 'text-ink' : 'text-gray-1 hover:text-ink',
             // Before the first measure the pill is drawn by the button itself.
             !pill && picked === o.value && 'bg-panel',
@@ -181,15 +182,21 @@ export function FilterBar({
         onChange={(v) => go({ heavy: v })}
       />
       {variant === 'main' ? (
-        <input
-          id="filter-q"
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="몬스터 검색"
-          aria-label="몬스터 검색"
-          className="board-control ml-auto h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel px-[9px] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
-        />
+        <div className="relative ml-auto">
+          <Search
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 left-(--space-search-inset) size-(--size-icon-search) -translate-y-1/2 text-gray-1"
+          />
+          <input
+            id="filter-q"
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="몬스터 검색"
+            aria-label="몬스터 검색"
+            className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-(--space-search-inset) pl-[calc(var(--space-search-inset)+var(--size-icon-search)+var(--space-search-icon-gap))] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
+          />
+        </div>
       ) : null}
     </div>
   );

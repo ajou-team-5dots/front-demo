@@ -58,7 +58,7 @@ async function PreviewContent({ searchParams }: Pick<Props, 'searchParams'>) {
                 patches={data.patches}
                 patchList={PREVIEW_PATCHES}
                 trend={data.trend}
-                rangeLabel="10/12 - 10/22"
+                rangeLabel="10/12–10/22"
                 filters={filters}
                 pick={pick}
                 rankOf={PREVIEW_ROWS.length}

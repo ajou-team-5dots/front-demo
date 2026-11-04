@@ -122,7 +122,7 @@ function ColorCard({ t, prefix, m }: { t: TokenEntry; prefix: string; m?: Measur
 
 function Section({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
-    <Panel title={title} hint={hint} className="pb-4">
+    <Panel title={title} meta={hint} className="pb-4">
       <div className="mt-3">{children}</div>
     </Panel>
   );
@@ -276,16 +276,16 @@ function BarSample() {
         ['bg-chart-death', '50%'],
         ['bg-chart-survival', '36%'],
       ].map(([fill, w]) => (
-        <div key={fill} className="h-(--size-bar-skill) rounded-pill bg-chart-track">
-          <div className={cn('h-full rounded-pill', fill)} style={{ width: w }} />
+        <div key={fill} className="h-(--size-bar-skill) rounded-mark bg-chart-track">
+          <div className={cn('h-full rounded-mark', fill)} style={{ width: w }} />
         </div>
       ))}
-      <div className="h-(--size-bar-share) overflow-hidden rounded-pill bg-chart-track">
-        <div className="h-full w-[16%] rounded-pill bg-chart-actual" />
+      <div className="h-(--size-bar-share) overflow-hidden rounded-mark bg-chart-track">
+        <div className="h-full w-[16%] rounded-mark bg-chart-actual" />
       </div>
       <div className="relative h-3">
         <div className="absolute top-[5.5px] right-0 left-0 h-px bg-chart-track" />
-        <div className="absolute top-[5px] left-[20%] h-(--size-dumbbell-line) w-[45%] bg-chart-comparison" />
+        <div className="absolute top-[calc(6px-var(--size-dumbbell-line)/2)] left-[20%] h-(--size-dumbbell-line) w-[45%] rounded-full bg-chart-comparison" />
         <div className="absolute -top-px left-[20%] size-(--size-dumbbell-dot) -translate-x-1/2 rounded-full bg-chart-survival" />
         <div className="absolute -top-px left-[65%] size-(--size-dumbbell-dot) -translate-x-1/2 rounded-full bg-chart-death" />
       </div>
@@ -343,7 +343,7 @@ export function TokenPreview() {
             <Row key={t.path} t={t} prefix="opacity">
               <span
                 aria-hidden
-                className="h-5 w-24 shrink-0 rounded-pill bg-chart-comparison"
+                className="h-5 w-24 shrink-0 rounded-mark bg-chart-comparison"
                 style={{ opacity: `var(${t.cssVar})` }}
               />
             </Row>
@@ -398,7 +398,7 @@ export function TokenPreview() {
             <Row key={t.path} t={t} prefix="size">
               <span
                 aria-hidden
-                className="w-24 shrink-0 rounded-pill bg-chart-comparison"
+                className="w-24 shrink-0 rounded-mark bg-chart-comparison"
                 style={{ height: `var(${t.cssVar})` }}
               />
             </Row>
@@ -415,8 +415,8 @@ export function TokenPreview() {
           {byPrefix('space').map((t) => (
             <Row key={t.path} t={t} prefix="space">
               <span aria-hidden className="flex shrink-0" style={{ gap: `var(${t.cssVar})` }}>
-                <span className="size-5 rounded-pill bg-gray-2" />
-                <span className="size-5 rounded-pill bg-gray-2" />
+                <span className="size-5 rounded-mark bg-gray-2" />
+                <span className="size-5 rounded-mark bg-gray-2" />
               </span>
             </Row>
           ))}

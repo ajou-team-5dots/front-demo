@@ -30,6 +30,10 @@
   --chart-survival: #0f9a8f;
   /* 막대의 빈 부분, 격자선, 0이 아닌 기준선. 제약: 패널 위에서 보일 만큼만 (그래픽 대비 대상 아님) */
   --chart-track: #e7ecf3;
+  /* 비율·기술 막대의 빈 부분(트랙). track 보다 조금 옅게(패널 대비 약 1.15:1) 해서 빈 자리가 값 막대보다 눈에 띄지 않게. 제약: 패널 위에서 보일 만큼 (그래픽 대비 대상 아님) */
+  --chart-track-bar: color-mix(in oklab, var(--chart-track) 80%, var(--panel));
+  /* 준비 조건별 비중 공유 눈금(0·25·50·75·100%)의 세로 격자선. 글자가 아닌 안내선이라 아주 옅게, 그래도 흰 패널 위에서 보이게. 제약: 패널 대비 1.15:1 이상(tokens:contrast), 점·연결선보다 훨씬 옅게 */
+  --chart-guide: #e4e9f0;
   /* 흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음 */
   --chart-accent: #c0850f;
   /* 흐름도 칸 색 재료(갈색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사) */
@@ -132,18 +136,14 @@
   --opacity-point-thin: 0.6;
   /* 필터·선택을 바꾸는 동안 내용 전체 흐림. 제약: 0.4–0.8, 내용이 읽힐 만큼 */
   --opacity-pending: 0.6;
-  /* 패널, KPI 상자, 필터 바 (rounded-panel). 제약: 레이아웃에 영향 없음 */
+  /* 모서리 규칙 "패널": 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널 (rounded-panel). 제약: control 이상 */
   --corner-panel: 10px;
-  /* 선택 상자, 칩, 목록 행, 툴팁, 세그먼트 바깥 (rounded-control). 제약: panel 이하 */
+  /* 모서리 규칙 "컨트롤": 입력·조작 요소 전부(선택 상자와 그 목록, 검색 입력, 세그먼트 바깥과 안 단추, 단추, ⓘ 단추, 목록 행), 툴팁, 패널 안 보조 상자(흐름 요약) (rounded-control). 제약: panel 이하, pill 이상 */
   --corner-control: 6px;
-  /* 배지, 세그먼트 단추, 기술·비율 막대 끝 (rounded-pill). 제약: 막대 높이(size.bar.skill 10px)의 절반 이하가 자연스러움 */
+  /* 모서리 규칙 "칩·배지": 점검 신호·표본 부족·수치 미변경 등 배지, 흐름 조건 칩 (rounded-pill). 제약: 배지 높이(20px)의 절반 미만, control 이하 */
   --corner-pill: 4px;
-  /* 흐름도 칸 키보드 초점 고리 모서리. 제약: 없음 */
-  --corner-focus: 4px;
-  /* 흐름도 칸, 같은 조건 위험 배수 범위 막대 모서리. 제약: 칸 너비(14px)의 1/4 이하 */
+  /* 모서리 규칙 "막대": 모든 막대 끝과 트랙(비율 막대, 기술 막대, 범위 막대, 0 표시), 막대 범례 견본, 흐름도 칸과 그 초점 고리, 산점도 네모 점 (rounded-mark, SVG RADIUS.mark). 트랙과 채움은 같은 값. 제약: 가장 작은 막대(size.bar.zero-stub 3px)보다 작게 */
   --corner-mark: 2px;
-  /* 산점도 네모(중간보스) 점 모서리. 제약: 2px 이하, 크면 원과 구분이 어려움 */
-  --corner-mark-sm: 1px;
   /* 패널 사이 간격(가로·세로), 필터 바 아래 간격. 제약: 레이아웃 변경. 1440 화면 높이 맞춤이 깨질 수 있어 바꾸지 않는 것이 기본 */
   --space-panel-gap: 14px;
   /* 패널 안쪽 좌우 여백, 차트 그리는 폭 계산에도 쓰임. 제약: 레이아웃 변경. 바꾸지 않는 것이 기본 */
@@ -152,6 +152,20 @@
   --space-panel-top: 12px;
   /* 세그먼트 컨트롤(기간, 2초·5초) 안쪽 여백. 제약: 단추 높이 24px 와 바깥 30px 에 맞춘 값(30 = 24 + 2×3) */
   --space-segment-inset: 3px;
+  /* 보드 아래 끝과 창 아래 끝 사이 여백(창보다 짧은 화면은 보드가 여기까지 늘어남). 페이지 위 여백(창 위 끝 → 머리글 글자, 약 20px)과 같은 값. 제약: 레이아웃 영향 */
+  --space-page-bottom: 20px;
+  /* 상세 첫 줄(전투 양상, 준비 조건별 비중) 패널의 마지막 내용 ↔ 패널 아래 끝. 제목 글자 위 여백(panel-top + 머리 줄 안 여백, 약 20px)과 같게 해 위아래가 맞아 보이게. 제약: 레이아웃 영향(size.detail-row 안에 들어가야 함) */
+  --space-panel-bottom: 20px;
+  /* 준비 조건별 비중 행의 칸 사이 간격(조건 이름 | 막대 | 수치 | 차이 | 배지). 100% 눈금선과 오른쪽 수치 사이가 붙어 보이지 않게. 제약: 12–16px, 레이아웃 영향(막대 칸 폭이 줄어듦) */
+  --space-dumbbell-gap: 14px;
+  /* 패치 전후 위험: 머리 줄 아래 ↔ 추이 차트 위. 제약: 레이아웃 영향(추이 높이 = 패널 높이 − 위 여백 − 머리 줄 − 이 값 − patch-body-bottom) */
+  --space-patch-body-top: 12px;
+  /* 패치 전후 위험: 추이 차트 아래 ↔ 패널 아래 끝. 제약: 레이아웃 영향 */
+  --space-patch-body-bottom: 16px;
+  /* 필터 바 검색 입력 왼쪽 안쪽 여백(돋보기 아이콘 왼쪽)과 오른쪽 안쪽 여백. 제약: 입력 너비 244px 안 */
+  --space-search-inset: 9px;
+  /* 검색 입력의 돋보기 아이콘 ↔ 글자 사이. 제약: 4–8px */
+  --space-search-icon-gap: 6px;
   /* 오각형 눈금 숫자(+1, -2). 제약: 10px 미만 금지 */
   --font-size-micro: 10px;
   /* 패널 설명, 축 눈금, 배지, 목록 보조 줄, 산점도 점 이름. 제약: 11px 미만 금지. 키우면 산점도 이름 겹침 회피·목록 줄이 바뀜 */
@@ -164,12 +178,14 @@
   --font-size-body: 14px;
   /* 패널 안 소제목, 상세 단계·역할, 흐름 요약 숫자. 제약: title 보다 작게 */
   --font-size-subtitle: 16px;
-  /* 패널 제목. 제약: 제목 줄 높이 22px, 키우면 패널 안 차트 위치가 밀림 */
-  --font-size-title: 18px;
+  /* 패널 제목(공통 패널 머리 줄 shell/panel-header.tsx). 제약: 머리 줄 높이(size.panel-header) 안, subtitle 보다 크게. 키우면 패널 안 차트 위치가 밀림 */
+  --font-size-title: 20px;
   /* 머리글(AKKADIA, 몬스터 밸런스 보드), 같은 조건 위험 배수 숫자. 제약: 머리글 높이 60px 안 */
   --font-size-heading: 20px;
-  /* 상세 KPI 숫자(사망, 교전, 기대 대비 위험). 제약: KPI 상자 높이 66px 안 */
-  --font-size-kpi: 22px;
+  /* 상세 KPI 숫자(사망, 교전, 기대 대비 위험), 숫자만(단위는 kpi-unit). 제약: KPI 상자(size.kpi-box) 높이 안에 라벨·숫자 두 줄, 한 칸(상자 너비의 1/3) 안에 "4,429" 가 들어가야 함 */
+  --font-size-kpi: 32px;
+  /* 상세 KPI 숫자 뒤 단위(건, 배), gray-1. 제약: kpi 의 절반 정도, 숫자보다 확실히 작게 */
+  --font-size-kpi-unit: 16px;
   /* 상세 화면 몬스터 이름. 제약: 긴 이름은 말줄임, 줄 높이 29px */
   --font-size-display: 24px;
   /* 산점도 격자선. 제약: thin 이하 */
@@ -180,38 +196,40 @@
   --stroke-width-ring: 1.25px;
   /* 비교 고리, 패치 평균 점선, 1배 기준 점선, 패치 날짜선, 산점도 초점 고리. 제약: bold 보다 가늘게(고른 몬스터 선이 가장 굵어야 함) */
   --stroke-width-regular: 1.5px;
-  /* 오각형 고른 몬스터 선, 패치 추이 선, 범례 선. 제약: 차트 선 중 가장 굵게 */
-  --stroke-width-bold: 2px;
+  /* 오각형 고른 몬스터 선, 패치 추이 선, 범례 선. 제약: 차트 선 중 가장 굵게(regular 1.5px 보다 굵게), 3px 이하 */
+  --stroke-width-bold: 2.5px;
   /* 흐름도 칸 키보드 초점 고리. 제약: 2px 이상(접근성) */
   --stroke-width-focus: 2px;
   /* 차트 글자 뒤 패널색 테두리(선·면 위에서도 글자가 읽히게). 제약: 2–4px */
   --stroke-width-halo: 3px;
-  /* 산점도 점 반지름(모든 모양이 이 반지름 원과 같은 넓이). 제약: 키우면 점 겹침이 늘고 겹침 회피 간격도 함께 바뀜 */
-  --stroke-point-mark: 6px;
+  /* 산점도 점 반지름(모든 모양이 이 반지름 원과 같은 넓이). 제약: 키우면 점 겹침이 늘고 겹침 회피 간격도 함께 바뀜. 누르는 범위(11px)보다 작게 */
+  --stroke-point-mark: 8px;
   /* 산점도 가리킨 점이 커지는 양. 제약: 0–3px */
   --stroke-point-mark-hover-grow: 1.5px;
   /* 산점도 범례 점 반지름. 제약: mark 이하 */
-  --stroke-point-legend: 4.5px;
+  --stroke-point-legend: 6px;
   /* 오각형 꼭짓점 반지름. 제약: vertex-hover 보다 작게 */
-  --stroke-point-vertex: 4px;
+  --stroke-point-vertex: 6px;
   /* 오각형 가리킨 축의 꼭짓점 반지름. 제약: vertex 보다 크고 vertex-ring 보다 작게 */
-  --stroke-point-vertex-hover: 5.5px;
+  --stroke-point-vertex-hover: 7.5px;
   /* 오각형 축 끝을 넘은 값 표시 점선 고리 반지름. 제약: vertex-hover 보다 크게 */
-  --stroke-point-vertex-ring: 8px;
+  --stroke-point-vertex-ring: 10px;
   /* 패치 추이 점 반지름(교전 10건 이상인 날). 제약: trend-thin 보다 크게 */
-  --stroke-point-trend: 3.5px;
+  --stroke-point-trend: 5.5px;
   /* 패치 추이 빈 점 반지름(교전 10건 미만인 날). 제약: trend 보다 작게 */
-  --stroke-point-trend-thin: 2.5px;
-  /* 같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval)보다 크게 */
-  --stroke-point-estimate: 6px;
-  /* 보스 기술 막대 높이, 기술 범례 견본 높이. 제약: 기술 행 높이(44–56px) 안에 막대 두 개 */
-  --size-bar-skill: 10px;
-  /* 준비 패널 "반격하지 못한 사망"·"큰 피해" 비율 막대 높이. 제약: 레이아웃 영향, 25px 기준으로 패널 높이를 맞춤 */
-  --size-bar-share: 25px;
+  --stroke-point-trend-thin: 4.5px;
+  /* 같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval) 높이보다 크게 */
+  --stroke-point-estimate: 8px;
+  /* 보스 기술 막대 높이, 기술 범례 견본 높이. 제약: 기술 행 높이(44–56px) 안에 막대 두 개(15 + 4 + 15) */
+  --size-bar-skill: 15px;
+  /* 준비 패널 "반격하지 못한 사망"·"큰 피해" 비율 막대 높이. 제약: 14–16px, 기술 막대와 같은 무게 */
+  --size-bar-share: 16px;
   /* 같은 조건 위험 배수 95% 범위 막대 높이. 제약: estimate 점 지름보다 작게 */
-  --size-bar-interval: 4px;
-  /* 준비 조건 처치자→사망자 연결선 두께. 제약: dot 보다 훨씬 가늘게 */
-  --size-dumbbell-line: 2px;
+  --size-bar-interval: 6px;
+  /* 값이 0인 비율·기술 막대 자리의 짧은 표시 폭(빈 막대 바탕 대신). 제약: 2–4px, 값으로 읽히지 않을 만큼 짧게 */
+  --size-bar-zero-stub: 3px;
+  /* 준비 조건 처치자→사망자 연결선 두께. 제약: dot(14px) 보다 훨씬 가늘게, 4px 이하 */
+  --size-dumbbell-line: 3px;
   /* 준비 조건 처치자·사망자 점 지름. 제약: 행 높이 안, 14px 기준으로 위치를 맞춤 */
   --size-dumbbell-dot: 14px;
   /* 준비 패널 범례 동그라미 지름. 제약: dumbbell.dot 이하 */
@@ -224,6 +242,26 @@
   --size-sankey-node-min: 18px;
   /* 고른 칸이 양옆으로 넓어지는 양. 제약: 0–6px */
   --size-sankey-pick-grow: 4px;
+  /* 패널 제목 옆 ⓘ 설명 단추 아이콘 크기(단추 자체는 24px). 제약: 제목 글자(font-size.title)보다 작게 */
+  --size-icon-info: 15px;
+  /* 필터 바 "몬스터 검색" 입력 안 왼쪽 돋보기 아이콘 크기(색은 gray-1). 제약: 입력 높이(30px) 안, 글자(font-size.label)와 비슷하게 */
+  --size-icon-search: 14px;
+  /* 모든 패널 머리 줄 높이(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤). 제약: 컨트롤(선택 상자·세그먼트 30px)이 들어가는 높이, 레이아웃 영향(패널 내용 시작 위치) */
+  --size-panel-header: 30px;
+  /* 상세 제목 줄 오른쪽 KPI 상자 너비(세 칸 균등). 제약: 한 칸에 "4,429건"(font-size.kpi + kpi-unit)이 들어가야 함, 레이아웃 영향(몬스터 이름 칸이 줄어듦) */
+  --size-kpi-box-w: 420px;
+  /* KPI 상자 높이 = 상세 제목 줄 높이. 제약: 라벨과 숫자(font-size.kpi) 두 줄이 들어가야 함, 레이아웃 영향 */
+  --size-kpi-box-h: 72px;
+  /* 상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 두 패널 내용(머리 줄 + 눈금 줄 + 네 조건 + 두 비율 막대 / 오각형 + 중앙값 기준 거리 눈금자)과 아래 여백 space.panel-bottom 이 들어가야 함 */
+  --size-detail-row: 364px;
+  /* 상세 "패치 전후 위험" 패널의 최소 높이. 상세가 창보다 짧으면 이 패널이 남는 높이를 받아 늘어나고, 추이 차트 높이는 패널 높이에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함 */
+  --size-patch-panel: 288px;
+  /* 패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축 너비. 제약: 오른쪽 묶음 너비(340px) 이하 */
+  --size-ratio-axis-w: 330px;
+  /* 같은 조건 위험 배수 범위 축의 최소 높이(패널이 기본 높이일 때). 제약: 점(stroke.point.estimate) + 눈금 글자가 들어가야 함 */
+  --size-ratio-axis-h-min: 58px;
+  /* 같은 조건 위험 배수 범위 축의 최대 높이. 패널이 창에 맞춰 높아지면 축도 이만큼까지 함께 커져 오른쪽 묶음이 비어 보이지 않게. 제약: h-min 이상, 너무 크면 축이 차트처럼 보임 */
+  --size-ratio-axis-h-max: 96px;
   /* 보드의 모든 움직임 가속 곡선(CSS 전환, 숫자 트윈, 목록 재정렬). 제약: 네 값 모두 0–1 범위의 x, 튀는 곡선 금지 */
   --ease-board: cubic-bezier(0.2, 0.7, 0.2, 1);
   /* 컨트롤 색 변화, 꼭짓점 크기. 제약: base 보다 짧게, 200ms 이하 */

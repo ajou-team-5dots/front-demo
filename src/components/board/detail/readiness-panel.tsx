@@ -7,6 +7,7 @@ import type { H1Condition, H1Readiness } from '@/types/monsters';
 
 import { useChartTooltip } from '../shell/chart-tooltip';
 import { Panel } from '../shell/panel';
+import { LegendItem } from '../shell/panel-header';
 import { useTween } from '../shell/use-tween';
 import type { ReadinessPanelProps } from './contracts';
 import { DetailMotion, EASE, SLOW } from './detail-motion';
@@ -19,6 +20,11 @@ const CONDITIONS: { key: H1Condition; label: string; meaning: string }[] = [
   { key: 'woodenWeapon', label: '나무 무기', meaning: '나무 등급 무기로 교전' },
   { key: 'noArmor', label: '방어구 없음', meaning: '방어구 없이 교전' },
 ];
+
+/** Columns of a dumbbell row; the scale row and the gridlines use the same grid to line up. */
+const ROW_GRID = 'grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] gap-x-(--space-dumbbell-gap)';
+/** Shared x scale of the dumbbells (share of deaths / of kills, 0–100%). */
+const TICKS = [0, 0.25, 0.5, 0.75, 1];
 
 /** Values that change on a filter change slide instead of jumping. */
 const SLIDE = `left ${SLOW} ${EASE}, width ${SLOW} ${EASE}`;
@@ -72,7 +78,7 @@ function DumbbellRow({ label, meaning, row, totalDeaths, show, hide }: DumbbellR
   return (
     <div
       role="listitem"
-      className="grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] items-center gap-x-2"
+      className={cn(ROW_GRID, 'items-center')}
       onPointerMove={(e) => show(e, tipBody)}
       onPointerLeave={hide}
     >
@@ -85,7 +91,7 @@ function DumbbellRow({ label, meaning, row, totalDeaths, show, hide }: DumbbellR
           <>
             <div
               data-dumbbell="bar"
-              className="board-slide-w board-first absolute top-[5px] h-(--size-dumbbell-line) bg-chart-comparison"
+              className="board-slide-w board-first absolute top-[calc(6px-var(--size-dumbbell-line)/2)] h-(--size-dumbbell-line) rounded-full bg-chart-comparison"
               style={{ left: `${lo * 100}%`, width: `${(hi - lo) * 100}%` }}
             />
             <span
@@ -150,6 +156,7 @@ function ShareBar({
   show,
   hide,
 }: ShareBarProps) {
+  const empty = !sampleShort && n === 0;
   return (
     <div className={className}>
       <div className="flex h-[19px] w-full items-baseline justify-between">
@@ -169,6 +176,8 @@ function ShareBar({
           )}
         </span>
       </div>
+      {/* Every share runs on the same light track; a zero share puts a short stub at 0 on it
+          (with the "0/n건 · 0%" label above) instead of a fill. */}
       <div
         role="img"
         aria-label={
@@ -176,14 +185,17 @@ function ShareBar({
             ? `${title}: 표본 부족`
             : `${title}: ${unit} ${num(total)}건 중 ${num(n)}건, ${pct(share)}`
         }
-        className="mt-3 h-(--size-bar-share) w-full overflow-hidden rounded-pill bg-chart-track"
+        className="mt-2.5 h-(--size-bar-share) w-full overflow-hidden rounded-mark bg-chart-track-bar"
         onPointerMove={(e) => show(e, tip)}
         onPointerLeave={hide}
       >
-        {sampleShort ? null : (
+        {empty ? (
+          <div aria-hidden className="h-full w-(--size-bar-zero-stub) rounded-mark bg-gray-2" />
+        ) : null}
+        {sampleShort || empty ? null : (
           <div
             className={cn(
-              'board-grow board-first h-full rounded-pill',
+              'board-grow board-first h-full rounded-mark',
               fill === 'death' ? 'bg-chart-death' : 'bg-chart-actual',
             )}
             style={{ width: `${Math.max(0, Math.min(1, share)) * 100}%`, transition: SLIDE }}
@@ -204,42 +216,102 @@ export function ReadinessPanel({ h1, aux1, aux2 }: ReadinessPanelProps) {
   return (
     <Panel
       title="준비 조건별 비중"
-      className="h-full"
+      className="h-full pb-(--space-panel-bottom)"
       enter={1}
-      actions={
-        <div className="ml-auto flex items-center gap-3 pr-3 text-(length:--font-size-caption) font-semibold text-gray-1">
-          <span className="flex items-center gap-1">
-            <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-survival" />
+      meta={
+        <>
+          사망 <span className="text-ink">{num(totalDeaths)}건</span> 중
+        </>
+      }
+      legend={
+        <>
+          <LegendItem
+            swatch={
+              <span
+                aria-hidden
+                className="size-(--size-legend-dot) rounded-full bg-chart-survival"
+              />
+            }
+          >
             처치 교전
-          </span>
-          <span className="flex items-center gap-1">
-            <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-death" />
+          </LegendItem>
+          <LegendItem
+            swatch={
+              <span aria-hidden className="size-(--size-legend-dot) rounded-full bg-chart-death" />
+            }
+          >
             사망
-          </span>
-          <span className="text-ink tabular-nums">사망 {num(totalDeaths)}건 중</span>
-        </div>
+          </LegendItem>
+        </>
+      }
+      info={
+        <>
+          {CONDITIONS.map((c) => (
+            <p key={c.key}>
+              <span className="font-semibold">{c.label}</span>{' '}
+              <span className="text-gray-1">· {c.meaning}</span>
+            </p>
+          ))}
+          <p className="mt-1">
+            <span className="font-semibold">반격하지 못한 사망</span>{' '}
+            <span className="text-gray-1">· 한 번도 치지 못하고 사망한 경우</span>
+          </p>
+          <p>
+            <span className="font-semibold">한 번에 큰 피해를 받은 교전</span>{' '}
+            <span className="text-gray-1">· 가장 큰 한 번의 피해가 최대 HP 기준값 이상인 교전</span>
+          </p>
+        </>
       }
     >
       <DetailMotion />
-      <div
-        role="list"
-        aria-label="준비 조건별 사망자와 처치 교전 비중"
-        className="mt-5 grid h-[139px] w-full grid-rows-4"
-      >
-        {CONDITIONS.map((c) => (
-          <DumbbellRow
-            key={c.key}
-            label={c.label}
-            meaning={c.meaning}
-            row={byKey.get(c.key)}
-            totalDeaths={totalDeaths}
-            show={tip.show}
-            hide={tip.hide}
-          />
-        ))}
+      {/* One x scale for every dumbbell row: tick labels on top, light gridlines through all
+          rows, both in the same column of the same grid as the dots, so they line up exactly. */}
+      <div aria-hidden className={cn(ROW_GRID, 'mt-3 h-[14px]')}>
+        <div className="relative col-start-2">
+          {TICKS.map((t) => (
+            <span
+              key={t}
+              className="absolute top-0 -translate-x-1/2 text-(length:--font-size-caption) leading-[14px] font-medium text-gray-1 tabular-nums"
+              style={{ left: `${t * 100}%` }}
+            >
+              {pct(t)}
+            </span>
+          ))}
+        </div>
       </div>
+      <div className="relative mt-1">
+        <div aria-hidden className={cn(ROW_GRID, 'pointer-events-none absolute inset-0')}>
+          <div className="relative col-start-2">
+            {TICKS.map((t) => (
+              <span
+                key={t}
+                className="absolute inset-y-0 w-px -translate-x-1/2 bg-chart-guide"
+                style={{ left: `${t * 100}%` }}
+              />
+            ))}
+          </div>
+        </div>
+        <div
+          role="list"
+          aria-label="준비 조건별 사망자와 처치 교전 비중"
+          className="relative grid h-[139px] w-full grid-rows-4"
+        >
+          {CONDITIONS.map((c) => (
+            <DumbbellRow
+              key={c.key}
+              label={c.label}
+              meaning={c.meaning}
+              row={byKey.get(c.key)}
+              totalDeaths={totalDeaths}
+              show={tip.show}
+              hide={tip.hide}
+            />
+          ))}
+        </div>
+      </div>
+      {/* The two share bars sit at the bottom (space.panel-bottom under the last one). */}
       <ShareBar
-        className="mt-[17px]"
+        className="mt-auto pt-3"
         title="반격하지 못한 사망"
         n={aux1.unanswered}
         total={aux1.deaths}

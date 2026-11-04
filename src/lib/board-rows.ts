@@ -42,3 +42,7 @@ export function roleLabel(role: string): string {
 
 /** "2026-10-12" → "10/12" */
 export const shortDay = (d: string) => d.slice(5).replace('-', '/');
+
+/** Data period as one label ("10/12–10/22"), for the detail subtitle. */
+export const dayRange = (r: { from: string; to: string }) =>
+  `${shortDay(r.from)}–${shortDay(r.to)}`;

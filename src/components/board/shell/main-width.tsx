@@ -8,6 +8,7 @@ import {
   useState,
   type RefObject,
 } from 'react';
+import { flushSync } from 'react-dom';
 
 /**
  * The board's main area (frame − side padding − 320 sidebar − 14 gap) at the 1440 frame. The
@@ -85,4 +86,42 @@ export function useMeasuredWidth(
   }, [fallback, ref]);
 
   return { width, settled };
+}
+
+/**
+ * Border-box height of `ref`, kept current with a ResizeObserver. Starts at `fallback` (the
+ * server render) and measures before the first client paint. A change is rendered with
+ * flushSync inside the observer callback (which runs after layout, before paint), so a box that
+ * changes size in a commit (another monster with a different detail) is never painted with the
+ * previous height.
+ */
+export function useMeasuredHeight(
+  ref: RefObject<HTMLElement | null>,
+  fallback: number,
+  /** Re-read before paint whenever this changes (e.g. the open monster). */
+  key?: string,
+): number {
+  const [height, setHeight] = useState(fallback);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const read = () => Math.round(el.getBoundingClientRect().height);
+    const first = read();
+    if (first > 0) setHeight(first);
+    const ro = new ResizeObserver(() => {
+      const h = read();
+      if (h > 0) flushSync(() => setHeight(h));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  // When `key` changes (another monster) the box is re-read in the same commit, before paint: a
+  // layout-effect update renders synchronously, so no frame shows the previous height.
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const h = Math.round(el.getBoundingClientRect().height);
+    if (h > 0 && h !== height) setHeight(h);
+  }, [ref, height, key]);
+  return height;
 }

@@ -5,7 +5,7 @@ import { MainBoard } from '@/components/board/main/main-board';
 import { BoardFrame, DetailSkeleton, MainSkeleton } from '@/components/board/shell/board-frame';
 import { FilterBar } from '@/components/board/shell/filter-bar';
 import { parseFilters, parseMonster, parsePick } from '@/lib/board-filters';
-import { filterRows, shortDay, stagesOf } from '@/lib/board-rows';
+import { dayRange, filterRows, stagesOf } from '@/lib/board-rows';
 import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterDetail, getMonsterList, getPatchRisk } from '@/server/data/monsters';
 import type { BoardFilters, FlowPick } from '@/types/board';
@@ -44,7 +44,7 @@ async function DetailContent({ monster, filters, pick }: DetailContentProps) {
       patches={patches}
       patchList={patchList}
       trend={trend}
-      rangeLabel={`${shortDay(range.from)} - ${shortDay(range.to)}`}
+      rangeLabel={dayRange(range)}
       filters={filters}
       pick={pick}
       rankOf={Math.max(ranks.length, ...ranks)}

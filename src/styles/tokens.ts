@@ -20,6 +20,8 @@ export const COLOR = {
     death: 'var(--chart-death)',
     survival: 'var(--chart-survival)',
     track: 'var(--chart-track)',
+    trackBar: 'var(--chart-track-bar)',
+    guide: 'var(--chart-guide)',
     accent: 'var(--chart-accent)',
     earth: 'var(--chart-earth)',
     violet: 'var(--chart-violet)',
@@ -97,9 +99,7 @@ export const RADIUS = {
   panel: 10,
   control: 6,
   pill: 4,
-  focus: 4,
   mark: 2,
-  markSm: 1,
 } as const;
 
 /** Spacing, px. */
@@ -108,6 +108,13 @@ export const SPACE = {
   panelInset: 16,
   panelTop: 12,
   segmentInset: 3,
+  pageBottom: 20,
+  panelBottom: 20,
+  dumbbellGap: 14,
+  patchBodyTop: 12,
+  patchBodyBottom: 16,
+  searchInset: 9,
+  searchIconGap: 6,
 } as const;
 
 /** Font size, px. */
@@ -118,9 +125,10 @@ export const FONT_SIZE = {
   bodySm: 13,
   body: 14,
   subtitle: 16,
-  title: 18,
+  title: 20,
   heading: 20,
-  kpi: 22,
+  kpi: 32,
+  kpiUnit: 16,
   display: 24,
 } as const;
 
@@ -131,32 +139,33 @@ export const STROKE = {
     thin: 1,
     ring: 1.25,
     regular: 1.5,
-    bold: 2,
+    bold: 2.5,
     focus: 2,
     halo: 3,
   },
   point: {
-    mark: 6,
+    mark: 8,
     markHoverGrow: 1.5,
-    legend: 4.5,
-    vertex: 4,
-    vertexHover: 5.5,
-    vertexRing: 8,
-    trend: 3.5,
-    trendThin: 2.5,
-    estimate: 6,
+    legend: 6,
+    vertex: 6,
+    vertexHover: 7.5,
+    vertexRing: 10,
+    trend: 5.5,
+    trendThin: 4.5,
+    estimate: 8,
   },
 } as const;
 
 /** Bar heights and mark sizes, px. */
 export const SIZE = {
   bar: {
-    skill: 10,
-    share: 25,
-    interval: 4,
+    skill: 15,
+    share: 16,
+    interval: 6,
+    zeroStub: 3,
   },
   dumbbell: {
-    line: 2,
+    line: 3,
     dot: 14,
   },
   legend: {
@@ -167,6 +176,22 @@ export const SIZE = {
     nodeWidth: 14,
     nodeMin: 18,
     pickGrow: 4,
+  },
+  icon: {
+    info: 15,
+    search: 14,
+  },
+  panelHeader: 30,
+  kpiBox: {
+    w: 420,
+    h: 72,
+  },
+  detailRow: 364,
+  patchPanel: 288,
+  ratioAxis: {
+    w: 330,
+    hMin: 58,
+    hMax: 96,
   },
 } as const;
 
@@ -323,6 +348,24 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: '#e7ecf3',
     description:
       '막대의 빈 부분, 격자선, 0이 아닌 기준선. 제약: 패널 위에서 보일 만큼만 (그래픽 대비 대상 아님)',
+  },
+  {
+    path: 'color.chart.track-bar',
+    type: 'color',
+    cssVar: '--chart-track-bar',
+    css: 'color-mix(in oklab, var(--chart-track) 80%, var(--panel))',
+    value: '#e7ecf3',
+    description:
+      '비율·기술 막대의 빈 부분(트랙). track 보다 조금 옅게(패널 대비 약 1.15:1) 해서 빈 자리가 값 막대보다 눈에 띄지 않게. 제약: 패널 위에서 보일 만큼 (그래픽 대비 대상 아님)',
+  },
+  {
+    path: 'color.chart.guide',
+    type: 'color',
+    cssVar: '--chart-guide',
+    css: '#e4e9f0',
+    value: '#e4e9f0',
+    description:
+      '준비 조건별 비중 공유 눈금(0·25·50·75·100%)의 세로 격자선. 글자가 아닌 안내선이라 아주 옅게, 그래도 흰 패널 위에서 보이게. 제약: 패널 대비 1.15:1 이상(tokens:contrast), 점·연결선보다 훨씬 옅게',
   },
   {
     path: 'color.chart.accent',
@@ -779,7 +822,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-panel',
     css: '10px',
     value: 10,
-    description: '패널, KPI 상자, 필터 바 (rounded-panel). 제약: 레이아웃에 영향 없음',
+    description:
+      '모서리 규칙 "패널": 패널, 사이드바, KPI 상자, 필터 바, 로딩 패널 (rounded-panel). 제약: control 이상',
   },
   {
     path: 'radius.control',
@@ -787,7 +831,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-control',
     css: '6px',
     value: 6,
-    description: '선택 상자, 칩, 목록 행, 툴팁, 세그먼트 바깥 (rounded-control). 제약: panel 이하',
+    description:
+      '모서리 규칙 "컨트롤": 입력·조작 요소 전부(선택 상자와 그 목록, 검색 입력, 세그먼트 바깥과 안 단추, 단추, ⓘ 단추, 목록 행), 툴팁, 패널 안 보조 상자(흐름 요약) (rounded-control). 제약: panel 이하, pill 이상',
   },
   {
     path: 'radius.pill',
@@ -796,15 +841,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '4px',
     value: 4,
     description:
-      '배지, 세그먼트 단추, 기술·비율 막대 끝 (rounded-pill). 제약: 막대 높이(size.bar.skill 10px)의 절반 이하가 자연스러움',
-  },
-  {
-    path: 'radius.focus',
-    type: 'dimension',
-    cssVar: '--corner-focus',
-    css: '4px',
-    value: 4,
-    description: '흐름도 칸 키보드 초점 고리 모서리. 제약: 없음',
+      '모서리 규칙 "칩·배지": 점검 신호·표본 부족·수치 미변경 등 배지, 흐름 조건 칩 (rounded-pill). 제약: 배지 높이(20px)의 절반 미만, control 이하',
   },
   {
     path: 'radius.mark',
@@ -812,15 +849,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     cssVar: '--corner-mark',
     css: '2px',
     value: 2,
-    description: '흐름도 칸, 같은 조건 위험 배수 범위 막대 모서리. 제약: 칸 너비(14px)의 1/4 이하',
-  },
-  {
-    path: 'radius.mark-sm',
-    type: 'dimension',
-    cssVar: '--corner-mark-sm',
-    css: '1px',
-    value: 1,
-    description: '산점도 네모(중간보스) 점 모서리. 제약: 2px 이하, 크면 원과 구분이 어려움',
+    description:
+      '모서리 규칙 "막대": 모든 막대 끝과 트랙(비율 막대, 기술 막대, 범위 막대, 0 표시), 막대 범례 견본, 흐름도 칸과 그 초점 고리, 산점도 네모 점 (rounded-mark, SVG RADIUS.mark). 트랙과 채움은 같은 값. 제약: 가장 작은 막대(size.bar.zero-stub 3px)보다 작게',
   },
   {
     path: 'space.panel-gap',
@@ -856,6 +886,67 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 3,
     description:
       '세그먼트 컨트롤(기간, 2초·5초) 안쪽 여백. 제약: 단추 높이 24px 와 바깥 30px 에 맞춘 값(30 = 24 + 2×3)',
+  },
+  {
+    path: 'space.page-bottom',
+    type: 'dimension',
+    cssVar: '--space-page-bottom',
+    css: '20px',
+    value: 20,
+    description:
+      '보드 아래 끝과 창 아래 끝 사이 여백(창보다 짧은 화면은 보드가 여기까지 늘어남). 페이지 위 여백(창 위 끝 → 머리글 글자, 약 20px)과 같은 값. 제약: 레이아웃 영향',
+  },
+  {
+    path: 'space.panel-bottom',
+    type: 'dimension',
+    cssVar: '--space-panel-bottom',
+    css: '20px',
+    value: 20,
+    description:
+      '상세 첫 줄(전투 양상, 준비 조건별 비중) 패널의 마지막 내용 ↔ 패널 아래 끝. 제목 글자 위 여백(panel-top + 머리 줄 안 여백, 약 20px)과 같게 해 위아래가 맞아 보이게. 제약: 레이아웃 영향(size.detail-row 안에 들어가야 함)',
+  },
+  {
+    path: 'space.dumbbell-gap',
+    type: 'dimension',
+    cssVar: '--space-dumbbell-gap',
+    css: '14px',
+    value: 14,
+    description:
+      '준비 조건별 비중 행의 칸 사이 간격(조건 이름 | 막대 | 수치 | 차이 | 배지). 100% 눈금선과 오른쪽 수치 사이가 붙어 보이지 않게. 제약: 12–16px, 레이아웃 영향(막대 칸 폭이 줄어듦)',
+  },
+  {
+    path: 'space.patch-body-top',
+    type: 'dimension',
+    cssVar: '--space-patch-body-top',
+    css: '12px',
+    value: 12,
+    description:
+      '패치 전후 위험: 머리 줄 아래 ↔ 추이 차트 위. 제약: 레이아웃 영향(추이 높이 = 패널 높이 − 위 여백 − 머리 줄 − 이 값 − patch-body-bottom)',
+  },
+  {
+    path: 'space.patch-body-bottom',
+    type: 'dimension',
+    cssVar: '--space-patch-body-bottom',
+    css: '16px',
+    value: 16,
+    description: '패치 전후 위험: 추이 차트 아래 ↔ 패널 아래 끝. 제약: 레이아웃 영향',
+  },
+  {
+    path: 'space.search-inset',
+    type: 'dimension',
+    cssVar: '--space-search-inset',
+    css: '9px',
+    value: 9,
+    description:
+      '필터 바 검색 입력 왼쪽 안쪽 여백(돋보기 아이콘 왼쪽)과 오른쪽 안쪽 여백. 제약: 입력 너비 244px 안',
+  },
+  {
+    path: 'space.search-icon-gap',
+    type: 'dimension',
+    cssVar: '--space-search-icon-gap',
+    css: '6px',
+    value: 6,
+    description: '검색 입력의 돋보기 아이콘 ↔ 글자 사이. 제약: 4–8px',
   },
   {
     path: 'font-size.micro',
@@ -913,9 +1004,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'font-size.title',
     type: 'dimension',
     cssVar: '--font-size-title',
-    css: '18px',
-    value: 18,
-    description: '패널 제목. 제약: 제목 줄 높이 22px, 키우면 패널 안 차트 위치가 밀림',
+    css: '20px',
+    value: 20,
+    description:
+      '패널 제목(공통 패널 머리 줄 shell/panel-header.tsx). 제약: 머리 줄 높이(size.panel-header) 안, subtitle 보다 크게. 키우면 패널 안 차트 위치가 밀림',
   },
   {
     path: 'font-size.heading',
@@ -930,9 +1022,19 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'font-size.kpi',
     type: 'dimension',
     cssVar: '--font-size-kpi',
-    css: '22px',
-    value: 22,
-    description: '상세 KPI 숫자(사망, 교전, 기대 대비 위험). 제약: KPI 상자 높이 66px 안',
+    css: '32px',
+    value: 32,
+    description:
+      '상세 KPI 숫자(사망, 교전, 기대 대비 위험), 숫자만(단위는 kpi-unit). 제약: KPI 상자(size.kpi-box) 높이 안에 라벨·숫자 두 줄, 한 칸(상자 너비의 1/3) 안에 "4,429" 가 들어가야 함',
+  },
+  {
+    path: 'font-size.kpi-unit',
+    type: 'dimension',
+    cssVar: '--font-size-kpi-unit',
+    css: '16px',
+    value: 16,
+    description:
+      '상세 KPI 숫자 뒤 단위(건, 배), gray-1. 제약: kpi 의 절반 정도, 숫자보다 확실히 작게',
   },
   {
     path: 'font-size.display',
@@ -980,9 +1082,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'stroke.width.bold',
     type: 'dimension',
     cssVar: '--stroke-width-bold',
-    css: '2px',
-    value: 2,
-    description: '오각형 고른 몬스터 선, 패치 추이 선, 범례 선. 제약: 차트 선 중 가장 굵게',
+    css: '2.5px',
+    value: 2.5,
+    description:
+      '오각형 고른 몬스터 선, 패치 추이 선, 범례 선. 제약: 차트 선 중 가장 굵게(regular 1.5px 보다 굵게), 3px 이하',
   },
   {
     path: 'stroke.width.focus',
@@ -1004,10 +1107,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'stroke.point.mark',
     type: 'dimension',
     cssVar: '--stroke-point-mark',
-    css: '6px',
-    value: 6,
+    css: '8px',
+    value: 8,
     description:
-      '산점도 점 반지름(모든 모양이 이 반지름 원과 같은 넓이). 제약: 키우면 점 겹침이 늘고 겹침 회피 간격도 함께 바뀜',
+      '산점도 점 반지름(모든 모양이 이 반지름 원과 같은 넓이). 제약: 키우면 점 겹침이 늘고 겹침 회피 간격도 함께 바뀜. 누르는 범위(11px)보다 작게',
   },
   {
     path: 'stroke.point.mark-hover-grow',
@@ -1021,91 +1124,100 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'stroke.point.legend',
     type: 'dimension',
     cssVar: '--stroke-point-legend',
-    css: '4.5px',
-    value: 4.5,
+    css: '6px',
+    value: 6,
     description: '산점도 범례 점 반지름. 제약: mark 이하',
   },
   {
     path: 'stroke.point.vertex',
     type: 'dimension',
     cssVar: '--stroke-point-vertex',
-    css: '4px',
-    value: 4,
+    css: '6px',
+    value: 6,
     description: '오각형 꼭짓점 반지름. 제약: vertex-hover 보다 작게',
   },
   {
     path: 'stroke.point.vertex-hover',
     type: 'dimension',
     cssVar: '--stroke-point-vertex-hover',
-    css: '5.5px',
-    value: 5.5,
+    css: '7.5px',
+    value: 7.5,
     description: '오각형 가리킨 축의 꼭짓점 반지름. 제약: vertex 보다 크고 vertex-ring 보다 작게',
   },
   {
     path: 'stroke.point.vertex-ring',
     type: 'dimension',
     cssVar: '--stroke-point-vertex-ring',
-    css: '8px',
-    value: 8,
+    css: '10px',
+    value: 10,
     description: '오각형 축 끝을 넘은 값 표시 점선 고리 반지름. 제약: vertex-hover 보다 크게',
   },
   {
     path: 'stroke.point.trend',
     type: 'dimension',
     cssVar: '--stroke-point-trend',
-    css: '3.5px',
-    value: 3.5,
+    css: '5.5px',
+    value: 5.5,
     description: '패치 추이 점 반지름(교전 10건 이상인 날). 제약: trend-thin 보다 크게',
   },
   {
     path: 'stroke.point.trend-thin',
     type: 'dimension',
     cssVar: '--stroke-point-trend-thin',
-    css: '2.5px',
-    value: 2.5,
+    css: '4.5px',
+    value: 4.5,
     description: '패치 추이 빈 점 반지름(교전 10건 미만인 날). 제약: trend 보다 작게',
   },
   {
     path: 'stroke.point.estimate',
     type: 'dimension',
     cssVar: '--stroke-point-estimate',
-    css: '6px',
-    value: 6,
-    description: '같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval)보다 크게',
+    css: '8px',
+    value: 8,
+    description: '같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval) 높이보다 크게',
   },
   {
     path: 'size.bar.skill',
     type: 'dimension',
     cssVar: '--size-bar-skill',
-    css: '10px',
-    value: 10,
+    css: '15px',
+    value: 15,
     description:
-      '보스 기술 막대 높이, 기술 범례 견본 높이. 제약: 기술 행 높이(44–56px) 안에 막대 두 개',
+      '보스 기술 막대 높이, 기술 범례 견본 높이. 제약: 기술 행 높이(44–56px) 안에 막대 두 개(15 + 4 + 15)',
   },
   {
     path: 'size.bar.share',
     type: 'dimension',
     cssVar: '--size-bar-share',
-    css: '25px',
-    value: 25,
+    css: '16px',
+    value: 16,
     description:
-      '준비 패널 "반격하지 못한 사망"·"큰 피해" 비율 막대 높이. 제약: 레이아웃 영향, 25px 기준으로 패널 높이를 맞춤',
+      '준비 패널 "반격하지 못한 사망"·"큰 피해" 비율 막대 높이. 제약: 14–16px, 기술 막대와 같은 무게',
   },
   {
     path: 'size.bar.interval',
     type: 'dimension',
     cssVar: '--size-bar-interval',
-    css: '4px',
-    value: 4,
+    css: '6px',
+    value: 6,
     description: '같은 조건 위험 배수 95% 범위 막대 높이. 제약: estimate 점 지름보다 작게',
+  },
+  {
+    path: 'size.bar.zero-stub',
+    type: 'dimension',
+    cssVar: '--size-bar-zero-stub',
+    css: '3px',
+    value: 3,
+    description:
+      '값이 0인 비율·기술 막대 자리의 짧은 표시 폭(빈 막대 바탕 대신). 제약: 2–4px, 값으로 읽히지 않을 만큼 짧게',
   },
   {
     path: 'size.dumbbell.line',
     type: 'dimension',
     cssVar: '--size-dumbbell-line',
-    css: '2px',
-    value: 2,
-    description: '준비 조건 처치자→사망자 연결선 두께. 제약: dot 보다 훨씬 가늘게',
+    css: '3px',
+    value: 3,
+    description: '준비 조건 처치자→사망자 연결선 두께. 제약: dot(14px) 보다 훨씬 가늘게, 4px 이하',
   },
   {
     path: 'size.dumbbell.dot',
@@ -1155,6 +1267,96 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '4px',
     value: 4,
     description: '고른 칸이 양옆으로 넓어지는 양. 제약: 0–6px',
+  },
+  {
+    path: 'size.icon.info',
+    type: 'dimension',
+    cssVar: '--size-icon-info',
+    css: '15px',
+    value: 15,
+    description:
+      '패널 제목 옆 ⓘ 설명 단추 아이콘 크기(단추 자체는 24px). 제약: 제목 글자(font-size.title)보다 작게',
+  },
+  {
+    path: 'size.icon.search',
+    type: 'dimension',
+    cssVar: '--size-icon-search',
+    css: '14px',
+    value: 14,
+    description:
+      '필터 바 "몬스터 검색" 입력 안 왼쪽 돋보기 아이콘 크기(색은 gray-1). 제약: 입력 높이(30px) 안, 글자(font-size.label)와 비슷하게',
+  },
+  {
+    path: 'size.panel-header',
+    type: 'dimension',
+    cssVar: '--size-panel-header',
+    css: '30px',
+    value: 30,
+    description:
+      '모든 패널 머리 줄 높이(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤). 제약: 컨트롤(선택 상자·세그먼트 30px)이 들어가는 높이, 레이아웃 영향(패널 내용 시작 위치)',
+  },
+  {
+    path: 'size.kpi-box.w',
+    type: 'dimension',
+    cssVar: '--size-kpi-box-w',
+    css: '420px',
+    value: 420,
+    description:
+      '상세 제목 줄 오른쪽 KPI 상자 너비(세 칸 균등). 제약: 한 칸에 "4,429건"(font-size.kpi + kpi-unit)이 들어가야 함, 레이아웃 영향(몬스터 이름 칸이 줄어듦)',
+  },
+  {
+    path: 'size.kpi-box.h',
+    type: 'dimension',
+    cssVar: '--size-kpi-box-h',
+    css: '72px',
+    value: 72,
+    description:
+      'KPI 상자 높이 = 상세 제목 줄 높이. 제약: 라벨과 숫자(font-size.kpi) 두 줄이 들어가야 함, 레이아웃 영향',
+  },
+  {
+    path: 'size.detail-row',
+    type: 'dimension',
+    cssVar: '--size-detail-row',
+    css: '364px',
+    value: 364,
+    description:
+      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 두 패널 내용(머리 줄 + 눈금 줄 + 네 조건 + 두 비율 막대 / 오각형 + 중앙값 기준 거리 눈금자)과 아래 여백 space.panel-bottom 이 들어가야 함',
+  },
+  {
+    path: 'size.patch-panel',
+    type: 'dimension',
+    cssVar: '--size-patch-panel',
+    css: '288px',
+    value: 288,
+    description:
+      '상세 "패치 전후 위험" 패널의 최소 높이. 상세가 창보다 짧으면 이 패널이 남는 높이를 받아 늘어나고, 추이 차트 높이는 패널 높이에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함',
+  },
+  {
+    path: 'size.ratio-axis.w',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-w',
+    css: '330px',
+    value: 330,
+    description:
+      '패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축 너비. 제약: 오른쪽 묶음 너비(340px) 이하',
+  },
+  {
+    path: 'size.ratio-axis.h-min',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-h-min',
+    css: '58px',
+    value: 58,
+    description:
+      '같은 조건 위험 배수 범위 축의 최소 높이(패널이 기본 높이일 때). 제약: 점(stroke.point.estimate) + 눈금 글자가 들어가야 함',
+  },
+  {
+    path: 'size.ratio-axis.h-max',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-h-max',
+    css: '96px',
+    value: 96,
+    description:
+      '같은 조건 위험 배수 범위 축의 최대 높이. 패널이 창에 맞춰 높아지면 축도 이만큼까지 함께 커져 오른쪽 묶음이 비어 보이지 않게. 제약: h-min 이상, 너무 크면 축이 차트처럼 보임',
   },
   {
     path: 'motion.ease.board',
