@@ -285,7 +285,7 @@ function BarSample() {
       </div>
       <div className="relative h-3">
         <div className="absolute top-[5.5px] right-0 left-0 h-px bg-chart-track" />
-        <div className="absolute top-[calc(6px-var(--size-dumbbell-line)/2)] left-[20%] h-(--size-dumbbell-line) w-[45%] rounded-full bg-chart-comparison" />
+        <div className="absolute top-[calc(6px-var(--size-dumbbell-line)/2)] left-[20%] h-(--size-dumbbell-line) w-[45%] rounded-full bg-chart-dumbbell-line" />
         <div className="absolute -top-px left-[20%] size-(--size-dumbbell-dot) -translate-x-1/2 rounded-full bg-chart-survival" />
         <div className="absolute -top-px left-[65%] size-(--size-dumbbell-dot) -translate-x-1/2 rounded-full bg-chart-death" />
       </div>
@@ -360,6 +360,21 @@ export function TokenPreview() {
                 style={{ fontSize: `var(${t.cssVar})` }}
               >
                 위험 4.74배
+              </span>
+            </Row>
+          ))}
+        </ul>
+      </Section>
+
+      <Section title="글자 굵기" hint="font-weight · 클래스 font-(weight:--font-weight-…)">
+        <ul>
+          {byPrefix('font-weight').map((t) => (
+            <Row key={t.path} t={t} prefix="font-weight">
+              <span
+                className="shrink-0 text-(length:--font-size-body-sm) text-ink tabular-nums"
+                style={{ fontWeight: `var(${t.cssVar})` }}
+              >
+                4.74배
               </span>
             </Row>
           ))}

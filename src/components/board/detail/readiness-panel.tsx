@@ -91,7 +91,7 @@ function DumbbellRow({ label, meaning, row, totalDeaths, show, hide }: DumbbellR
           <>
             <div
               data-dumbbell="bar"
-              className="board-slide-w board-first absolute top-[calc(6px-var(--size-dumbbell-line)/2)] h-(--size-dumbbell-line) rounded-full bg-chart-comparison"
+              className="board-slide-w board-first absolute top-[calc(6px-var(--size-dumbbell-line)/2)] h-(--size-dumbbell-line) rounded-full bg-chart-dumbbell-line"
               style={{ left: `${lo * 100}%`, width: `${(hi - lo) * 100}%` }}
             />
             <span

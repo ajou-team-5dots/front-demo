@@ -22,6 +22,7 @@ export const COLOR = {
     track: 'var(--chart-track)',
     trackBar: 'var(--chart-track-bar)',
     guide: 'var(--chart-guide)',
+    dumbbellLine: 'var(--chart-dumbbell-line)',
     accent: 'var(--chart-accent)',
     earth: 'var(--chart-earth)',
     violet: 'var(--chart-violet)',
@@ -130,6 +131,11 @@ export const FONT_SIZE = {
   kpi: 32,
   kpiUnit: 16,
   display: 24,
+} as const;
+
+/** Font weight, 100–900. */
+export const FONT_WEIGHT = {
+  riskValue: 700,
 } as const;
 
 /** Stroke width and point radius, px. */
@@ -320,7 +326,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '#3b75e9',
     value: '#3b75e9',
     description:
-      '비교 집단: 오각형 중앙값 고리, 패치 평균 점선, 준비 조건 선, 위험 배수 범위 막대. 흐름도 칸 색 재료, 산점도 1~2배(scatter.mid). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
+      '비교 집단: 오각형 중앙값 고리, 패치 평균 점선, 위험 배수 범위 막대. 흐름도 칸 색 재료, 산점도 1~2배(scatter.mid). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사)',
   },
   {
     path: 'color.chart.death',
@@ -368,13 +374,22 @@ export const TOKEN_LIST: TokenEntry[] = [
       '준비 조건별 비중 공유 눈금(0·25·50·75·100%)의 세로 격자선. 글자가 아닌 안내선이라 아주 옅게, 그래도 흰 패널 위에서 보이게. 제약: 패널 대비 1.15:1 이상(tokens:contrast), 점·연결선보다 훨씬 옅게',
   },
   {
+    path: 'color.chart.dumbbell-line',
+    type: 'color',
+    cssVar: '--chart-dumbbell-line',
+    css: 'var(--chart-accent)',
+    value: '#e0781c',
+    description:
+      '준비 조건별 비중 덤벨의 가운데 연결선(처치 교전 점과 사망자 점 사이 차이). 점(생존 청록·사망 빨강)과 다른 색이라 차이 길이만 따로 읽힘. 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사), 점 두 색과 같은 색을 쓰지 않음',
+  },
+  {
     path: 'color.chart.accent',
     type: 'color',
     cssVar: '--chart-accent',
     css: '#e0781c',
     value: '#e0781c',
     description:
-      '흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음',
+      '흐름도 칸 색 재료(호박색), 덤벨 연결선(chart.dumbbell-line 이 참조). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음',
   },
   {
     path: 'color.chart.earth',
@@ -1043,6 +1058,15 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '24px',
     value: 24,
     description: '상세 화면 몬스터 이름. 제약: 긴 이름은 말줄임, 줄 높이 29px',
+  },
+  {
+    path: 'font-weight.risk-value',
+    type: 'fontWeight',
+    cssVar: '--font-weight-risk-value',
+    css: '700',
+    value: 700,
+    description:
+      '위험 높은 순 목록 오른쪽 기대 대비 위험 배수("4.74배"). 왼쪽 몬스터 이름(500, 선택 행 600)보다 굵게 해 숫자 열이 따로 읽히게. 제약: 600 이하로 내리면 선택 행 이름과 굵기가 같아짐, 숫자 칸(72px) 안에 가장 긴 배수("12.34배")가 줄바꿈 없이 들어가야 함',
   },
   {
     path: 'stroke.width.hairline',

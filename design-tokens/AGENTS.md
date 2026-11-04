@@ -117,27 +117,29 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 
 값은 `tokens.json`이 기준입니다. 아래는 어디에 쓰이는지와 바꿀 때 볼 곳입니다.
 
-| 토큰                                                                             | 화면 위치                                                     | 바꿀 때                                                              |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `font-size.title`                                                                | 모든 패널 제목(공통 머리 줄 `shell/panel-header.tsx`)         | `size.panel-header` 안에 들어가야 함                                 |
-| `font-size.kpi` / `font-size.kpi-unit`                                           | 상세 오른쪽 위 KPI 숫자 / 뒤 단위(건, 배)                     | `size.kpi-box` 한 칸(1/3)에 "4,429건"이 들어가야 함                  |
-| `size.kpi-box.w` / `.h`                                                          | 상세 제목 줄 오른쪽 KPI 상자                                  | `h`가 상세 제목 줄 높이. 라벨·숫자는 cap·기준선으로 잘라 가운데 정렬 |
-| `size.panel-header`                                                              | 모든 패널 머리 줄(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤)  | 컨트롤 30px이 들어가야 함. 패널 내용 시작 위치가 함께 바뀜           |
-| `size.detail-row`                                                                | 상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이                 | 두 패널 내용 + `space.panel-bottom`이 들어가야 함                    |
-| `size.patch-panel`                                                               | 패치 전후 위험 패널 최소 높이                                 | 창이 남으면 이 패널이 늘어남(추이 높이는 패널에서 계산)              |
-| `size.ratio-axis.w` / `.h-min` / `.h-max`                                        | 패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축           | 패널이 높아지면 `h-min`에서 `h-max`까지 커짐                         |
-| `size.bar.skill` / `size.bar.share` / `size.bar.interval` / `size.bar.zero-stub` | 보스 기술 막대 / 준비 패널 비율 막대 / 범위 막대 / 값 0 표시  | 막대 끝은 `radius.mark`                                              |
-| `size.dumbbell.line`                                                             | 준비 조건 처치자→사망자 연결선                                | `size.dumbbell.dot`보다 훨씬 가늘게                                  |
-| `size.icon.info` / `size.icon.search`                                            | 패널 제목 옆 ⓘ 아이콘 / 필터 바 검색 돋보기                   | 색은 `gray-1`                                                        |
-| `space.page-bottom`                                                              | 보드 아래 끝 ↔ 창 아래 끝(짧은 화면은 보드가 여기까지 늘어남) | 레이아웃 변경                                                        |
-| `space.panel-bottom`                                                             | 상세 첫 줄 두 패널의 아래 여백                                | 제목 위 여백과 같게                                                  |
-| `space.dumbbell-gap`                                                             | 준비 조건 행의 칸 사이(100% 눈금 ↔ 오른쪽 수치)               | 12–16px                                                              |
-| `space.patch-body-top` / `-bottom`                                               | 패치 전후 위험 머리 줄 ↔ 추이, 추이 ↔ 패널 아래               | 추이 높이가 함께 바뀜                                                |
-| `space.search-inset` / `space.search-icon-gap`                                   | 검색 입력 안쪽 여백 / 돋보기 ↔ 글자                           | 입력 너비 244px 안                                                   |
-| `color.chart.track-bar`                                                          | 비율·기술 막대의 빈 부분(트랙)                                | 값 막대보다 눈에 띄지 않게                                           |
-| `color.chart.guide`                                                              | 준비 조건 공유 눈금(0–100%) 세로 격자선                       | 패널 대비 1.15:1 이상(검사 있음)                                     |
-| `stroke.width.bold`, `stroke.point.*`                                            | 데이터 선 굵기, 산점도·오각형·추이 점                         | `bold`가 가장 굵게, 점 크기 순서 유지                                |
-| `radius.*`                                                                       | 4-1 모서리 규칙                                               | 요소 종류로 고름                                                     |
+| 토큰                                                                             | 화면 위치                                                     | 바꿀 때                                                                                                                             |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `font-size.title`                                                                | 모든 패널 제목(공통 머리 줄 `shell/panel-header.tsx`)         | `size.panel-header` 안에 들어가야 함                                                                                                |
+| `font-size.kpi` / `font-size.kpi-unit`                                           | 상세 오른쪽 위 KPI 숫자 / 뒤 단위(건, 배)                     | `size.kpi-box` 한 칸(1/3)에 "4,429건"이 들어가야 함                                                                                 |
+| `size.kpi-box.w` / `.h`                                                          | 상세 제목 줄 오른쪽 KPI 상자                                  | `h`가 상세 제목 줄 높이. 라벨·숫자는 cap·기준선으로 잘라 가운데 정렬                                                                |
+| `size.panel-header`                                                              | 모든 패널 머리 줄(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤)  | 컨트롤 30px이 들어가야 함. 패널 내용 시작 위치가 함께 바뀜                                                                          |
+| `size.detail-row`                                                                | 상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이                 | 두 패널 내용 + `space.panel-bottom`이 들어가야 함                                                                                   |
+| `size.patch-panel`                                                               | 패치 전후 위험 패널 최소 높이                                 | 창이 남으면 이 패널이 늘어남(추이 높이는 패널에서 계산)                                                                             |
+| `size.ratio-axis.w` / `.h-min` / `.h-max`                                        | 패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축           | 패널이 높아지면 `h-min`에서 `h-max`까지 커짐                                                                                        |
+| `size.bar.skill` / `size.bar.share` / `size.bar.interval` / `size.bar.zero-stub` | 보스 기술 막대 / 준비 패널 비율 막대 / 범위 막대 / 값 0 표시  | 막대 끝은 `radius.mark`                                                                                                             |
+| `size.dumbbell.line`                                                             | 준비 조건 처치자→사망자 연결선                                | `size.dumbbell.dot`보다 훨씬 가늘게                                                                                                 |
+| `size.icon.info` / `size.icon.search`                                            | 패널 제목 옆 ⓘ 아이콘 / 필터 바 검색 돋보기                   | 색은 `gray-1`                                                                                                                       |
+| `space.page-bottom`                                                              | 보드 아래 끝 ↔ 창 아래 끝(짧은 화면은 보드가 여기까지 늘어남) | 레이아웃 변경                                                                                                                       |
+| `space.panel-bottom`                                                             | 상세 첫 줄 두 패널의 아래 여백                                | 제목 위 여백과 같게                                                                                                                 |
+| `space.dumbbell-gap`                                                             | 준비 조건 행의 칸 사이(100% 눈금 ↔ 오른쪽 수치)               | 12–16px                                                                                                                             |
+| `space.patch-body-top` / `-bottom`                                               | 패치 전후 위험 머리 줄 ↔ 추이, 추이 ↔ 패널 아래               | 추이 높이가 함께 바뀜                                                                                                               |
+| `space.search-inset` / `space.search-icon-gap`                                   | 검색 입력 안쪽 여백 / 돋보기 ↔ 글자                           | 입력 너비 244px 안                                                                                                                  |
+| `color.chart.track-bar`                                                          | 비율·기술 막대의 빈 부분(트랙)                                | 값 막대보다 눈에 띄지 않게                                                                                                          |
+| `color.chart.guide`                                                              | 준비 조건 공유 눈금(0–100%) 세로 격자선                       | 패널 대비 1.15:1 이상(검사 있음)                                                                                                    |
+| `color.chart.dumbbell-line`                                                      | 준비 조건 덤벨의 가운데 연결선(처치 교전 점 ↔ 사망자 점)      | 지금 `{color.chart.accent}` 참조. 다른 색은 hex로 직접 넣음. 점 두 색(`survival`, `death`)과 같은 색 금지, 패널 대비 3:1(검사 있음) |
+| `font-weight.risk-value`                                                         | 위험 높은 순 목록 오른쪽 배수 숫자                            | 이름(500, 선택 행 600)보다 굵게. 72px 칸 안에서 "12.34배"가 줄바꿈 없이                                                             |
+| `stroke.width.bold`, `stroke.point.*`                                            | 데이터 선 굵기, 산점도·오각형·추이 점                         | `bold`가 가장 굵게, 점 크기 순서 유지                                                                                               |
+| `radius.*`                                                                       | 4-1 모서리 규칙                                               | 요소 종류로 고름                                                                                                                    |
 
 ## 5. 그룹별 영향 범위
 
@@ -152,6 +154,7 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 | `color.state`      | 목록 행·칩 hover 바탕                                                               | 거의 없음                                                |
 | `opacity`          | 흐름도 띠, 흐린 점·칸, 기준선, 오각형 면                                            | `band` 네 단계 순서(dim < default < hover < picked)      |
 | `font-size`        | 해당 크기의 모든 글자                                                               | **레이아웃이 밀리거나 글자가 잘림.** 고정 높이 칸이 많음 |
+| `font-weight`      | 토큰이 붙은 글자만 (지금은 목록 배수 숫자)                                          | 굵게 하면 글자 폭이 늘어 고정 폭 칸에서 잘릴 수 있음     |
 | `stroke`           | 차트 선 두께, 점 반지름                                                             | 굵기 위계(bold가 가장 굵게)                              |
 | `size`             | 막대 높이, 준비 조건 점, 흐름도 칸 폭                                               | 일부는 레이아웃 계산에 쓰임                              |
 | `radius`           | 모서리                                                                              | 거의 없음                                                |

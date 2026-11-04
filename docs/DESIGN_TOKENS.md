@@ -75,38 +75,39 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 
 ### 색
 
-| 토큰                                              | CSS 변수             | 화면 위치                                                 |
-| ------------------------------------------------- | -------------------- | --------------------------------------------------------- |
-| `color.base.brand`                                | `--brand`            | 머리글 AKKADIA                                            |
-| `color.base.ink`                                  | `--ink`              | 모든 본문 글자, 초점 고리, 1배 기준선                     |
-| `color.base.gray-1`                               | `--gray-1`           | 보조 글자, 축 눈금, 중앙값 점선                           |
-| `color.base.gray-2`                               | `--gray-2`           | 선택 상자 테두리, 산점도 0 기준선                         |
-| `color.base.gray-3`                               | `--gray-3`           | 페이지 바탕, 세그먼트 바탕, 칩, 열린 목록 행              |
-| `color.base.panel`                                | `--panel`            | 패널 바탕, 차트 글자 뒤 테두리                            |
-| `color.base.primary-strong/-soft`, `success-soft` | 같은 이름            | shadcn 부품 (보드 화면에서는 거의 안 씀)                  |
-| `color.base.skeleton-shine`                       | `--skeleton-shine`   | 로딩 뼈대 반짝임                                          |
-| `color.chart.actual`                              | `--chart-actual`     | 오각형 고른 몬스터 선·면, 패치 추이 선과 점, 위험 배수 점 |
-| `color.chart.comparison`                          | `--chart-comparison` | 오각형 비교 고리, 평균 점선, 준비 조건 선, 범위 막대      |
-| `color.chart.death`                               | `--chart-death`      | 사망 막대, 사망 점, 산점도 2배 선                         |
-| `color.chart.survival`                            | `--chart-survival`   | 생존 막대, 처치 점                                        |
-| `color.chart.track`                               | `--chart-track`      | 격자, 기준선                                              |
-| `color.chart.track-bar`                           | `--chart-track-bar`  | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)           |
-| `color.chart.guide`                               | `--chart-guide`      | 준비 조건 공유 눈금의 세로 격자선 (패널 대비 1.15:1 이상) |
-| `color.chart.accent/earth/violet`                 | `--chart-accent` 등  | 흐름도 칸 색의 재료                                       |
-| `color.chart.neutral`                             | `--chart-neutral`    | 산점도 1배 미만 점, 흐름도 순서 밖 칸                     |
-| `color.status.*`                                  | `--status-*`         | 배지 글자 (점검 신호, 표본 부족, 가설 지지)               |
-| `color.status.*-soft`                             | `--status-*-soft`    | 배지 바탕 (상태색 10%)                                    |
-| `color.sankey.lv.1–4`                             | `--sankey-lv-1` …    | 흐름도 1열 레벨 칸 (값 순서대로)                          |
-| `color.sankey.wp.1–4`                             | `--sankey-wp-1` …    | 흐름도 2열 무기 칸                                        |
-| `color.sankey.ar.1–3`                             | `--sankey-ar-1` …    | 흐름도 3열 방어구 칸                                      |
-| `color.sankey.grp.1–5`                            | `--sankey-grp-1` …   | 흐름도 4열 몬스터 집단 칸                                 |
-| `color.sankey.neutral`                            | `--sankey-neutral`   | 정해진 순서 밖의 칸                                       |
-| `color.scatter.high/mid/below`                    | `--scatter-*`        | 산점도 점 색 (2배 이상 / 1~2배 / 1배 미만)과 범례         |
-| `color.scatter.zone`                              | `--scatter-zone`     | 산점도 우선 점검 구역 바탕 (사망색 8%)                    |
-| `color.text-scale.flag`                           | `--text-scale-flag`  | 위험 목록 2배 이상 숫자                                   |
-| `color.text-scale.sub`                            | `--text-scale-sub`   | 위험 목록 "N단계 · 역할" 줄, 값 없는 숫자                 |
-| `color.state.row-hover`                           | `--state-row-hover`  | 차트에서 가리킨 몬스터의 목록 행 바탕                     |
-| `color.state.chip-hover`                          | `--state-chip-hover` | 흐름 칩 hover 바탕                                        |
+| 토큰                                              | CSS 변수                | 화면 위치                                                                   |
+| ------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `color.base.brand`                                | `--brand`               | 머리글 AKKADIA                                                              |
+| `color.base.ink`                                  | `--ink`                 | 모든 본문 글자, 초점 고리, 1배 기준선                                       |
+| `color.base.gray-1`                               | `--gray-1`              | 보조 글자, 축 눈금, 중앙값 점선                                             |
+| `color.base.gray-2`                               | `--gray-2`              | 선택 상자 테두리, 산점도 0 기준선                                           |
+| `color.base.gray-3`                               | `--gray-3`              | 페이지 바탕, 세그먼트 바탕, 칩, 열린 목록 행                                |
+| `color.base.panel`                                | `--panel`               | 패널 바탕, 차트 글자 뒤 테두리                                              |
+| `color.base.primary-strong/-soft`, `success-soft` | 같은 이름               | shadcn 부품 (보드 화면에서는 거의 안 씀)                                    |
+| `color.base.skeleton-shine`                       | `--skeleton-shine`      | 로딩 뼈대 반짝임                                                            |
+| `color.chart.actual`                              | `--chart-actual`        | 오각형 고른 몬스터 선·면, 패치 추이 선과 점, 위험 배수 점                   |
+| `color.chart.comparison`                          | `--chart-comparison`    | 오각형 비교 고리, 평균 점선, 범위 막대                                      |
+| `color.chart.death`                               | `--chart-death`         | 사망 막대, 사망 점, 산점도 2배 선                                           |
+| `color.chart.survival`                            | `--chart-survival`      | 생존 막대, 처치 점                                                          |
+| `color.chart.track`                               | `--chart-track`         | 격자, 기준선                                                                |
+| `color.chart.track-bar`                           | `--chart-track-bar`     | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)                             |
+| `color.chart.guide`                               | `--chart-guide`         | 준비 조건 공유 눈금의 세로 격자선 (패널 대비 1.15:1 이상)                   |
+| `color.chart.dumbbell-line`                       | `--chart-dumbbell-line` | 준비 조건 덤벨 가운데 연결선 (지금 `chart.accent` 참조, 패널 대비 3:1 이상) |
+| `color.chart.accent/earth/violet`                 | `--chart-accent` 등     | 흐름도 칸 색의 재료. `accent`는 덤벨 연결선도 따라 바뀜                     |
+| `color.chart.neutral`                             | `--chart-neutral`       | 산점도 1배 미만 점, 흐름도 순서 밖 칸                                       |
+| `color.status.*`                                  | `--status-*`            | 배지 글자 (점검 신호, 표본 부족, 가설 지지)                                 |
+| `color.status.*-soft`                             | `--status-*-soft`       | 배지 바탕 (상태색 10%)                                                      |
+| `color.sankey.lv.1–4`                             | `--sankey-lv-1` …       | 흐름도 1열 레벨 칸 (값 순서대로)                                            |
+| `color.sankey.wp.1–4`                             | `--sankey-wp-1` …       | 흐름도 2열 무기 칸                                                          |
+| `color.sankey.ar.1–3`                             | `--sankey-ar-1` …       | 흐름도 3열 방어구 칸                                                        |
+| `color.sankey.grp.1–5`                            | `--sankey-grp-1` …      | 흐름도 4열 몬스터 집단 칸                                                   |
+| `color.sankey.neutral`                            | `--sankey-neutral`      | 정해진 순서 밖의 칸                                                         |
+| `color.scatter.high/mid/below`                    | `--scatter-*`           | 산점도 점 색 (2배 이상 / 1~2배 / 1배 미만)과 범례                           |
+| `color.scatter.zone`                              | `--scatter-zone`        | 산점도 우선 점검 구역 바탕 (사망색 8%)                                      |
+| `color.text-scale.flag`                           | `--text-scale-flag`     | 위험 목록 2배 이상 숫자                                                     |
+| `color.text-scale.sub`                            | `--text-scale-sub`      | 위험 목록 "N단계 · 역할" 줄, 값 없는 숫자                                   |
+| `color.state.row-hover`                           | `--state-row-hover`     | 차트에서 가리킨 몬스터의 목록 행 바탕                                       |
+| `color.state.chip-hover`                          | `--state-chip-hover`    | 흐름 칩 hover 바탕                                                          |
 
 ### 불투명도
 
@@ -146,6 +147,14 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `font-size.display`  | 24  | 상세 몬스터 이름                                       |
 
 줄 높이(`leading-[…]`)는 아직 토큰이 아닙니다.
+
+### 글자 굵기 (`font-(weight:--font-weight-…)`, SVG는 `FONT_WEIGHT.…`)
+
+| 토큰                     | 값  | 화면 위치                                                       |
+| ------------------------ | --- | --------------------------------------------------------------- |
+| `font-weight.risk-value` | 700 | 위험 높은 순 목록 오른쪽 배수 숫자 (이름 500, 선택 행 이름 600) |
+
+- 다른 글자 굵기는 아직 클래스(`font-medium`, `font-semibold`, `font-bold`)로 둡니다. 디자이너가 바꾸고 싶은 굵기가 생기면 이 묶음에 토큰을 더합니다.
 
 ### 선 두께와 점 크기 (`STROKE.width.…`, `STROKE.point.…`, 점은 반지름)
 

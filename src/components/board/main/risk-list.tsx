@@ -199,7 +199,7 @@ export function RiskList({
               <span
                 className={cn(
                   'w-[72px] shrink-0 text-right text-(length:--font-size-body-sm) tabular-nums',
-                  valued ? 'font-semibold text-ink' : 'font-medium',
+                  valued ? 'font-(weight:--font-weight-risk-value) text-ink' : 'font-medium',
                 )}
                 style={flagged || !valued ? { color: flagged ? FLAG_TEXT : SUB_TEXT } : undefined}
               >

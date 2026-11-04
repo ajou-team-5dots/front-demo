@@ -72,14 +72,14 @@ const cssValue = (t) => {
   return `color-mix(in oklab, ${base} ${pct}%, ${withValue})`;
 };
 
-/** Resolved raw value for TS: numbers for number/dimension/duration, [x1, y1, x2, y2] for
+/** Resolved raw value for TS: numbers for number/fontWeight/dimension/duration, [x1, y1, x2, y2] for
  * cubicBezier, strings otherwise. */
 const resolved = (t) => {
   const raw = t.node.$value;
   if (t.type === 'cubicBezier') return raw;
   const alias = typeof raw === 'string' && raw.match(ALIAS);
   if (alias) return resolved(target(alias[1]));
-  if (t.type === 'number') return raw;
+  if (t.type === 'number' || t.type === 'fontWeight') return raw;
   if (t.type === 'dimension' || t.type === 'duration') {
     return typeof raw === 'object' ? raw.value : Number.parseFloat(raw);
   }
@@ -130,6 +130,7 @@ const exported = [
   ['RADIUS', 'radius', resolved, 'Corner radius, px.'],
   ['SPACE', 'space', resolved, 'Spacing, px.'],
   ['FONT_SIZE', 'font-size', resolved, 'Font size, px.'],
+  ['FONT_WEIGHT', 'font-weight', resolved, 'Font weight, 100–900.'],
   ['STROKE', 'stroke', resolved, 'Stroke width and point radius, px.'],
   ['SIZE', 'size', resolved, 'Bar heights and mark sizes, px.'],
   ['MOTION', 'motion', resolved, 'Easing control points [x1, y1, x2, y2] and durations (ms).'],
