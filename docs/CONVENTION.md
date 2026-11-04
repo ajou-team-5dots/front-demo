@@ -32,13 +32,13 @@ PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
 Airbnb 원칙과 Next.js/shadcn 관례가 충돌하는 곳만 끈다. 새 예외를 추가하면 이 표에 이유를 적는다.
 
-| 규칙                             | 상태 | 이유                                                                 |
-| -------------------------------- | ---- | -------------------------------------------------------------------- |
-| `import-x/prefer-default-export` | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export |
-| `react/react-in-jsx-scope`       | off  | React 17+ JSX 변환                                                   |
-| `react/jsx-props-no-spreading`   | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                            |
-| `react/require-default-props`    | off  | TypeScript 타입이 prop-types를 대체                                  |
-| `src/components/ui/**` 일부 규칙 | off  | shadcn이 생성한 코드는 원본과 가깝게 유지                            |
+| 규칙                             | 상태 | 이유                                                                    |
+| -------------------------------- | ---- | ----------------------------------------------------------------------- |
+| `import-x/prefer-default-export` | off  | App Router의 `page`/`layout`만 default export, 나머지는 named export    |
+| `react/react-in-jsx-scope`       | off  | React 17+ JSX 변환                                                      |
+| `react/jsx-props-no-spreading`   | off  | shadcn/ui 컴포넌트가 `...props` 패턴 사용                               |
+| `react/require-default-props`    | off  | TypeScript 타입이 prop-types를 대체                                     |
+| `src/components/ui/**` 일부 규칙 | off  | shadcn이 생성한 코드는 원본과 가깝게 유지 (select.tsx의 정의 순서 포함) |
 
 ## 4. 폴더 구조
 
@@ -50,6 +50,7 @@ src/
     <feature>/         # 기능별 컴포넌트 (예: blueprint/, charts/)
   hooks/               # use 로 시작하는 커스텀 훅
   lib/                 # 순수 함수, 데이터 변환, utils.ts(cn). 클라이언트에서도 import 가능
+  styles/              # tokens.css, tokens.ts (design-tokens/tokens.json 에서 pnpm tokens 로 생성, 직접 수정 금지)
   server/
     data/              # 데이터 읽기 (Data Access Layer). 'server-only'
     actions/           # 데이터 쓰기 (Server Action). 'use server'
@@ -171,6 +172,7 @@ export default async function BlueprintsPage() {
 - `src/components/ui/` 파일은 가능한 한 수정하지 않는다. 변형이 필요하면 감싸는 컴포넌트를 `components/<feature>/`에 만든다
 - 조건부 클래스는 `cn()` 사용, 문자열 이어붙이기 금지
 - 색은 `globals.css`의 CSS 변수 토큰(`bg-background`, `text-muted-foreground` 등)만 사용. `bg-[#123456]` 같은 하드코딩 금지
+- 색, 불투명도, 글자 크기, 선 두께, 점·막대 크기, 모서리, 간격, 모션 값의 원본은 `design-tokens/tokens.json` 하나다. 컴포넌트에 숫자나 `color-mix(...)`를 새로 적지 말고 토큰을 추가한 뒤 `pnpm tokens`로 생성한다. 글자 크기는 `text-(length:--font-size-…)`, SVG는 `@/styles/tokens`의 `STROKE`, `OPACITY` 등을 쓴다. 자세한 것은 `docs/DESIGN_TOKENS.md`
 - 다크 모드는 토큰으로 처리되므로 `dark:` 를 남발하지 않는다
 
 ## 10. 데이터 취급 (Akkadia 프로젝트 공통)
