@@ -43,6 +43,13 @@ export default defineConfig([
       'no-restricted-exports': 'off',
     },
   },
+  {
+    // select.tsx defines its scroll buttons below SelectContent, as upstream does.
+    files: ['src/components/ui/select.tsx'],
+    rules: {
+      '@typescript-eslint/no-use-before-define': 'off',
+    },
+  },
 
   {
     // Env vars (DB credentials etc.) may only be read in the server data layer. See docs/CONVENTION.md 7.

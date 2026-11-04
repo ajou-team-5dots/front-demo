@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+/* Design tokens, generated from design-tokens/tokens.json (pnpm tokens). */
+@import '../styles/tokens.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,8 +17,30 @@
   --color-primary-soft: var(--primary-soft);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
-  --shadow-card: 0 18px 44px rgb(15 23 42 / 0.08);
-  --container-page: 1180px;
+  /* Figma frame width (info-design, Desktop - 1). Wider screens center it. */
+  --container-page: 1440px;
+  --color-brand: var(--brand);
+  --color-ink: var(--ink);
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-panel: var(--panel);
+  --color-chart-actual: var(--chart-actual);
+  --color-chart-comparison: var(--chart-comparison);
+  --color-chart-death: var(--chart-death);
+  --color-chart-survival: var(--chart-survival);
+  --color-chart-track: var(--chart-track);
+  --color-status-warning: var(--status-warning);
+  --color-status-danger: var(--status-danger);
+  --color-status-supported: var(--status-supported);
+  --color-status-warning-soft: var(--status-warning-soft);
+  --color-status-danger-soft: var(--status-danger-soft);
+  --color-status-supported-soft: var(--status-supported-soft);
+  --color-state-row-hover: var(--state-row-hover);
+  --color-state-chip-hover: var(--state-chip-hover);
+  --radius-panel: var(--corner-panel);
+  --radius-control: var(--corner-control);
+  --radius-pill: var(--corner-pill);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -56,45 +80,40 @@
 }
 
 :root {
-  /* UI tokens. To be replaced by the new design system. */
-  --background: #f6f8fb;
-  --foreground: #172033;
-  --card: #ffffff;
-  --card-foreground: #172033;
-  --popover: #ffffff;
-  --popover-foreground: #172033;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --primary-strong: #1d4ed8;
-  --primary-soft: #eaf2ff;
-  --secondary: #eaf2ff;
-  --secondary-foreground: #1d4ed8;
-  /* Not in the design system: a neutral between background and outline for tracks and fills. */
-  --muted: #eef2f8;
-  --muted-foreground: #5b6b84;
-  --accent: #eaf2ff;
-  --accent-foreground: #1d4ed8;
-  --destructive: #dc2626;
-  --success: #16a34a;
-  --success-soft: #e9f8ef;
-  --border: #dbe4f0;
-  --input: #dbe4f0;
-  --ring: #2563eb;
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  /* card 20px; derived: sm 12, md 16, xl 28 (panel) */
-  --radius: 1.25rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #172033;
-  --sidebar-primary: #2563eb;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eaf2ff;
-  --sidebar-accent-foreground: #1d4ed8;
-  --sidebar-border: #dbe4f0;
-  --sidebar-ring: #2563eb;
+  /* Raw values live in src/styles/tokens.css. Below: shadcn names mapped onto them. */
+  --background: var(--gray-3);
+  --foreground: var(--ink);
+  --card: var(--panel);
+  --card-foreground: var(--ink);
+  --popover: var(--panel);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand);
+  --primary-foreground: var(--ink);
+  --secondary: var(--gray-3);
+  --secondary-foreground: var(--ink);
+  --muted: var(--gray-3);
+  --muted-foreground: var(--gray-1);
+  --accent: var(--gray-3);
+  --accent-foreground: var(--ink);
+  --destructive: var(--status-danger);
+  --success: var(--chart-survival);
+  --border: var(--gray-2);
+  --input: var(--gray-2);
+  --ring: var(--ink);
+  --chart-1: var(--chart-actual);
+  --chart-2: var(--chart-comparison);
+  --chart-3: var(--chart-death);
+  --chart-4: var(--chart-survival);
+  --chart-5: var(--chart-track);
+  --radius: 0.625rem;
+  --sidebar: var(--panel);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--gray-3);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--gray-2);
+  --sidebar-ring: var(--ink);
 }
 
 .dark {
@@ -144,5 +163,127 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* Board motion. Panels fade up once when data arrives; skeletons shimmer while it loads;
+   the content dims while a filter change is in flight (data-pending on the board root). */
+@keyframes board-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@keyframes board-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes board-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@keyframes board-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@layer components {
+  .board-enter {
+    animation: board-enter var(--duration-base) var(--ease-board) both;
+  }
+  .board-enter-1 {
+    animation-delay: 60ms;
+  }
+  .board-enter-2 {
+    animation-delay: 120ms;
+  }
+  .board-pop {
+    animation: board-pop var(--duration-base) var(--ease-board) both;
+  }
+  .board-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--gray-3) 30%,
+      var(--skeleton-shine) 50%,
+      var(--gray-3) 70%
+    );
+    background-size: 200% 100%;
+    animation: board-shimmer 1.4s linear infinite;
+  }
+  .board-dim {
+    transition: opacity var(--duration-base) var(--ease-board);
+  }
+  [data-pending='true'] .board-dim {
+    opacity: var(--opacity-pending);
+  }
+  /* Shared transition for chart marks whose geometry changes between renders. */
+  .board-mark {
+    transition:
+      transform var(--duration-slow) var(--ease-board),
+      width var(--duration-slow) var(--ease-board),
+      height var(--duration-slow) var(--ease-board),
+      x var(--duration-slow) var(--ease-board),
+      y var(--duration-slow) var(--ease-board),
+      cx var(--duration-slow) var(--ease-board),
+      cy var(--duration-slow) var(--ease-board),
+      r var(--duration-fast) var(--ease-board),
+      d var(--duration-slow) var(--ease-board),
+      fill var(--duration-base) var(--ease-board),
+      stroke var(--duration-base) var(--ease-board),
+      opacity var(--duration-base) var(--ease-board);
+  }
+  .board-control {
+    transition:
+      background-color var(--duration-fast) var(--ease-board),
+      color var(--duration-fast) var(--ease-board),
+      border-color var(--duration-fast) var(--ease-board),
+      box-shadow var(--duration-fast) var(--ease-board),
+      transform var(--duration-fast) var(--ease-board);
+  }
+}
+
+/* First-show motion (panel fade-up, bar grow, line draw) plays once per visit. After that,
+   html[data-board-seen] is set and navigations only transition values, so pages don't flash. */
+html[data-board-seen] .board-enter,
+html[data-board-seen] .board-first {
+  animation: none !important;
+}
+
+/* The board's main area is fluid (1440→1920 frame). Until its width is first measured and while
+   a resize is going on, marks jump to the new geometry instead of gliding (main-width.tsx). */
+[data-board-still] *,
+[data-board-still] *::before,
+[data-board-still] *::after {
+  transition: none !important;
+}
+
+/* Skeletons appear only if loading takes longer than 200ms, so fast responses never flash. */
+@keyframes board-late {
+  from {
+    opacity: 0;
+  }
+}
+.board-skeleton-late {
+  animation: board-late var(--duration-base) var(--ease-board) 200ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

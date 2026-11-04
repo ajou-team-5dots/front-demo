@@ -18,7 +18,8 @@ AI 코딩 에이전트(Codex 등)를 위한 작업 규칙. 사람용 상세 규�
 
 ```bash
 pnpm dev            # 개발 서버
-pnpm check          # lint + format:check + typecheck. 작업 끝나면 반드시 실행
+pnpm check          # lint + format:check + typecheck + tokens:check + tokens:contrast. 작업 끝나면 반드시 실행
+pnpm tokens         # design-tokens/tokens.json → src/styles/tokens.{css,ts} 생성
 pnpm build          # 프로덕션 빌드
 pnpm lint:fix       # ESLint 자동 수정
 pnpm format         # Prettier 적용
@@ -34,7 +35,7 @@ pnpm dlx shadcn@latest add <component>   # shadcn 컴포넌트 추가
 5. 파일명 kebab-case, 컴포넌트 PascalCase, 훅 `useXxx`, 상수 UPPER_SNAKE_CASE
 6. 기본은 Server Component. 필요할 때만 `'use client'`
 7. UI 부품은 먼저 shadcn/ui에서 가져온다. `src/components/ui/`는 직접 수정하지 말고 감싸서 확장
-8. 클래스 조합은 `cn()`, 색은 CSS 변수 토큰만 (`bg-[#hex]` 금지)
+8. 클래스 조합은 `cn()`, 색은 CSS 변수 토큰만 (`bg-[#hex]` 금지). 디자인 변경(색, 불투명도, 글자 크기, 선 두께 등)은 `design-tokens/AGENTS.md`를 따른다
 9. **`any` 금지** (`unknown` + 좁히기), **객체 타입은 `interface`**, `type`은 유니온/유틸리티에만. `@ts-ignore` 금지
 10. zod 등 런타임 검증은 Server Action/Route Handler의 외부 입력에만. 계층은 components → server/actions → server/data, 별도 service/repository 계층을 만들지 않는다
 
@@ -55,6 +56,8 @@ src/components/<기능>/ 기능 컴포넌트
 src/server/data/      데이터 읽기 ('server-only')
 src/server/actions/   데이터 쓰기 ('use server')
 src/hooks/  src/lib/  src/types/
+src/styles/           디자인 토큰 생성물 (직접 수정 금지)
+design-tokens/        디자인 토큰 원본 tokens.json. 디자인 변경은 design-tokens/AGENTS.md를 따른다
 ```
 
 ## 데이터 규칙 (반드시 지킬 것)

@@ -4,3 +4,5 @@ build
 node_modules
 pnpm-lock.yaml
 next-env.d.ts
+# Batch output is kept byte-for-byte so it can be compared with the analysis run.
+data/precomputed/

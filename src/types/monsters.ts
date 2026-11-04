@@ -1,14 +1,16 @@
 // Return shapes for the monster balance board (계산 명세 5장 API, 3장 변수 이름 그대로).
-// Fields marked TODO are inferred: 5장 says the detail shape should match
-// out/screen_data/detail_<monster>.json, which we do not have yet. Confirm with analysts.
+// Matches the supplied base tables and precomputed JSON. Missing batch values remain null.
 
 /** High-activity accounts included (default) or excluded. */
 export type Heavy = 'include' | 'exclude';
 
+/** "현재 수치" drops pre-patch entities of changed monsters (DATA_SPEC 2장); "전체" keeps them. */
+export type Period = 'current' | 'all';
+
 export type MonsterRole = 'boss' | 'midboss' | 'mob';
 
 /** 3-1: deaths above the Poisson 95% point → signal, above 99.8% → strong. */
-export type DeathSignal = 'signal' | 'strong' | 'none'; // TODO: 'none' 값 이름 확인
+export type DeathSignal = 'signal' | 'strong' | 'none';
 
 /** 3-2 */
 export type H1State = 'unk' | 'yes' | 'no';
@@ -21,31 +23,34 @@ export type H3State = 'sample_short' | 'signal' | 'none';
 export interface MonsterMainRow {
   monster: string;
   role: MonsterRole;
-  grade: string; // TODO: 값 목록 확인 (weak/medium/strong?)
+  /** Grade as stored in the base table, including 'none'. */
+  grade: string;
   mainStage: number;
   enc: number;
   deaths: number;
+  /** Encounters ending in death or near death; distinct from player death records. */
+  danger: number;
   deathsPer100: number;
   /** Precomputed (4장). null until the batch has run. */
   riskVsExpected: number | null;
   signal: DeathSignal;
-  /** Precomputed (4장). TODO: 순위의 기준(오각형 종합?) 확인 */
+  /** Monster-level rank from pentagon.json. */
   pentagonRank: number | null;
   h2State: H2State | null;
   h2IntentCheck: boolean;
   /** Bosses only. */
   h3State: H3State | null;
   h3State2: H3State | null;
+  /** Boss level: h3State and h3State2 disagree on signal. Per-ability: BossSkill.criterionEffect. */
   h3CriterionEffect: boolean;
 }
 
-/** 4장 pentagon axis, precomputed. TODO: 축 키 이름 확인 */
+/** 4장 pentagon axis; the batch can leave unavailable measurements null. */
 export interface PentagonAxis {
   axis: string;
-  value: number;
-  peerMedian: number;
-  z: number;
-  rank: number;
+  value: number | null;
+  peerMedian: number | null;
+  z: number | null;
 }
 
 export type H1Condition = 'lowLevel' | 'noWeapon' | 'woodenWeapon' | 'noArmor';
@@ -62,6 +67,14 @@ export interface H1Readiness {
   ratio: number | null;
   encN: number;
   deadN: number;
+  /** Denominator of `dead` (all deaths to this monster). Optional for older callers. */
+  deadTotal?: number;
+  /** Numerator and denominator of `win`. Optional for older callers. */
+  winN?: number;
+  winTotal?: number;
+  otherEncN: number;
+  encDeadN: number;
+  otherDeadN: number;
   state: H1State;
 }
 
@@ -75,11 +88,19 @@ export interface H2Period {
   players: number;
 }
 
+export interface H2Daily extends H2Period {
+  /** Calendar day in Asia/Seoul, matching patch timestamps. */
+  date: string;
+  period: 'before' | 'after';
+}
+
 /** 3-3, one patch. */
 export interface H2Patch {
-  patchId: string; // TODO: 패치 목록(GET /patches)의 id 형식 확인
+  /** Corresponds to patches.json and the model's patch key. */
+  patchId: string;
   before: H2Period;
   after: H2Period;
+  daily: H2Daily[];
   sampleOk: boolean;
   /** Precomputed logistic-regression ratio (4장), only when sampleOk. */
   sameCondition: { or: number; lo: number; hi: number } | null;
@@ -87,7 +108,7 @@ export interface H2Patch {
   netOfComparator: number | null;
   state: H2State;
   intentCheck: boolean;
-  /** Group value sent along when a changed monster is sample_short. TODO: 모양 확인 */
+  /** Unavailable until the analysis spec supplies a group calculation or batch value. */
   groupReference: number | null;
 }
 
@@ -96,7 +117,7 @@ export interface Aux1Unanswered {
   unanswered: number;
   deaths: number;
   unansweredShare: number;
-  sampleShort: boolean; // TODO: 응답에서 sample_short를 어떻게 표시하는지 확인
+  sampleShort: boolean;
 }
 
 /** 3-6 (screen shows bosses only) */
@@ -104,7 +125,7 @@ export interface Aux2BigHit {
   hitEnc: number;
   bigHit: number;
   bigHitShare: number;
-  sampleShort: boolean; // TODO: 위와 같음
+  sampleShort: boolean;
 }
 
 /** 3-4, one window (5 s or 2 s). Spec names carry a _w suffix per window; here the window is the key. */
@@ -138,6 +159,10 @@ export interface BossSkill {
 /** GET /monsters/{monster} */
 export interface MonsterDetail {
   monster: string;
+  enc: number;
+  deaths: number;
+  riskVsExpected: number | null;
+  pentagonRank: number | null;
   pentagon: PentagonAxis[];
   H1_readiness: H1Readiness[];
   H2_patch: H2Patch[];
