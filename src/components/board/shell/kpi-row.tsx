@@ -6,8 +6,6 @@ interface Kpi {
   value: string;
   /** Unit drawn small and gray after the number ("건", "배"). */
   unit?: string;
-  /** Comparison line under the value, e.g. "36종 중 2위". */
-  sub?: string;
   /** Full meaning for the hover title, e.g. "기대 대비 위험 (던전 단계 반영)". */
   title?: string;
 }
@@ -18,14 +16,14 @@ interface KpiRowProps {
   className?: string;
 }
 
-// A white 456×88 box (radius 10, no border) at the right end of the detail's title row: three
-// equal columns of label (12 SemiBold gray-1), value (32 Bold ink, tabular) with its unit
-// (16 gray-1), and a comparison line (11 gray-1). The values fade in when they change.
+// A white box (size.kpi-box, radius 10, no border) at the right end of the detail's title row:
+// three equal columns of label (12 SemiBold gray-1) over value (32 Bold ink, tabular) with its
+// unit (16 gray-1). The values fade in when they change.
 export function KpiRow({ items, className }: KpiRowProps) {
   return (
     <dl
       className={cn(
-        'board-enter grid h-[88px] w-[456px] shrink-0 grid-cols-3 gap-4 rounded-panel bg-panel px-4 py-2.5 tabular-nums',
+        'board-enter grid h-(--size-kpi-box-h) w-(--size-kpi-box-w) shrink-0 grid-cols-3 content-center gap-4 rounded-panel bg-panel px-4 tabular-nums',
         className,
       )}
     >
@@ -37,7 +35,7 @@ export function KpiRow({ items, className }: KpiRowProps) {
           <dd className="mt-0.5 leading-9 text-ink">
             <span
               key={k.value}
-              className="board-swap inline-block text-(length:--font-size-kpi) font-bold tracking-tight"
+              className="board-swap inline-block text-(length:--font-size-kpi) font-bold"
             >
               {k.value}
             </span>
@@ -47,11 +45,6 @@ export function KpiRow({ items, className }: KpiRowProps) {
               </span>
             ) : null}
           </dd>
-          {k.sub ? (
-            <dd className="mt-0.5 text-(length:--font-size-caption) leading-[13px] font-semibold text-gray-1">
-              {k.sub}
-            </dd>
-          ) : null}
         </div>
       ))}
     </dl>

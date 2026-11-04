@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { boardHref } from '@/lib/board-filters';
-import { pickChips, roleLabel, type KpiRanks } from '@/lib/board-rows';
+import { pickChips, roleLabel } from '@/lib/board-rows';
 import type { BoardFilters, DailyPoint, FlowPick, PatchInfo } from '@/types/board';
 import type { H2Patch, MonsterDetail as MonsterDetailData, MonsterMainRow } from '@/types/monsters';
 
@@ -24,7 +24,7 @@ interface MonsterDetailProps {
   patches: H2Patch[];
   patchList: PatchInfo[];
   trend: DailyPoint[];
-  /** "10/12 - 10/22" */
+  /** "10/12–10/22" (dayRange) */
   rangeLabel: string;
   filters: BoardFilters;
   pick: FlowPick;
@@ -32,8 +32,6 @@ interface MonsterDetailProps {
   rankOf: number;
   /** Defaults to the real board ('/'); dev previews pass their own path. */
   hrefFor?: BoardHrefFor;
-  /** Where the monster stands in the batch per KPI (the KPI box's comparison line). */
-  ranks?: KpiRanks;
 }
 
 interface TitleRowProps {
@@ -44,11 +42,11 @@ interface TitleRowProps {
   kpi?: ReactNode;
 }
 
-// Name and meta on the left, the 380×66 KPI box at the right end of the same row. No close
+// Name and meta on the left, the KPI box (size.kpi-box) at the right end of the same row. No close
 // button: the open row in the sidebar (or Esc) returns to the overview.
 function TitleRow({ monster, meta, sub, kpi }: TitleRowProps) {
   return (
-    <div className="flex h-[88px] shrink-0 items-center justify-between gap-6 pl-4">
+    <div className="flex h-(--size-kpi-box-h) shrink-0 items-center justify-between gap-6 pl-4">
       <div className="flex min-w-0 items-center gap-[22px]">
         <h1
           tabIndex={-1}
@@ -108,7 +106,6 @@ export function MonsterDetail({
   pick,
   rankOf,
   hrefFor = defaultHref(filters),
-  ranks,
 }: MonsterDetailProps) {
   // H3 is computed for bosses only (DATA_SPEC 5장); midbosses get H3_bossSkill null and no
   // panel. A boss with no skill records gets an empty panel that says 기술 기록 없음.
@@ -135,18 +132,15 @@ export function MonsterDetail({
                 label: '사망',
                 value: row.deaths.toLocaleString('ko-KR'),
                 unit: '건',
-                sub: ranks ? `${ranks.of}종 중 ${ranks.deaths}위` : undefined,
               },
               {
                 label: '교전',
                 value: row.enc.toLocaleString('ko-KR'),
                 unit: '건',
-                sub: ranks ? `${ranks.of}종 중 ${ranks.enc}위` : undefined,
               },
               {
                 label: '기대 대비 위험',
                 ...riskKpi(row.riskVsExpected, row.deaths),
-                sub: ranks && ranks.risk !== null ? `${ranks.of}종 중 ${ranks.risk}위` : undefined,
                 title: `기대 대비 위험 (던전 단계 반영). 1배보다 크면 같은 단계 기대보다 위험이 높습니다.${
                   row.riskVsExpected === 0 && row.deaths === 0
                     ? ' 사망이 없어 배수를 계산하지 않습니다.'
@@ -157,7 +151,7 @@ export function MonsterDetail({
           />
         }
       />
-      <div className="flex h-[380px] gap-(--space-panel-gap)">
+      <div className="flex h-[340px] gap-(--space-panel-gap)">
         <div className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]">
           <Pentagon
             axes={detail.pentagon}

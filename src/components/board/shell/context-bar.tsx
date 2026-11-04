@@ -44,7 +44,8 @@ export function ContextBar({ rangeLabel, filters, shown, monster }: ContextBarPr
     filters.q ? `"${filters.q}"` : null,
   ].filter((v): v is string => Boolean(v));
   return (
-    <p
+    <div
+      role="group"
       aria-label="지금 보는 범위"
       className="flex h-[34px] min-w-0 items-center gap-2.5 px-4 text-(length:--font-size-label) leading-none font-medium tabular-nums"
     >
@@ -67,6 +68,6 @@ export function ContextBar({ rangeLabel, filters, shown, monster }: ContextBarPr
           <Item label="선택">{monster}</Item>
         </>
       ) : null}
-    </p>
+    </div>
   );
 }

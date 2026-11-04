@@ -90,7 +90,7 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `color.chart.death`                               | `--chart-death`      | 사망 막대, 사망 점, 산점도 2배 선                         |
 | `color.chart.survival`                            | `--chart-survival`   | 생존 막대, 처치 점                                        |
 | `color.chart.track`                               | `--chart-track`      | 격자, 기준선                                              |
-| `color.chart.track-bar`                           | `--chart-track-bar`  | 비율·기술 막대의 빈 부분 (track 55%, 더 옅게)             |
+| `color.chart.track-bar`                           | `--chart-track-bar`  | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)           |
 | `color.chart.accent/earth/violet`                 | `--chart-accent` 등  | 흐름도 칸 색의 재료                                       |
 | `color.chart.neutral`                             | `--chart-neutral`    | 산점도 1배 미만 점, 흐름도 순서 밖 칸                     |
 | `color.status.*`                                  | `--status-*`         | 배지 글자 (점검 신호, 표본 부족, 가설 지지)               |
@@ -163,9 +163,9 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `stroke.point.vertex`          | 6    | 오각형 꼭짓점                                            |
 | `stroke.point.vertex-hover`    | 7.5  | 오각형 가리킨 꼭짓점                                     |
 | `stroke.point.vertex-ring`     | 10   | 오각형 축 끝을 넘은 값 고리                              |
-| `stroke.point.trend`           | 4.5  | 패치 추이 점                                             |
-| `stroke.point.trend-thin`      | 3.5  | 패치 추이 빈 점 (교전 적은 날)                           |
-| `stroke.point.estimate`        | 7    | 같은 조건 위험 배수 점                                   |
+| `stroke.point.trend`           | 5.5  | 패치 추이 점                                             |
+| `stroke.point.trend-thin`      | 4.5  | 패치 추이 빈 점 (교전 적은 날)                           |
+| `stroke.point.estimate`        | 8    | 같은 조건 위험 배수 점                                   |
 
 ### 크기, 모서리, 간격
 
@@ -180,6 +180,10 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                          |
 | `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                         |
 | `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                  |
+| `size.icon.search`       | 14  | 필터 바 몬스터 검색 돋보기 아이콘                |
+| `size.panel-header`      | 30  | 모든 패널 머리 줄 높이                           |
+| `size.kpi-box.w`         | 420 | 상세 KPI 상자 너비                               |
+| `size.kpi-box.h`         | 72  | 상세 KPI 상자 높이 = 제목 줄 높이                |
 | `size.sankey.node-width` | 14  | 흐름도 칸 너비                                   |
 | `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                              |
 | `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                            |

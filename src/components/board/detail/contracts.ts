@@ -11,7 +11,7 @@ import type {
   PentagonAxis,
 } from '@/types/monsters';
 
-/** Figma 25:114, titled "전투 양상"; in the detail column 340×380, 360×380 from a 1200 main area. */
+/** Figma 25:114, titled "전투 양상"; in the detail column 340×340, 360×340 from a 1200 main area. */
 export interface PentagonProps {
   axes: PentagonAxis[];
   /** Overall rank, null when not computed. */
@@ -22,7 +22,7 @@ export interface PentagonProps {
   note?: string;
 }
 
-/** Figma 38:463 "준비 조건별 비중" (rest of the row beside the pentagon, 380 tall) + "반격하지 못한 사망" + "한 번에 큰 피해를 받은 교전". */
+/** Figma 38:463 "준비 조건별 비중" (rest of the row beside the pentagon, 340 tall) + "반격하지 못한 사망" + "한 번에 큰 피해를 받은 교전". */
 export interface ReadinessPanelProps {
   h1: H1Readiness[];
   aux1: Aux1Unanswered;
@@ -49,7 +49,7 @@ export interface PickedFlowRowProps {
   chips: { label: string; removeHref: string }[];
 }
 
-/** Figma 38:642 "보스 기술 직후 사망" (bosses only), full detail width × 365. */
+/** Figma 38:642 "보스 기술 직후 사망" (bosses only), full detail width, as tall as its skill rows. */
 export interface SkillWindowProps {
   skills: BossSkill[];
 }

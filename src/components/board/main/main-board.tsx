@@ -18,6 +18,7 @@ import { Panel } from '@/components/board/shell/panel';
 import { MainWidthProvider, useMeasuredWidth } from '@/components/board/shell/main-width';
 import { boardHref, monsterOfHref, toggleHref } from '@/lib/board-filters';
 import { pickChips } from '@/lib/board-rows';
+import { cn } from '@/lib/utils';
 import { SPACE } from '@/styles/tokens';
 import type { BoardFilters, FlowData, FlowKey, FlowPick } from '@/types/board';
 import type { MonsterMainRow } from '@/types/monsters';
@@ -55,11 +56,11 @@ interface SharedHover {
 // A list row, a scatter mark or Enter opens a monster (?m=); the open one again, or Esc, closes.
 const SIDEBAR_W = 320;
 const GAP = SPACE.panelGap;
-/** Scatter and flow panel heights (h-[678px] / h-[440px] below). */
-const SCATTER_H = 678;
-const FLOW_H = 440;
-/** Board height: the overview's two panels. The sidebar and the main viewport match it. */
-export const BOARD_H = SCATTER_H + GAP + FLOW_H;
+// Board height: whichever slot is shown sets it (the overview's two panels, 678 + 14 + 440, or
+// the detail's own content), and the sidebar stretches to it, so the sidebar's bottom edge is
+// always the bottom edge of the main column's last panel. The slot that is not shown is taken
+// out of flow (absolute, at its own track position) and clipped; the switch happens when the
+// slide starts, so nothing moves after it ends. The sidebar list scrolls inside itself.
 const PANEL_X = SPACE.panelInset;
 const SUMMARY_RIGHT = 12;
 const SUMMARY_W = 144;
@@ -72,6 +73,8 @@ const SANKEY_REST = PANEL_X + SUMMARY_RIGHT + SUMMARY_W + SANKEY_SUMMARY_GAP;
  */
 const TRACK_W = `calc(200% + ${GAP}px)`;
 const SLOT_W = `calc(50% - ${GAP / 2}px)`;
+/** The detail slot's place on the track: one slot and the gap from its left edge. */
+const DETAIL_X = `calc(50% + ${GAP / 2}px)`;
 const TRACK_OPEN = `translateX(calc(-50% - ${GAP / 2}px))`;
 const SLIDE = 'transform var(--duration-slow) var(--ease-board)';
 
@@ -195,7 +198,6 @@ export function MainBoard({
     shownMonster.current = monster;
     if (before === monster) return;
     if (monster && !before) {
-      detailRef.current?.scrollTo({ top: 0 });
       detailRef.current
         ?.querySelector<HTMLElement>('[data-detail-title]')
         ?.focus({ preventScroll: true });
@@ -216,8 +218,8 @@ export function MainBoard({
 
   return (
     <div
-      className="flex"
-      style={{ gap: GAP, height: BOARD_H }}
+      className="flex items-stretch"
+      style={{ gap: GAP }}
       data-board-still={settled ? undefined : ''}
     >
       <div ref={sidebarRef} data-board-sidebar className="shrink-0" style={{ width: SIDEBAR_W }}>
@@ -253,14 +255,10 @@ export function MainBoard({
       </div>
 
       {/* overflow: clip (not hidden) so focus or find-in-page can never scroll the track. */}
-      <div
-        ref={mainRef}
-        className="relative min-w-0 flex-1 overflow-clip"
-        style={{ height: BOARD_H }}
-      >
+      <div ref={mainRef} className="relative min-w-0 flex-1 overflow-clip">
         <MainWidthProvider value={mainW}>
           <div
-            className="flex h-full"
+            className="relative flex items-start"
             style={{
               gap: GAP,
               width: TRACK_W,
@@ -269,7 +267,7 @@ export function MainBoard({
             }}
           >
             <div
-              className="flex shrink-0 flex-col"
+              className={cn('flex shrink-0 flex-col', open && 'absolute top-0 left-0')}
               style={{ width: SLOT_W, gap: GAP }}
               inert={open}
             >
@@ -340,11 +338,15 @@ export function MainBoard({
                     excludedDeaths={flow.excluded?.deaths ?? 0}
                   />
                 </div>
-                {chips.length ? (
-                  <div className="absolute bottom-3 left-3">
+                <div className="absolute bottom-3 left-3">
+                  {chips.length ? (
                     <FlowChips chips={chips} />
-                  </div>
-                ) : null}
+                  ) : (
+                    <p className="flex h-7 items-center text-(length:--font-size-label) font-medium text-gray-1">
+                      칸을 누르면 여기에 조건이 쌓입니다
+                    </p>
+                  )}
+                </div>
               </Panel>
             </div>
             {/* A size container: the detail switches to its wide arrangement from 1200. */}
@@ -352,8 +354,10 @@ export function MainBoard({
               ref={detailRef}
               role="region"
               aria-label={monster ? `${monster} 상세` : '몬스터 상세'}
-              className="@container h-full shrink-0 overflow-y-auto overscroll-contain"
-              style={{ width: SLOT_W }}
+              className={cn('@container shrink-0', !open && 'absolute top-0')}
+              style={
+                open ? { width: SLOT_W, marginLeft: DETAIL_X } : { width: SLOT_W, left: DETAIL_X }
+              }
               inert={!open}
             >
               {shownDetail}

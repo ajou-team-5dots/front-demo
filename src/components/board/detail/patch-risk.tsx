@@ -6,10 +6,12 @@ import { FONT_SIZE, OPACITY, RADIUS, SIZE, STROKE } from '@/styles/tokens';
 import type { DailyPoint, PatchInfo } from '@/types/board';
 import type { H2Patch, H2Period } from '@/types/monsters';
 
+import { textWidth } from '../main/focus-scatter-geom';
 import { BoardSelect } from '../shell/board-select';
 import { useChartTooltip } from '../shell/chart-tooltip';
 import { EmptyState } from '../shell/empty-state';
 import { Panel } from '../shell/panel';
+import { LegendItem, LineSwatch } from '../shell/panel-header';
 import { useTween } from '../shell/use-tween';
 import type { PatchRiskProps } from './contracts';
 import { DetailMotion, EASE, SLOW } from './detail-motion';
@@ -69,15 +71,45 @@ const sumAvg = (pts: DailyPoint[]): Avg | null => {
   return enc > 0 ? { value: (events / enc) * 100, events, enc } : null;
 };
 
+interface TrendSummary {
+  before: Avg | null;
+  after: Avg | null;
+  /** Some plotted day has fewer than THIN_ENC encounters (hollow point, faint line). */
+  anyThin: boolean;
+}
+
+/** The before/after averages of the patch (when it falls inside the trend) and the thin-day flag. */
+function summarize(trend: DailyPoint[], patch: PatchInfo | undefined, h2: H2Patch | undefined) {
+  const days = [...trend].sort((a, b) => a.day.localeCompare(b.day));
+  const out: TrendSummary = {
+    before: null,
+    after: null,
+    anyThin: days.some((d) => d.enc > 0 && d.enc < THIN_ENC),
+  };
+  if (!patch || days.length === 0) return out;
+  const first = days[0].day;
+  const span = Math.max(1, dayIndex(days[days.length - 1].day, first) + 1);
+  const idx = dayIndex(kstDay(patch.ts), first) + kstDayFraction(patch.ts);
+  if (idx < 0 || idx > span) return out;
+  const patchDay = kstDay(patch.ts);
+  out.before = h2 ? periodAvg(h2.before) : sumAvg(days.filter((d) => d.day < patchDay));
+  out.after = h2 ? periodAvg(h2.after) : sumAvg(days.filter((d) => d.day > patchDay));
+  return out;
+}
+
 const avgText = (b: Avg, a: Avg) =>
   `평균 패치 전 ${b.value.toFixed(1)} (${num(b.events)}/${num(b.enc)}) → 패치 후 ${a.value.toFixed(1)} (${num(a.events)}/${num(a.enc)})`;
 
-/** The trend's two legend lines (series, then the before/after averages) take this much. */
-const LEGEND_EXTRA = 15;
+/** Where an average label is drawn. */
+interface Spot {
+  x: number;
+  y: number;
+  anchor: 'start' | 'end';
+}
 
-function Trend({ trend, patch, h2, picked, width: TW, height, show, hide }: TrendProps) {
-  // The averages get their own legend line (the trend is narrower beside the ratio column).
-  const TH = height - LEGEND_EXTRA;
+function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: TrendProps) {
+  // Series key, thin-day key and the average key are in the panel header legend; the averages'
+  // values are direct labels on their lines.
   const days = [...trend].sort((a, b) => a.day.localeCompare(b.day));
   const first = days[0].day;
   const span = Math.max(1, dayIndex(days[days.length - 1].day, first) + 1);
@@ -90,13 +122,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height, show, hide }: Tren
   const patchInRange = patchIdx !== null && patchIdx >= 0 && patchIdx <= span;
   const patchX = patchInRange && patchIdx !== null ? xAt(patchIdx) : null;
 
-  let before: Avg | null = null;
-  let after: Avg | null = null;
-  if (patch && patchInRange) {
-    const patchDay = kstDay(patch.ts);
-    before = h2 ? periodAvg(h2.before) : sumAvg(days.filter((d) => d.day < patchDay));
-    after = h2 ? periodAvg(h2.after) : sumAvg(days.filter((d) => d.day > patchDay));
-  }
+  const { before, after } = summarize(trend, patch, h2);
 
   const maxV = Math.max(...days.map(risk), before?.value ?? 0, after?.value ?? 0);
   const yMax = niceCeil(maxV * 1.1);
@@ -130,39 +156,50 @@ function Trend({ trend, patch, h2, picked, width: TW, height, show, hide }: Tren
     .join(' ');
   const labelEvery = Math.ceil(days.length / 11);
   const beforeD = patchXT !== null && before ? `M${M.l},${beforeY} H${patchXT}` : null;
+  // Average labels go at an end of their own segment, above or below the dashed line: the first
+  // of right-above, right-below, left-above, left-below whose box clears every point and the
+  // trend line (sampled along each segment), so a label never sits on the data.
+  const beforeText = before ? `패치 전 평균 ${before.value.toFixed(1)}` : '';
+  const afterText = after ? `패치 후 평균 ${after.value.toFixed(1)}` : '';
+  const pad = STROKE.point.trend + 2;
+  const samples = pts.flatMap((d, i) => {
+    const x = xDay(d.day);
+    const y = yDay(d);
+    const next = pts[i + 1];
+    if (!next) return [[x, y]];
+    const nx = xDay(next.day);
+    const ny = yDay(next);
+    const n = Math.max(1, Math.ceil(Math.hypot(nx - x, ny - y) / 3));
+    return Array.from({ length: n }, (_, k) => [x + ((nx - x) * k) / n, y + ((ny - y) * k) / n]);
+  });
+  const clear = (x1: number, x2: number, y1: number, y2: number) =>
+    !samples.some(([px, py]) => px + pad > x1 && px - pad < x2 && py + pad > y1 && py - pad < y2);
+  const place = (text: string, lineY: number, left: number, right: number): Spot => {
+    const w = textWidth(text, FONT_SIZE.caption);
+    const top = M.t + FONT_SIZE.caption;
+    const bottom = M.t + innerH - 2;
+    // Nearest first: just above or below the line, then a row further out each way.
+    const ys = [-5, FONT_SIZE.caption + 3, -5 - 14, FONT_SIZE.caption + 3 + 14, -5 - 28]
+      .map((dy) => lineY + dy)
+      .filter((y) => y >= top && y <= bottom);
+    const spots: Spot[] = ys.flatMap((y) => [
+      { x: right, y, anchor: 'end' as const },
+      { x: left, y, anchor: 'start' as const },
+    ]);
+    const box = (sp: Spot) => {
+      const x1 = sp.anchor === 'end' ? sp.x - w : sp.x;
+      return [x1, x1 + w, sp.y - FONT_SIZE.caption, sp.y + 2] as const;
+    };
+    return (
+      spots.find((sp) => clear(...box(sp))) ?? spots[0] ?? { x: right, y: lineY - 5, anchor: 'end' }
+    );
+  };
+  const beforeSpot = patchXT === null ? null : place(beforeText, beforeY, M.l + 4, patchXT - 6);
+  const afterSpot = patchXT === null ? null : place(afterText, afterY, patchXT + 6, TW - M.r - 4);
   const afterD = patchXT !== null && after ? `M${patchXT},${afterY} H${TW - M.r}` : null;
 
   return (
     <div className="flex flex-col" style={{ width: TW }}>
-      <div className="flex h-[29px] flex-col justify-between text-(length:--font-size-caption) leading-[13px] font-semibold whitespace-nowrap">
-        <span className="flex items-center gap-2 text-gray-1">
-          100교전당 위험 사건 (사망 + 빈사)
-          {picked ? (
-            <span className="board-pop board-first rounded-control bg-gray-3 px-1.5 text-ink">
-              선택한 흐름 기준
-            </span>
-          ) : null}
-          {anyThin ? <span>· 속 빈 점 = 교전 {THIN_ENC}건 미만 (선도 옅게)</span> : null}
-        </span>
-        {before && after ? (
-          <span className="flex min-w-0 items-center gap-1.5 self-start text-ink tabular-nums">
-            <svg aria-hidden width={16} height={4} className="shrink-0">
-              <line
-                x1={0}
-                x2={16}
-                y1={2}
-                y2={2}
-                stroke="var(--chart-comparison)"
-                strokeWidth={STROKE.width.regular}
-                strokeDasharray="5 3"
-              />
-            </svg>
-            <span className="truncate" title={avgText(before, after)}>
-              {avgText(before, after)}
-            </span>
-          </span>
-        ) : null}
-      </div>
       <svg
         width={TW}
         height={TH}
@@ -173,7 +210,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height, show, hide }: Tren
             ? `, 패치 전 ${before.value.toFixed(1)}, 패치 후 ${after.value.toFixed(1)}`
             : ''
         }`}
-        className="mt-1 overflow-visible"
+        className="overflow-visible"
       >
         {[0, yMax / 2, yMax].map((t) => (
           <g key={t}>
@@ -234,6 +271,40 @@ function Trend({ trend, patch, h2, picked, width: TW, height, show, hide }: Tren
             strokeWidth={STROKE.width.regular}
             strokeDasharray="5 3"
           />
+        ) : null}
+        {beforeD && before ? (
+          <text
+            x={beforeSpot?.x}
+            y={beforeSpot?.y}
+            textAnchor={beforeSpot?.anchor}
+            fontSize={FONT_SIZE.caption}
+            fontWeight={600}
+            fill="var(--chart-comparison)"
+            stroke="var(--panel)"
+            strokeWidth={STROKE.width.halo}
+            strokeLinejoin="round"
+            className="tabular-nums"
+            style={{ paintOrder: 'stroke fill' }}
+          >
+            {beforeText}
+          </text>
+        ) : null}
+        {afterD && after ? (
+          <text
+            x={afterSpot?.x}
+            y={afterSpot?.y}
+            textAnchor={afterSpot?.anchor}
+            fontSize={FONT_SIZE.caption}
+            fontWeight={600}
+            fill="var(--chart-comparison)"
+            stroke="var(--panel)"
+            strokeWidth={STROKE.width.halo}
+            strokeLinejoin="round"
+            className="tabular-nums"
+            style={{ paintOrder: 'stroke fill' }}
+          >
+            {afterText}
+          </text>
         ) : null}
         {patchXT !== null && patch ? (
           <g data-patch-x={patchXT} transform={`translate(${patchXT} 0)`}>
@@ -479,7 +550,7 @@ function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
   return (
     <div className="flex flex-col" style={{ width: SIDE_W }}>
       {/* What the ratio means (HINT) is in the panel's ⓘ. */}
-      <h3 className="text-(length:--font-size-body) leading-[17px] font-semibold text-ink">
+      <h3 className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1">
         같은 조건 위험 배수
       </h3>
       {sc ? (
@@ -572,8 +643,8 @@ function SidePanel({ patch, h2, picked, compact, show, hide }: SidePanelProps) {
 const H_CHANGED = 332;
 const H_UNCHANGED = 240;
 /** Trend SVG heights that fill those panels. */
-const TH_CHANGED = 226;
-const TH_UNCHANGED = 134;
+const TH_CHANGED = 262;
+const TH_UNCHANGED = 170;
 
 // Figma 38:448 / 38:595: title + patch select (150×30 at 138/9), patch label, trend + ratio.
 export function PatchRisk({
@@ -594,6 +665,9 @@ export function PatchRisk({
   const patch = patchList.find((p) => p.id === patchId);
   const h2 = patches.find((h) => h.patchId === patchId);
   const changed = patch ? patch.changed.includes(monster) : true;
+  const hasTrend = !trend.every((d) => d.enc === 0);
+  // Same averages the trend draws (with picked cells they come from the filtered trend).
+  const sum = summarize(trend, patch, picked ? undefined : h2);
 
   return (
     <div
@@ -610,22 +684,95 @@ export function PatchRisk({
         meta={patch ? patch.label : undefined}
         info={
           <>
-            {changed ? null : <p>수치 미변경 · 패치 효과로 해석하지 않음</p>}
-            <p className={changed ? undefined : 'mt-1'}>
+            {changed ? null : <p className="mb-1">수치 미변경 · 패치 효과로 해석하지 않음</p>}
+            <p>
+              <span className="font-semibold">100교전당 위험 사건</span>{' '}
+              <span className="text-gray-1">· 사망 + 빈사</span>
+            </p>
+            {sum.before && sum.after ? (
+              <p>
+                <span className="font-semibold">평균</span>{' '}
+                <span className="text-gray-1">· {avgText(sum.before, sum.after)}</span>
+              </p>
+            ) : null}
+            {sum.anyThin ? (
+              <p>
+                <span className="font-semibold">속 빈 점</span>{' '}
+                <span className="text-gray-1">· 교전 {THIN_ENC}건 미만 (선도 옅게)</span>
+              </p>
+            ) : null}
+            <p className="mt-1">
               <span className="font-semibold">같은 조건 위험 배수</span>{' '}
               <span className="text-gray-1">· {HINT}</span>
             </p>
           </>
         }
+        legend={
+          hasTrend ? (
+            <>
+              <LegendItem
+                swatch={<LineSwatch color="var(--chart-actual)" width={STROKE.width.bold} />}
+              >
+                100교전당 위험 사건
+              </LegendItem>
+              {sum.before && sum.after ? (
+                <LegendItem
+                  swatch={
+                    <LineSwatch
+                      color="var(--chart-comparison)"
+                      width={STROKE.width.regular}
+                      dash="5 3"
+                    />
+                  }
+                >
+                  패치 전·후 평균
+                </LegendItem>
+              ) : null}
+              {sum.anyThin ? (
+                <LegendItem
+                  swatch={
+                    <svg
+                      aria-hidden
+                      width={2 * STROKE.point.trendThin + 2}
+                      height={2 * STROKE.point.trendThin + 2}
+                      className="shrink-0"
+                    >
+                      <circle
+                        cx={STROKE.point.trendThin + 1}
+                        cy={STROKE.point.trendThin + 1}
+                        r={STROKE.point.trendThin}
+                        fill="var(--panel)"
+                        stroke="var(--chart-actual)"
+                        strokeOpacity={OPACITY.point.thin}
+                        strokeWidth={STROKE.width.regular}
+                      />
+                    </svg>
+                  }
+                >
+                  교전 {THIN_ENC}건 미만
+                </LegendItem>
+              ) : null}
+            </>
+          ) : undefined
+        }
         chips={
-          changed ? undefined : (
-            <SignalBadge
-              tone="warning"
-              className="board-pop board-first"
-              title="수치 미변경 · 패치 효과로 해석하지 않음"
-            >
-              수치 미변경
-            </SignalBadge>
+          changed && !picked ? undefined : (
+            <>
+              {changed ? null : (
+                <SignalBadge
+                  tone="warning"
+                  className="board-pop board-first"
+                  title="수치 미변경 · 패치 효과로 해석하지 않음"
+                >
+                  수치 미변경
+                </SignalBadge>
+              )}
+              {picked ? (
+                <span className="board-pop board-first inline-flex h-5 items-center rounded-pill bg-gray-3 px-1.5 text-(length:--font-size-caption) font-semibold whitespace-nowrap text-ink">
+                  선택한 흐름 기준
+                </span>
+              ) : null}
+            </>
           )
         }
         controls={
@@ -643,7 +790,7 @@ export function PatchRisk({
       >
         <div className="mt-3 flex" style={{ gap: COL_GAP }}>
           <div className="flex shrink-0" style={{ width: trendW }}>
-            {trend.every((d) => d.enc === 0) ? (
+            {!hasTrend ? (
               <EmptyState>{picked ? '선택한 조건의 교전 없음' : '일별 기록 없음'}</EmptyState>
             ) : (
               // With picked flow cells the H2 periods (all encounters) would not match the

@@ -1,5 +1,6 @@
 'use client';
 
+import { Search } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { MONSTER_GROUPS, toQuery } from '@/lib/board-filters';
@@ -181,15 +182,21 @@ export function FilterBar({
         onChange={(v) => go({ heavy: v })}
       />
       {variant === 'main' ? (
-        <input
-          id="filter-q"
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="몬스터 검색"
-          aria-label="몬스터 검색"
-          className="board-control ml-auto h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel px-[9px] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
-        />
+        <div className="relative ml-auto">
+          <Search
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 left-[9px] size-(--size-icon-search) -translate-y-1/2 text-gray-1"
+          />
+          <input
+            id="filter-q"
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="몬스터 검색"
+            aria-label="몬스터 검색"
+            className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-[9px] pl-[29px] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
+          />
+        </div>
       ) : null}
     </div>
   );

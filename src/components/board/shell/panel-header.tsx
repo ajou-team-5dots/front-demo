@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
+import { SIZE } from '@/styles/tokens';
 
 import { InfoTip } from './info-tip';
 
@@ -25,8 +26,8 @@ const META =
 const LEGEND =
   'flex items-center gap-3 text-(length:--font-size-label) font-medium whitespace-nowrap text-gray-1';
 
-// One header grammar for every panel, always in this order on one 30px row:
-//   title · secondary figure · legend · ⓘ · warning chips ............ controls
+// One header grammar for every panel, always in this order on one row (size.panel-header):
+//   title · secondary figure · ⓘ · legend · warning chips ............ controls
 export function PanelHeader({
   title,
   meta,
@@ -37,17 +38,19 @@ export function PanelHeader({
   className,
 }: PanelHeaderProps) {
   return (
-    <div className={cn('flex h-[30px] min-w-0 shrink-0 items-center gap-3', className)}>
+    <div
+      className={cn('flex h-(--size-panel-header) min-w-0 shrink-0 items-center gap-3', className)}
+    >
       <h2 className="shrink-0 text-(length:--font-size-title) leading-6 font-semibold whitespace-nowrap text-ink">
         {title}
       </h2>
       {meta ? <span className={META}>{meta}</span> : null}
-      {legend ? <div className={LEGEND}>{legend}</div> : null}
       {info ? (
         <span className="-ml-1.5 flex">
           <InfoTip label={title}>{info}</InfoTip>
         </span>
       ) : null}
+      {legend ? <div className={LEGEND}>{legend}</div> : null}
       {chips ? <div className="flex min-w-0 items-center gap-1.5">{chips}</div> : null}
       {controls ? <div className="ml-auto flex shrink-0 items-center gap-3">{controls}</div> : null}
     </div>
@@ -66,5 +69,38 @@ export function LegendItem({ swatch, children }: LegendItemProps) {
       {swatch}
       {children}
     </span>
+  );
+}
+
+interface PanelLegendProps {
+  children: ReactNode;
+  className?: string;
+}
+
+/** A legend on its own row under the header, for panels too narrow to hold it in the header row. */
+export function PanelLegend({ children, className }: PanelLegendProps) {
+  return <div className={cn(LEGEND, 'h-5', className)}>{children}</div>;
+}
+
+interface LineSwatchProps {
+  color: string;
+  width: number;
+  dash?: string;
+}
+
+/** A short line key for line-chart legends (solid or dashed). */
+export function LineSwatch({ color, width, dash }: LineSwatchProps) {
+  return (
+    <svg aria-hidden width={SIZE.legend.swatchW} height={4} className="shrink-0">
+      <line
+        x1={0}
+        x2={SIZE.legend.swatchW}
+        y1={2}
+        y2={2}
+        stroke={color}
+        strokeWidth={width}
+        strokeDasharray={dash}
+      />
+    </svg>
   );
 }

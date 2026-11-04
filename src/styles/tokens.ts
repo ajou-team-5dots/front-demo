@@ -144,9 +144,9 @@ export const STROKE = {
     vertex: 6,
     vertexHover: 7.5,
     vertexRing: 10,
-    trend: 4.5,
-    trendThin: 3.5,
-    estimate: 7,
+    trend: 5.5,
+    trendThin: 4.5,
+    estimate: 8,
   },
 } as const;
 
@@ -173,6 +173,12 @@ export const SIZE = {
   },
   icon: {
     info: 15,
+    search: 14,
+  },
+  panelHeader: 30,
+  kpiBox: {
+    w: 420,
+    h: 72,
   },
 } as const;
 
@@ -334,10 +340,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'color.chart.track-bar',
     type: 'color',
     cssVar: '--chart-track-bar',
-    css: 'color-mix(in oklab, var(--chart-track) 55%, var(--panel))',
+    css: 'color-mix(in oklab, var(--chart-track) 80%, var(--panel))',
     value: '#e7ecf3',
     description:
-      '비율·기술 막대의 빈 부분(트랙). track 보다 옅게 해서 빈 자리가 값 막대보다 눈에 띄지 않게. 제약: 패널 위에서 겨우 보일 만큼 (그래픽 대비 대상 아님)',
+      '비율·기술 막대의 빈 부분(트랙). track 보다 조금 옅게(패널 대비 약 1.15:1) 해서 빈 자리가 값 막대보다 눈에 띄지 않게. 제약: 패널 위에서 보일 만큼 (그래픽 대비 대상 아님)',
   },
   {
     path: 'color.chart.accent',
@@ -931,7 +937,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '20px',
     value: 20,
     description:
-      '패널 제목(공통 패널 머리 줄 shell/panel-header.tsx). 제약: 머리 줄 높이 30px 안(줄 높이 24px), subtitle 보다 크게. 키우면 패널 안 차트 위치가 밀림',
+      '패널 제목(공통 패널 머리 줄 shell/panel-header.tsx). 제약: 머리 줄 높이(size.panel-header) 안, subtitle 보다 크게. 키우면 패널 안 차트 위치가 밀림',
   },
   {
     path: 'font-size.heading',
@@ -949,7 +955,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '32px',
     value: 32,
     description:
-      '상세 KPI 숫자(사망, 교전, 기대 대비 위험), 숫자만(단위는 kpi-unit). 제약: KPI 상자 높이 88px 안(줄 높이 36px), 세 칸 각 136px 안에 "4,429" 가 들어가야 함',
+      '상세 KPI 숫자(사망, 교전, 기대 대비 위험), 숫자만(단위는 kpi-unit). 제약: KPI 상자(size.kpi-box) 높이 안에 라벨·숫자 두 줄, 한 칸(상자 너비의 1/3) 안에 "4,429" 가 들어가야 함',
   },
   {
     path: 'font-size.kpi-unit',
@@ -1080,25 +1086,25 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'stroke.point.trend',
     type: 'dimension',
     cssVar: '--stroke-point-trend',
-    css: '4.5px',
-    value: 4.5,
+    css: '5.5px',
+    value: 5.5,
     description: '패치 추이 점 반지름(교전 10건 이상인 날). 제약: trend-thin 보다 크게',
   },
   {
     path: 'stroke.point.trend-thin',
     type: 'dimension',
     cssVar: '--stroke-point-trend-thin',
-    css: '3.5px',
-    value: 3.5,
+    css: '4.5px',
+    value: 4.5,
     description: '패치 추이 빈 점 반지름(교전 10건 미만인 날). 제약: trend 보다 작게',
   },
   {
     path: 'stroke.point.estimate',
     type: 'dimension',
     cssVar: '--stroke-point-estimate',
-    css: '7px',
-    value: 7,
-    description: '같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval)보다 크게',
+    css: '8px',
+    value: 8,
+    description: '같은 조건 위험 배수 점 반지름. 제약: 범위 막대(size.bar.interval) 높이보다 크게',
   },
   {
     path: 'size.bar.skill',
@@ -1200,6 +1206,42 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 15,
     description:
       '패널 제목 옆 ⓘ 설명 단추 아이콘 크기(단추 자체는 24px). 제약: 제목 글자(font-size.title)보다 작게',
+  },
+  {
+    path: 'size.icon.search',
+    type: 'dimension',
+    cssVar: '--size-icon-search',
+    css: '14px',
+    value: 14,
+    description:
+      '필터 바 "몬스터 검색" 입력 안 왼쪽 돋보기 아이콘 크기(색은 gray-1). 제약: 입력 높이(30px) 안, 글자(font-size.label)와 비슷하게',
+  },
+  {
+    path: 'size.panel-header',
+    type: 'dimension',
+    cssVar: '--size-panel-header',
+    css: '30px',
+    value: 30,
+    description:
+      '모든 패널 머리 줄 높이(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤). 제약: 컨트롤(선택 상자·세그먼트 30px)이 들어가는 높이, 레이아웃 영향(패널 내용 시작 위치)',
+  },
+  {
+    path: 'size.kpi-box.w',
+    type: 'dimension',
+    cssVar: '--size-kpi-box-w',
+    css: '420px',
+    value: 420,
+    description:
+      '상세 제목 줄 오른쪽 KPI 상자 너비(세 칸 균등). 제약: 한 칸에 "4,429건"(font-size.kpi + kpi-unit)이 들어가야 함, 레이아웃 영향(몬스터 이름 칸이 줄어듦)',
+  },
+  {
+    path: 'size.kpi-box.h',
+    type: 'dimension',
+    cssVar: '--size-kpi-box-h',
+    css: '72px',
+    value: 72,
+    description:
+      'KPI 상자 높이 = 상세 제목 줄 높이. 제약: 라벨과 숫자(font-size.kpi) 두 줄이 들어가야 함, 레이아웃 영향',
   },
   {
     path: 'motion.ease.board',

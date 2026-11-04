@@ -6,6 +6,7 @@ import { FONT_SIZE, OPACITY, STROKE } from '@/styles/tokens';
 
 import { useChartTooltip } from '../shell/chart-tooltip';
 import { Panel } from '../shell/panel';
+import { LegendItem, LineSwatch, PanelLegend } from '../shell/panel-header';
 import { useTween } from '../shell/use-tween';
 import type { PentagonProps } from './contracts';
 import { DetailMotion } from './detail-motion';
@@ -50,10 +51,11 @@ const AXES: Record<string, AxisMeta> = {
 const ORDER = ['race_med', 'hits_med', 'hpcost_mean', 'escape_rate', 'avoid_rate'];
 
 // Figma 38:462 / 38:606, now titled "전투 양상"; 340×360 in the detail column, chart slot 302 wide.
+// The legend sits under the header (PanelLegend), so the drawing starts at the top label.
 const W = 302;
-const H = 260;
+const H = 244;
 const CX = W / 2;
-const CY = 148;
+const CY = 132;
 const R = 90;
 /**
  * One fixed scale for every monster (never fitted per monster): z is clamped to ±Z_MAX, the
@@ -75,8 +77,8 @@ const isNum = (v: number | null | undefined): v is number =>
 /** Beyond the scale end, so the vertex is pinned at ±Z_MAX. */
 const isOut = (z: number | null | undefined) => isNum(z) && Math.abs(z) > Z_MAX;
 
-/** Ring labels sit this far beside the top spoke, clear of its vertex dot (r 5.5 + stroke). */
-const LABEL_DX = 9;
+/** Ring labels sit this far beside the top spoke, clear of its (hovered) vertex dot. */
+const LABEL_DX = STROKE.point.vertexHover + 3;
 /** Rough label box: 10px text, Hangul full width, signs and digits about 0.6em. */
 const labelBox = (z: number) => ({ w: z === 0 ? 30 : 13, h: 12 });
 const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / 5;
@@ -108,19 +110,21 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
   const vertex = (i: number) => pointAt(i, radii[i]);
   // Ring labels go right of the top spoke unless a plotted vertex would land on them there and
   // the left side is clear (decided on the target radii, so the side does not flicker).
-  const ringLabelHits = (side: 1 | -1) =>
+  const labelHit = (z: number, side: 1 | -1) =>
     rows.some((r) => {
       if (!has[r.i]) return false;
       const [vx, vy] = pointAt(r.i, radiusOf(r.data?.z ?? 0));
-      return RINGS.some((z) => {
-        const { w, h } = labelBox(z);
-        const x0 = side > 0 ? CX + LABEL_DX : CX - LABEL_DX - w;
-        const y1 = CY - radiusOf(z) + 3.5;
-        const p = STROKE.point.vertexHover + 1;
-        return vx + p > x0 && vx - p < x0 + w && vy + p > y1 - h + 2 && vy - p < y1 + 2;
-      });
+      const { w, h } = labelBox(z);
+      const x0 = side > 0 ? CX + LABEL_DX : CX - LABEL_DX - w;
+      const y1 = CY - radiusOf(z) + 3.5;
+      const p = STROKE.point.vertexHover + 1;
+      return vx + p > x0 && vx - p < x0 + w && vy + p > y1 - h + 2 && vy - p < y1 + 2;
     });
+  const ringLabelHits = (side: 1 | -1) => RINGS.some((z) => labelHit(z, side));
   const labelSide = ringLabelHits(1) && !ringLabelHits(-1) ? -1 : 1;
+  // A ring label that would still sit on a vertex on that side is left out (the scale is also
+  // explained in ⓘ), so no tick text is ever drawn over a dot.
+  const ringShown = RINGS.filter((z) => !labelHit(z, labelSide));
   const shown = rows.filter((r) => has[r.i]);
   // A missing axis pulls the fill to the center (a notch, never a 4-gon across the gap) and
   // leaves the outline open on both sides of it.
@@ -142,6 +146,13 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
           </>
         ) : undefined
       }
+      chips={
+        note ? (
+          <SignalBadge tone="warning" title={note}>
+            현재 수치 기준
+          </SignalBadge>
+        ) : undefined
+      }
       info={
         <>
           <p>{CAPTION}</p>
@@ -151,7 +162,19 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
       }
     >
       <DetailMotion />
-      <div className="my-auto ml-[3px] h-[260px] w-[302px] shrink-0">
+      <PanelLegend className="mt-1">
+        <LegendItem swatch={<LineSwatch color="var(--chart-actual)" width={STROKE.width.bold} />}>
+          이 몬스터
+        </LegendItem>
+        <LegendItem
+          swatch={
+            <LineSwatch color="var(--chart-comparison)" width={STROKE.width.regular} dash="4 3" />
+          }
+        >
+          같은 역할·등급 중앙값
+        </LegendItem>
+      </PanelLegend>
+      <div className="mx-auto mt-2 h-[244px] w-[302px] shrink-0">
         <svg
           width={W}
           height={H}
@@ -167,33 +190,6 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
           className="overflow-visible"
           onPointerLeave={() => setHover(null)}
         >
-          {/* Legend */}
-          <g fontSize={FONT_SIZE.caption} fontWeight={600} fill="var(--gray-1)">
-            <line
-              x1={0}
-              x2={16}
-              y1={6}
-              y2={6}
-              stroke="var(--chart-actual)"
-              strokeWidth={STROKE.width.bold}
-            />
-            <text x={21} y={10}>
-              이 몬스터
-            </text>
-            <line
-              x1={80}
-              x2={96}
-              y1={6}
-              y2={6}
-              stroke="var(--chart-comparison)"
-              strokeWidth={STROKE.width.regular}
-              strokeDasharray="4 3"
-            />
-            <text x={101} y={10}>
-              같은 역할·등급 중앙값
-            </text>
-          </g>
-
           {/* Grid: one fixed scale for every monster. Rings at z = −2, −1, +1, +2 (thin) and the
               peer median z = 0 (dashed, drawn below); the center is z = −3, the spoke ends +3. */}
           {RINGS.filter((z) => z !== 0).map((z) => (
@@ -293,7 +289,7 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
             fill="var(--gray-1)"
             aria-hidden
           >
-            {RINGS.map((z) => (
+            {ringShown.map((z) => (
               <text
                 key={z}
                 x={CX + labelSide * LABEL_DX}
@@ -393,15 +389,6 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
           ))}
         </svg>
       </div>
-      {/* The period note changes how the shape reads, so a short chip stays visible (full text
-          in ⓘ). */}
-      {note ? (
-        <div className="pb-3">
-          <SignalBadge tone="warning" title={note}>
-            현재 수치 기준
-          </SignalBadge>
-        </div>
-      ) : null}
       {tip.node}
     </Panel>
   );

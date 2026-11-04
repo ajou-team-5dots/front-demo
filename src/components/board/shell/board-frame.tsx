@@ -51,7 +51,7 @@ function SkeletonPanel({ className, children }: SkeletonPanelProps) {
     <div
       className={`rounded-panel bg-panel px-(--space-panel-inset) pt-(--space-panel-top) ${className}`}
     >
-      <Block className="h-[30px] w-40" />
+      <Block className="h-(--size-panel-header) w-40" />
       {children}
     </div>
   );
@@ -120,11 +120,11 @@ export function DetailSkeleton() {
       aria-busy="true"
       aria-label="상세를 불러오는 중"
     >
-      <div className="flex h-[88px] items-center justify-between gap-6 pl-4">
+      <div className="flex h-(--size-kpi-box-h) items-center justify-between gap-6 pl-4">
         <Block className="h-[29px] w-56" />
-        <Block className="h-[88px] w-[456px] shrink-0 rounded-panel" />
+        <Block className="h-(--size-kpi-box-h) w-(--size-kpi-box-w) shrink-0 rounded-panel" />
       </div>
-      <div className="flex h-[380px] gap-(--space-panel-gap)">
+      <div className="flex h-[340px] gap-(--space-panel-gap)">
         <SkeletonPanel className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]" />
         <SkeletonPanel className="h-full min-w-0 flex-1" />
       </div>

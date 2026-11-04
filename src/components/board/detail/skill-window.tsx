@@ -83,13 +83,13 @@ function stateBadge(s: BossSkill, win: Win) {
   return null;
 }
 
-/** Chart height that fits the 365 panel (Figma 38:642): rows share it up to ROW_MAX each. */
-const CHART_H = 281;
+/** Height the skill rows share (up to ROW_MAX each); the panel grows to its content. */
+const CHART_H = 313;
 const ROW_MAX = 56;
 /** Two bar lines (14 + 4 + 14) with room around them; the badge (20) fits beside. */
 const ROW_MIN = 44;
 
-// Figma 38:642 (full detail width × 365 at most 4–5 skills): "보스 기술 직후 사망". With more
+// Figma 38:642 (full detail width): "보스 기술 직후 사망". The panel is as tall as its rows. With more
 // skills the rows keep ROW_MIN and the panel grows instead of squeezing them.
 export function SkillWindow({ skills }: SkillWindowProps) {
   const tip = useChartTooltip();
@@ -105,7 +105,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
   return (
     <Panel
       title="보스 기술 직후 사망"
-      className="min-h-[365px] pb-4"
+      className="pb-4"
       enter={2}
       legend={
         skills.length > 0 ? (
@@ -118,7 +118,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
                 />
               }
             >
-              사망 (기술 있음/전체 사망)
+              사망
             </LegendItem>
             <LegendItem
               swatch={
@@ -128,7 +128,7 @@ export function SkillWindow({ skills }: SkillWindowProps) {
                 />
               }
             >
-              살아남은 교전 (가장 큰 피해 직전 {win}초 · 기술 있음/전체)
+              살아남은 교전
             </LegendItem>
           </>
         ) : undefined
@@ -137,6 +137,14 @@ export function SkillWindow({ skills }: SkillWindowProps) {
         skills.length > 0 ? (
           <>
             <p>사망 직전 {win}초 안에 그 기술이 있었던 비율</p>
+            <p className="mt-1">
+              <span className="font-semibold">사망</span>{' '}
+              <span className="text-gray-1">· 기술 있음/전체 사망</span>
+            </p>
+            <p>
+              <span className="font-semibold">살아남은 교전</span>{' '}
+              <span className="text-gray-1">· 가장 큰 피해 직전 {win}초 · 기술 있음/전체</span>
+            </p>
             {diff.length > 0 ? (
               <p className="mt-1">
                 {diff.map((s) => s.ability).join(', ')}: 2초와 5초 기준에서 점검 신호가 다르게
