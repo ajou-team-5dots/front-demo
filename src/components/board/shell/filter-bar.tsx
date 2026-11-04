@@ -127,7 +127,7 @@ export function FilterBar({
       label="역할·등급"
       value={filters.group ?? ''}
       options={[
-        { value: '', label: '역할·등급' },
+        { value: '', label: '전체' },
         ...MONSTER_GROUPS.map((g) => ({ value: g, label: g })),
       ]}
       onChange={(v) => go({ group: MONSTER_GROUPS.find((g) => g === v) ?? null })}
@@ -140,7 +140,7 @@ export function FilterBar({
       label="던전 단계"
       value={filters.stage === null ? '' : String(filters.stage)}
       options={[
-        { value: '', label: '던전 단계' },
+        { value: '', label: '전체' },
         ...stages.map((s) => ({ value: String(s), label: `${s}단계` })),
       ]}
       onChange={(v) => go({ stage: v ? Number(v) : null })}
