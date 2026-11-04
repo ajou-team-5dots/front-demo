@@ -182,6 +182,26 @@ export default function Home() {
 }
 ```
 
+## 5-1. 녹화 데이터 (`DATA_SOURCE=fixture`)
+
+디자이너처럼 DB·AWS 없이 화면만 띄울 때 쓴다. `.env.local`에 `DATA_SOURCE=fixture` 한 줄이면 되고, `query()`가 `data/fixtures/queries/<key>.json`에서 결과를 돌려준다.
+
+- 키는 공백을 정리한 SQL과 이름순 params의 sha256이다. 데이터 함수의 SQL이 바뀌면 키가 달라져 "녹화된 조회 결과가 없습니다"로 실패한다(오래된 결과가 조용히 나오지 않는다).
+- 녹화 범위: 몬스터 36종 × 기간(현재/전체) × 고활동(포함/제외)의 개요와 상세, 흐름 칸 선택 없음. 흐름 칸 선택은 예시 4종(`elderroot_stage_1`, `small_zombie`, `rift_stalker_strong`, `iron_guardian_weak`)의 레벨 `1~19`만 녹화한다. 칸 조합(몬스터당 100개)을 다 녹화하면 7천여 조회, 29MB가 되어 뺐다. 녹화 안 된 상세는 "디자인 예시 데이터에는 없는 화면입니다"로 보인다.
+- 단계·역할·검색 필터는 페이지 안에서 거르므로 조회가 없다.
+- Vercel 운영(`VERCEL_ENV=production`)에서는 `fixture`를 거부한다.
+
+다시 녹화하는 때: 적재·배치로 **데이터가 바뀌었을 때**, 또는 데이터 함수의 **SQL이나 params가 바뀌었을 때**(fixture 모드에서 "녹화된 조회 결과가 없습니다"가 나오면 이 경우다).
+
+```bash
+# .env.local이 direct나 lambda로 DB에 접속되는 상태에서
+pnpm fixtures:record   # 예상 DB 조회 242번, 1분 남짓
+```
+
+- 공유 EC2를 운영 화면과 같이 쓰므로, 스크립트는 조회를 하나씩 순서대로 보내고 같은 조회는 한 번만 보낸다(Node에서는 `'use cache'`가 없어서 그대로 두면 내부 조회가 반복된다). 범위를 넓히기 전에 조회 수를 먼저 센다.
+- 결과에 식별 정보 컬럼(`player_id`, `player_seq`, `actor_id`, `source_actor`, `target_address`, `msg` 등), 지갑 주소 형태의 값, 원시 `game_events` 조회가 하나라도 있으면 아무것도 쓰지 않고 실패한다.
+- `data/fixtures/`는 Prettier 대상에서 뺐다(녹화한 그대로 둔다). 녹화 후 `pnpm test`의 `tests/fixture.test.ts`로 기대값을 확인한다.
+
 ## 6. 캐시
 
 - 데이터 함수는 `'use cache'` + `cacheTag(...)` + `cacheLife('hours')`. 인자가 캐시 키다.
