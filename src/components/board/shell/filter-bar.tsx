@@ -19,8 +19,6 @@ interface FilterBarProps {
   basePath: string;
   /** Open monster (?m=), kept across filter changes so the detail stays open. */
   monster?: string | null;
-  /** Main screen: field labels and the monster search (Figma 14:5). Detail: selects only (25:85). */
-  variant: 'main' | 'detail';
 }
 
 interface SegmentProps<T extends string> {
@@ -95,7 +93,6 @@ export function FilterBar({
   stages,
   basePath,
   monster = null,
-  variant,
 }: FilterBarProps) {
   const { navigate } = useBoardPending();
   const [q, setQ] = useState(filters.q);
@@ -127,10 +124,11 @@ export function FilterBar({
       label="역할·등급"
       value={filters.group ?? ''}
       options={[
-        { value: '', label: '역할·등급' },
+        { value: '', label: '전체' },
         ...MONSTER_GROUPS.map((g) => ({ value: g, label: g })),
       ]}
       onChange={(v) => go({ group: MONSTER_GROUPS.find((g) => g === v) ?? null })}
+      widthClass="w-(--size-select-group)"
     />
   );
   const stageSelect = (
@@ -139,28 +137,20 @@ export function FilterBar({
       label="던전 단계"
       value={filters.stage === null ? '' : String(filters.stage)}
       options={[
-        { value: '', label: '던전 단계' },
+        { value: '', label: '전체' },
         ...stages.map((s) => ({ value: String(s), label: `${s}단계` })),
       ]}
       onChange={(v) => go({ stage: v ? Number(v) : null })}
+      widthClass="w-(--size-select-stage)"
     />
   );
 
   return (
     <div className="flex h-[42px] items-center rounded-panel bg-panel px-[6px]">
-      {variant === 'main' ? (
-        <>
-          <span className={cn(fieldLabel, 'mr-2 ml-3')}>역할·등급</span>
-          {groupSelect}
-          <span className={cn(fieldLabel, 'mr-2 ml-5')}>던전 단계</span>
-          {stageSelect}
-        </>
-      ) : (
-        <div className="flex gap-[6px]">
-          {groupSelect}
-          {stageSelect}
-        </div>
-      )}
+      <span className={cn(fieldLabel, 'mr-2 ml-3')}>역할·등급</span>
+      {groupSelect}
+      <span className={cn(fieldLabel, 'mr-2 ml-5')}>던전 단계</span>
+      {stageSelect}
       <span className={cn(fieldLabel, 'mr-[10px] ml-5')}>기간</span>
       <Segment
         label="기간"
@@ -181,23 +171,21 @@ export function FilterBar({
         ]}
         onChange={(v) => go({ heavy: v })}
       />
-      {variant === 'main' ? (
-        <div className="relative ml-auto">
-          <Search
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-(--space-search-inset) size-(--size-icon-search) -translate-y-1/2 text-gray-1"
-          />
-          <input
-            id="filter-q"
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="몬스터 검색"
-            aria-label="몬스터 검색"
-            className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-(--space-search-inset) pl-[calc(var(--space-search-inset)+var(--size-icon-search)+var(--space-search-icon-gap))] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
-          />
-        </div>
-      ) : null}
+      <div className="relative ml-auto">
+        <Search
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-(--space-search-inset) size-(--size-icon-search) -translate-y-1/2 text-gray-1"
+        />
+        <input
+          id="filter-q"
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="몬스터 검색"
+          aria-label="몬스터 검색"
+          className="board-control h-[30px] w-[244px] rounded-control border-2 border-gray-2 bg-panel pr-(--space-search-inset) pl-[calc(var(--space-search-inset)+var(--size-icon-search)+var(--space-search-icon-gap))] text-(length:--font-size-label) font-medium text-ink placeholder:text-gray-1 focus-visible:outline-2 focus-visible:outline-ink"
+        />
+      </div>
     </div>
   );
 }

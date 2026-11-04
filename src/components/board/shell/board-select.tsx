@@ -21,8 +21,8 @@ interface BoardSelectProps {
   value: string;
   options: BoardSelectOption[];
   onChange: (value: string) => void;
-  /** Trigger width class, Figma 22:17 is 95px. */
-  widthClass?: string;
+  /** Fixed trigger width class from a size.select token, so changing the value never resizes it. */
+  widthClass: string;
 }
 
 // The empty string means "all" in our filters, but the select needs a real value for it.
@@ -32,14 +32,7 @@ const fromUi = (v: string) => (v === ALL ? '' : v);
 
 // Figma 22:17 select (2px gray-2 border, radius 6, 12 Medium, text inset 19) with a designed
 // popup: white, gray-2 border, items left-aligned on the same x as the trigger text.
-export function BoardSelect({
-  id,
-  label,
-  value,
-  options,
-  onChange,
-  widthClass = 'w-[95px]',
-}: BoardSelectProps) {
+export function BoardSelect({ id, label, value, options, onChange, widthClass }: BoardSelectProps) {
   const items = options.map((o) => ({ value: toUi(o.value), label: o.label }));
   return (
     <Select
