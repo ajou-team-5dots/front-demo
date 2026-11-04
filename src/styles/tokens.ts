@@ -371,8 +371,8 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'color.chart.accent',
     type: 'color',
     cssVar: '--chart-accent',
-    css: '#de7b1e',
-    value: '#de7b1e',
+    css: '#e0781c',
+    value: '#e0781c',
     description:
       '흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음',
   },
@@ -462,7 +462,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     type: 'color',
     cssVar: '--sankey-lv-1',
     css: 'var(--chart-accent)',
-    value: '#de7b1e',
+    value: '#e0781c',
     description:
       '흐름도 1열 레벨 "1~19" 칸과 그 칸에서 나가는 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
@@ -525,7 +525,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     type: 'color',
     cssVar: '--sankey-wp-4',
     css: 'var(--chart-accent)',
-    value: '#de7b1e',
+    value: '#e0781c',
     description:
       '흐름도 2열 무기 "금·다이아" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
@@ -534,7 +534,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     type: 'color',
     cssVar: '--sankey-ar-1',
     css: 'var(--chart-accent)',
-    value: '#de7b1e',
+    value: '#e0781c',
     description:
       '흐름도 3열 방어구 "없음" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
@@ -579,7 +579,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     type: 'color',
     cssVar: '--sankey-grp-3',
     css: 'var(--chart-accent)',
-    value: '#de7b1e',
+    value: '#e0781c',
     description:
       '흐름도 4열 "일반·strong" 칸과 띠. 제약: 같은 열 안의 다른 칸 색과 OKLab 거리 0.10 이상, 색약 시뮬레이션 0.05 이상 (tokens:contrast 검사). 사망 색(chart.death) 쓰지 않음',
   },
