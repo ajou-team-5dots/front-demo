@@ -22,7 +22,7 @@ const CONDITIONS: { key: H1Condition; label: string; meaning: string }[] = [
 ];
 
 /** Columns of a dumbbell row; the scale row and the gridlines use the same grid to line up. */
-const ROW_GRID = 'grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] gap-x-2';
+const ROW_GRID = 'grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] gap-x-(--space-dumbbell-gap)';
 /** Shared x scale of the dumbbells (share of deaths / of kills, 0–100%). */
 const TICKS = [0, 0.25, 0.5, 0.75, 1];
 
@@ -216,7 +216,7 @@ export function ReadinessPanel({ h1, aux1, aux2 }: ReadinessPanelProps) {
   return (
     <Panel
       title="준비 조건별 비중"
-      className="h-full"
+      className="h-full pb-(--space-panel-bottom)"
       enter={1}
       meta={
         <>
@@ -309,8 +309,9 @@ export function ReadinessPanel({ h1, aux1, aux2 }: ReadinessPanelProps) {
           ))}
         </div>
       </div>
+      {/* The two share bars sit at the bottom (space.panel-bottom under the last one). */}
       <ShareBar
-        className="mt-[17px]"
+        className="mt-auto pt-3"
         title="반격하지 못한 사망"
         n={aux1.unanswered}
         total={aux1.deaths}

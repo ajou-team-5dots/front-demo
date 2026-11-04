@@ -50,7 +50,8 @@ const AXES: Record<string, AxisMeta> = {
 };
 const ORDER = ['race_med', 'hits_med', 'hpcost_mean', 'escape_rate', 'avoid_rate'];
 
-// Figma 38:462 / 38:606, now titled "전투 양상"; 340×360 in the detail column, chart slot 302 wide.
+// Figma 38:462 / 38:606, now titled "전투 양상"; 340 (360) wide × size.detail-row in the detail
+// column, chart slot 302 wide.
 // The legend sits under the header (PanelLegend), so the drawing starts at the top label.
 const W = 302;
 const H = 240;
@@ -128,7 +129,7 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
   return (
     <Panel
       title="전투 양상"
-      className="h-full"
+      className="h-full pb-(--space-panel-bottom)"
       meta={
         rank !== null ? (
           <>
@@ -359,7 +360,7 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
       </div>
       <div
         data-ring-scale
-        className="mx-auto mt-1 flex items-center gap-2 text-(length:--font-size-caption) font-medium text-gray-1"
+        className="mx-auto mt-auto flex items-center gap-2 text-(length:--font-size-caption) font-medium text-gray-1"
       >
         <span>중앙값 기준 거리</span>
         <svg aria-hidden width={SCALE_W} height={SCALE_H} className="shrink-0">

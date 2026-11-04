@@ -2,6 +2,16 @@
 
 디자인 변경(색, 불투명도, 글자 크기, 선 두께, 점·막대 크기, 모서리, 간격, 모션)을 맡은 AI 에이전트(Claude, Codex)용 작업 지침입니다. 사람용 설명과 토큰 → 화면 위치 표는 `docs/DESIGN_TOKENS.md`에 있습니다.
 
+## 0. 처음 시작할 때와 작업 흐름
+
+- 처음: `pnpm install` → `pnpm dev` → `/dev/tokens`와 세 화면 `/`, `/?m=elderroot_stage_1`, `/?m=small_zombie`를 엽니다. Node 24.22.2, pnpm만.
+- 흐름: 이슈 → 브랜치 → 커밋 → PR. 규칙은 `docs/ISSUE_PR_GUIDE.md`와 저장소 루트 `AGENTS.md`가 기준입니다.
+  - 브랜치는 `dev`에서 `<type>/<이슈번호>-<설명>`. type은 Conventional Commits 값만(`design/`은 없음). 색·크기 변경은 `style/41-warm-tone`처럼.
+  - PR은 `dev`로, 본문 첫 줄 `Closes #<이슈번호>`, 리뷰어는 작성자가 아닌 사람 1명 이상.
+- 요청 하나 = PR 하나. PR 본문에 바꾼 토큰을 `경로: 이전 → 이후`로 모두 적고, 세 화면의 바꾸기 전·후 스크린샷을 붙입니다.
+- `pnpm tokens:contrast`가 실패하면 규칙이 아니라 색을 고칩니다. 통과하는 값이 없으면 멈추고 사람에게 묻습니다(3장, 6장).
+- 이슈·커밋·push·PR은 사람이 요청할 때만 합니다(8장 "하지 말 것"의 마지막 줄과 같은 규칙).
+
 ## 1. 고칠 파일은 하나
 
 - **`design-tokens/tokens.json`만 고칩니다.**
@@ -89,6 +99,32 @@ Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
 - 새 요소는 이 표에서 종류를 골라 그 토큰을 씁니다. `rounded-lg`, `rounded-md`, `rounded`, `rounded-[…]`, `rounded-none`처럼 토큰이 아닌 클래스는 쓰지 않습니다(`src/components/ui/*` 포함). 원은 `rounded-full`만 씁니다.
 - 확인: `grep -rnoE "rounded(-[a-z0-9]+|-\[[^]]+\])?" src/components src/app | grep -vE "rounded-(panel|control|pill|mark|full)$"` 가 아무것도 내지 않아야 합니다(주석의 낱말 제외).
 
+## 4-2. 보드 정리(2026-11)에서 추가·바꾼 토큰 (화면 위치)
+
+값은 `tokens.json`이 기준입니다. 아래는 어디에 쓰이는지와 바꿀 때 볼 곳입니다.
+
+| 토큰                                                                             | 화면 위치                                                     | 바꿀 때                                                              |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `font-size.title`                                                                | 모든 패널 제목(공통 머리 줄 `shell/panel-header.tsx`)         | `size.panel-header` 안에 들어가야 함                                 |
+| `font-size.kpi` / `font-size.kpi-unit`                                           | 상세 오른쪽 위 KPI 숫자 / 뒤 단위(건, 배)                     | `size.kpi-box` 한 칸(1/3)에 "4,429건"이 들어가야 함                  |
+| `size.kpi-box.w` / `.h`                                                          | 상세 제목 줄 오른쪽 KPI 상자                                  | `h`가 상세 제목 줄 높이. 라벨·숫자는 cap·기준선으로 잘라 가운데 정렬 |
+| `size.panel-header`                                                              | 모든 패널 머리 줄(제목 · 보조 수치 · ⓘ · 범례 · 칩 · 컨트롤)  | 컨트롤 30px이 들어가야 함. 패널 내용 시작 위치가 함께 바뀜           |
+| `size.detail-row`                                                                | 상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이                 | 두 패널 내용 + `space.panel-bottom`이 들어가야 함                    |
+| `size.patch-panel`                                                               | 패치 전후 위험 패널 최소 높이                                 | 창이 남으면 이 패널이 늘어남(추이 높이는 패널에서 계산)              |
+| `size.ratio-axis.w` / `.h-min` / `.h-max`                                        | 패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축           | 패널이 높아지면 `h-min`에서 `h-max`까지 커짐                         |
+| `size.bar.skill` / `size.bar.share` / `size.bar.interval` / `size.bar.zero-stub` | 보스 기술 막대 / 준비 패널 비율 막대 / 범위 막대 / 값 0 표시  | 막대 끝은 `radius.mark`                                              |
+| `size.dumbbell.line`                                                             | 준비 조건 처치자→사망자 연결선                                | `size.dumbbell.dot`보다 훨씬 가늘게                                  |
+| `size.icon.info` / `size.icon.search`                                            | 패널 제목 옆 ⓘ 아이콘 / 필터 바 검색 돋보기                   | 색은 `gray-1`                                                        |
+| `space.page-bottom`                                                              | 보드 아래 끝 ↔ 창 아래 끝(짧은 화면은 보드가 여기까지 늘어남) | 레이아웃 변경                                                        |
+| `space.panel-bottom`                                                             | 상세 첫 줄 두 패널의 아래 여백                                | 제목 위 여백과 같게                                                  |
+| `space.dumbbell-gap`                                                             | 준비 조건 행의 칸 사이(100% 눈금 ↔ 오른쪽 수치)               | 12–16px                                                              |
+| `space.patch-body-top` / `-bottom`                                               | 패치 전후 위험 머리 줄 ↔ 추이, 추이 ↔ 패널 아래               | 추이 높이가 함께 바뀜                                                |
+| `space.search-inset` / `space.search-icon-gap`                                   | 검색 입력 안쪽 여백 / 돋보기 ↔ 글자                           | 입력 너비 244px 안                                                   |
+| `color.chart.track-bar`                                                          | 비율·기술 막대의 빈 부분(트랙)                                | 값 막대보다 눈에 띄지 않게                                           |
+| `color.chart.guide`                                                              | 준비 조건 공유 눈금(0–100%) 세로 격자선                       | 패널 대비 1.15:1 이상(검사 있음)                                     |
+| `stroke.width.bold`, `stroke.point.*`                                            | 데이터 선 굵기, 산점도·오각형·추이 점                         | `bold`가 가장 굵게, 점 크기 순서 유지                                |
+| `radius.*`                                                                       | 4-1 모서리 규칙                                               | 요소 종류로 고름                                                     |
+
 ## 5. 그룹별 영향 범위
 
 | 그룹               | 바꾸면 달라지는 곳                                                                  | 위험                                                     |
@@ -149,13 +185,13 @@ pnpm dev
 - `src/server/**`(데이터 계산)를 고치지 않습니다.
 - 레이아웃(패널 크기, 위치, 차트 너비·높이·여백, `space` 토큰)을 바꾸지 않습니다. 요청이 레이아웃 변경을 명시할 때만 하고, 그때도 세 화면을 1440·1920에서 확인합니다.
 - 대비 규칙(`org.5dots.contrast`, `org.5dots.distinct`)을 지우거나 낮추지 않습니다.
-- 커밋, push, PR은 사람이 요청할 때만 합니다.
+- 커밋, push, PR은 사람이 요청할 때만 합니다. 요청받았을 때의 절차는 0장.
 
 ## 9. 자주 하는 요청
 
 ### "전체 톤을 따뜻하게"
 
-- 바꿀 토큰: `color.base.gray-1`, `gray-2`, `gray-3`, `ink`(살짝), 필요하면 `color.chart.track`, `color.base.skeleton-shine`
+- 바꿀 토큰: `color.base.gray-1`, `gray-2`, `gray-3`, `ink`(살짝), 필요하면 `color.chart.track`(막대 트랙 `track-bar`가 이 색을 섞어 쓰므로 함께 바뀜), `color.chart.guide`, `color.base.skeleton-shine`
 - 방법: 회색들의 파란 기운을 줄이고 노란·붉은 기운을 조금 더합니다(예: `#e9eef5` → `#efece6` 방향). 밝기는 그대로 둡니다.
 - 확인: `gray-3`이 바탕이라 `ink`, `gray-1`, `text-scale.*`의 gray-3 대비가 같이 바뀝니다. `pnpm tokens:contrast`.
 - 차트 의미색(`color.chart.*`)은 톤 요청이라도 바꾸지 않는 것이 기본입니다. 바꾸면 흐름도 구분 검사가 깨지기 쉽습니다.
@@ -185,7 +221,7 @@ pnpm dev
   - 바탕을 어둡게 할수록 이 둘이 먼저 깨집니다. 따뜻하게 하면서 밝기를 지금보다 낮추지 않습니다.
 - 함께 바꿀지 정할 것 (요청에 없으면 사람에게 묻습니다):
   - `color.base.skeleton-shine`(`#f8fafc`, 로딩 중 반짝임): gray-3만 따뜻해지면 로딩 상자만 푸르게 보입니다. 같은 방향으로 옮기는 것을 권합니다.
-  - `color.chart.track`(`#e7ecf3`, 막대의 빈 부분·격자): 패널 위에 그려지므로 바탕과 직접 겹치지는 않지만, 나란히 보면 푸른 회색으로 튑니다. 바꾸면 차트 인상이 함께 따뜻해집니다.
+  - `color.chart.track`(`#e7ecf3`, 격자·기준선, 막대 빈 부분 `track-bar`의 바탕색)과 `color.chart.guide`(`#e4e9f0`, 준비 조건 눈금선): 패널 위에 그려지므로 바탕과 직접 겹치지는 않지만, 나란히 보면 푸른 회색으로 튑니다. 바꾸면 차트 인상이 함께 따뜻해집니다.
 - 어울림 확인: `gray-1`(`#4f5b6e`)과 `ink`는 푸른 기운이 있는 회색입니다. 바탕만 따뜻해지면 글자가 차갑게 떠 보일 수 있습니다. `/dev/tokens`와 세 화면에서 보고, 어색하면 `gray-1`을 같은 방향으로 조금 옮기는 안을 사람에게 제안합니다(이건 "바탕만" 범위를 넘음).
 
 ### "흐름도 레벨 색 바꾸기" (예: "1~19 칸을 초록으로")

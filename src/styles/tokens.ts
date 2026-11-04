@@ -109,6 +109,12 @@ export const SPACE = {
   panelTop: 12,
   segmentInset: 3,
   pageBottom: 20,
+  panelBottom: 20,
+  dumbbellGap: 14,
+  patchBodyTop: 12,
+  patchBodyBottom: 16,
+  searchInset: 9,
+  searchIconGap: 6,
 } as const;
 
 /** Font size, px. */
@@ -180,8 +186,13 @@ export const SIZE = {
     w: 420,
     h: 72,
   },
-  detailRow: 352,
+  detailRow: 364,
   patchPanel: 288,
+  ratioAxis: {
+    w: 330,
+    hMin: 58,
+    hMax: 96,
+  },
 } as const;
 
 /** Easing control points [x1, y1, x2, y2] and durations (ms). */
@@ -886,6 +897,58 @@ export const TOKEN_LIST: TokenEntry[] = [
       '보드 아래 끝과 창 아래 끝 사이 여백(창보다 짧은 화면은 보드가 여기까지 늘어남). 페이지 위 여백(창 위 끝 → 머리글 글자, 약 20px)과 같은 값. 제약: 레이아웃 영향',
   },
   {
+    path: 'space.panel-bottom',
+    type: 'dimension',
+    cssVar: '--space-panel-bottom',
+    css: '20px',
+    value: 20,
+    description:
+      '상세 첫 줄(전투 양상, 준비 조건별 비중) 패널의 마지막 내용 ↔ 패널 아래 끝. 제목 글자 위 여백(panel-top + 머리 줄 안 여백, 약 20px)과 같게 해 위아래가 맞아 보이게. 제약: 레이아웃 영향(size.detail-row 안에 들어가야 함)',
+  },
+  {
+    path: 'space.dumbbell-gap',
+    type: 'dimension',
+    cssVar: '--space-dumbbell-gap',
+    css: '14px',
+    value: 14,
+    description:
+      '준비 조건별 비중 행의 칸 사이 간격(조건 이름 | 막대 | 수치 | 차이 | 배지). 100% 눈금선과 오른쪽 수치 사이가 붙어 보이지 않게. 제약: 12–16px, 레이아웃 영향(막대 칸 폭이 줄어듦)',
+  },
+  {
+    path: 'space.patch-body-top',
+    type: 'dimension',
+    cssVar: '--space-patch-body-top',
+    css: '12px',
+    value: 12,
+    description:
+      '패치 전후 위험: 머리 줄 아래 ↔ 추이 차트 위. 제약: 레이아웃 영향(추이 높이 = 패널 높이 − 위 여백 − 머리 줄 − 이 값 − patch-body-bottom)',
+  },
+  {
+    path: 'space.patch-body-bottom',
+    type: 'dimension',
+    cssVar: '--space-patch-body-bottom',
+    css: '16px',
+    value: 16,
+    description: '패치 전후 위험: 추이 차트 아래 ↔ 패널 아래 끝. 제약: 레이아웃 영향',
+  },
+  {
+    path: 'space.search-inset',
+    type: 'dimension',
+    cssVar: '--space-search-inset',
+    css: '9px',
+    value: 9,
+    description:
+      '필터 바 검색 입력 왼쪽 안쪽 여백(돋보기 아이콘 왼쪽)과 오른쪽 안쪽 여백. 제약: 입력 너비 244px 안',
+  },
+  {
+    path: 'space.search-icon-gap',
+    type: 'dimension',
+    cssVar: '--space-search-icon-gap',
+    css: '6px',
+    value: 6,
+    description: '검색 입력의 돋보기 아이콘 ↔ 글자 사이. 제약: 4–8px',
+  },
+  {
     path: 'font-size.micro',
     type: 'dimension',
     cssVar: '--font-size-micro',
@@ -1254,10 +1317,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'size.detail-row',
     type: 'dimension',
     cssVar: '--size-detail-row',
-    css: '352px',
-    value: 352,
+    css: '364px',
+    value: 364,
     description:
-      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 준비 조건 패널 내용(머리 줄 + 눈금 줄 + 네 조건 + 두 비율 막대)과 전투 양상(오각형 + 중앙값 기준 거리 눈금자 줄)이 들어가야 함',
+      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 두 패널 내용(머리 줄 + 눈금 줄 + 네 조건 + 두 비율 막대 / 오각형 + 중앙값 기준 거리 눈금자)과 아래 여백 space.panel-bottom 이 들어가야 함',
   },
   {
     path: 'size.patch-panel',
@@ -1267,6 +1330,33 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: 288,
     description:
       '상세 "패치 전후 위험" 패널의 최소 높이. 상세가 창보다 짧으면 이 패널이 남는 높이를 받아 늘어나고, 추이 차트 높이는 패널 높이에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함',
+  },
+  {
+    path: 'size.ratio-axis.w',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-w',
+    css: '330px',
+    value: 330,
+    description:
+      '패치 전후 위험 오른쪽 "같은 조건 위험 배수" 범위 축 너비. 제약: 오른쪽 묶음 너비(340px) 이하',
+  },
+  {
+    path: 'size.ratio-axis.h-min',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-h-min',
+    css: '58px',
+    value: 58,
+    description:
+      '같은 조건 위험 배수 범위 축의 최소 높이(패널이 기본 높이일 때). 제약: 점(stroke.point.estimate) + 눈금 글자가 들어가야 함',
+  },
+  {
+    path: 'size.ratio-axis.h-max',
+    type: 'dimension',
+    cssVar: '--size-ratio-axis-h-max',
+    css: '96px',
+    value: 96,
+    description:
+      '같은 조건 위험 배수 범위 축의 최대 높이. 패널이 창에 맞춰 높아지면 축도 이만큼까지 함께 커져 오른쪽 묶음이 비어 보이지 않게. 제약: h-min 이상, 너무 크면 축이 차트처럼 보임',
   },
   {
     path: 'motion.ease.board',

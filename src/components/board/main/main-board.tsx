@@ -346,7 +346,7 @@ export function MainBoard({
           >
             <div
               className={cn('flex shrink-0 flex-col', open && 'absolute top-0 left-0')}
-              style={{ width: SLOT_W, gap: GAP, minHeight: open ? undefined : fill }}
+              style={{ width: SLOT_W, gap: GAP, minHeight: fill }}
               inert={open}
             >
               <Panel
@@ -440,9 +440,11 @@ export function MainBoard({
               aria-label={monster ? `${monster} 상세` : '몬스터 상세'}
               className={cn('@container flex shrink-0 flex-col', !open && 'absolute top-0')}
               style={
+                // Both slots keep the fill height whether shown or not, so the outgoing one never
+                // shrinks under the slide.
                 open
                   ? { width: SLOT_W, marginLeft: DETAIL_X, minHeight: fill }
-                  : { width: SLOT_W, left: DETAIL_X }
+                  : { width: SLOT_W, left: DETAIL_X, minHeight: fill }
               }
               inert={!open}
             >

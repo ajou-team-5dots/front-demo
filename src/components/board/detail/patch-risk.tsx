@@ -24,12 +24,16 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const dayIndex = (day: string, first: string) => (Date.parse(day) - Date.parse(first)) / DAY_MS;
 const risk = (p: { danger: number; enc: number }) => (p.enc > 0 ? (p.danger / p.enc) * 100 : 0);
 
-/** 0, 2, 5, 10, 20, 50 ... ceiling for the y axis. */
-const niceCeil = (v: number) => {
-  if (v <= 0) return 1;
-  const p = 10 ** Math.floor(Math.log10(v));
-  const m = [1, 2, 5, 10].find((s) => s * p >= v) ?? 10;
-  return m * p;
+/**
+ * Y scale just above the data: a nice step (1, 2, 2.5, 5 × 10ⁿ) for about `count` intervals,
+ * and the max is the first step at or above the data max plus a little headroom.
+ */
+const niceScale = (v: number, count: number): { max: number; step: number } => {
+  const top = Math.max(v, 0.1) * 1.05;
+  const raw = top / count;
+  const p = 10 ** Math.floor(Math.log10(raw));
+  const step = ([1, 2, 2.5, 5, 10].find((m) => m * p >= raw) ?? 10) * p;
+  return { max: Math.ceil(top / step - 1e-9) * step, step };
 };
 
 const patchOption = (p: PatchInfo) => `${md(kstDay(p.ts))} patch`;
@@ -41,8 +45,6 @@ const PANEL_PAD = 32;
 const COL_GAP = 28;
 const SIDE_W = 340;
 const M = { l: 36, r: 14, t: 18, b: 22 };
-/** Space around an average label in the right gutter (half on each side). */
-const GUTTER_PAD = 12;
 /** Days with fewer encounters than this are drawn faint (hollow point, light line). */
 const THIN_ENC = 10;
 
@@ -100,30 +102,18 @@ function summarize(trend: DailyPoint[], patch: PatchInfo | undefined, h2: H2Patc
 }
 
 const avgText = (b: Avg, a: Avg) =>
-  `평균 패치 전 ${b.value.toFixed(1)} (${num(b.events)}/${num(b.enc)}) → 패치 후 ${a.value.toFixed(1)} (${num(a.events)}/${num(a.enc)})`;
+  `패치 전 ${b.value.toFixed(1)} (${num(b.events)}/${num(b.enc)}) → 패치 후 ${a.value.toFixed(1)} (${num(a.events)}/${num(a.enc)})`;
 
 function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: TrendProps) {
-  // Series key, thin-day key and the average key are in the panel header legend; the averages'
-  // values are direct labels on their lines.
+  // Series key, thin-day key and the average key are in the panel header legend; each average's
+  // value is a direct label on its own dashed segment (see placeAvg).
   const days = [...trend].sort((a, b) => a.day.localeCompare(b.day));
   const first = days[0].day;
   const span = Math.max(1, dayIndex(days[days.length - 1].day, first) + 1);
-  // The two average values are labels in a right gutter outside the plot, at their line's height
-  // (the after line runs into it), so they can never sit on a point or the trend line. The
-  // gutter is as wide as the longer label.
   const { before, after } = summarize(trend, patch, h2);
   const beforeText = before ? `패치 전 ${before.value.toFixed(1)}` : '';
   const afterText = after ? `패치 후 ${after.value.toFixed(1)}` : '';
-  const MR =
-    before && after
-      ? Math.ceil(
-          Math.max(
-            textWidth(beforeText, FONT_SIZE.caption),
-            textWidth(afterText, FONT_SIZE.caption),
-          ),
-        ) + GUTTER_PAD
-      : M.r;
-  const innerW = TW - M.l - MR;
+  const innerW = TW - M.l - M.r;
   const innerH = TH - M.t - M.b;
   const xAt = (idx: number) => round2(M.l + (idx / span) * innerW);
   const xDay = (day: string) => xAt(dayIndex(day, first) + 0.5);
@@ -133,7 +123,16 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
   const patchX = patchInRange && patchIdx !== null ? xAt(patchIdx) : null;
 
   const maxV = Math.max(...days.map(risk), before?.value ?? 0, after?.value ?? 0);
-  const yMax = niceCeil(maxV * 1.1);
+  // More gridlines when the panel (and so the chart) is tall.
+  // The smallest nice max over 3–6 intervals (a tall chart prefers more intervals on a tie).
+  const { max: yMax, step: yStep } = [3, 4, 5, 6]
+    .map((n) => niceScale(maxV, n))
+    .reduce((best, c) => {
+      if (c.max < best.max - 1e-9) return c;
+      if (Math.abs(c.max - best.max) < 1e-9 && innerH > 300 && c.step < best.step) return c;
+      return best;
+    });
+  const yTicks = Array.from({ length: Math.round(yMax / yStep) + 1 }, (_, k) => k * yStep);
   const yAt = (v: number) => round2(M.t + innerH - (v / yMax) * innerH);
   // Every day's y, the two average levels and the patch x glide in one tween, and the line, its
   // points, the solid segments and the average lines are all drawn from those same numbers, so
@@ -164,18 +163,59 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
     .join(' ');
   const labelEvery = Math.ceil(days.length / 11);
   const beforeD = patchXT !== null && before ? `M${M.l},${beforeY} H${patchXT}` : null;
-  // Gutter label heights: centred on their line, pushed apart when the two lines are close.
-  const LABEL_GAP = FONT_SIZE.caption + 3;
-  let beforeLY = beforeY + FONT_SIZE.caption / 3;
-  let afterLY = afterY + FONT_SIZE.caption / 3;
-  if (Math.abs(beforeLY - afterLY) < LABEL_GAP) {
-    const mid = (beforeLY + afterLY) / 2;
-    const upFirst = beforeY <= afterY;
-    beforeLY = mid + (upFirst ? -LABEL_GAP / 2 : LABEL_GAP / 2);
-    afterLY = mid + (upFirst ? LABEL_GAP / 2 : -LABEL_GAP / 2);
+  // Average labels sit on their own segment, 4px above the line: 패치 전 ends just left of the
+  // patch line, 패치 후 at the right end. A label whose box (+3px) would touch a trend point or
+  // segment flips below its line; if the two labels would overlap, the 패치 후 one moves down a
+  // line. Both have the panel-colored halo.
+  const pad = 3;
+  const lineSamples = pts.flatMap((d, i) => {
+    const x = xDay(d.day);
+    const y = yDay(d);
+    const next = pts[i + 1];
+    if (!next) return [[x, y]];
+    const nx = xDay(next.day);
+    const ny = yDay(next);
+    const n = Math.max(1, Math.ceil(Math.hypot(nx - x, ny - y) / 2));
+    return Array.from({ length: n }, (_, k) => [x + ((nx - x) * k) / n, y + ((ny - y) * k) / n]);
+  });
+  const reach = STROKE.point.trend + STROKE.width.bold / 2 + pad;
+  const hits = (x1: number, x2: number, y1: number, y2: number) =>
+    lineSamples.some(
+      ([px, py]) => px > x1 - reach && px < x2 + reach && py > y1 - reach && py < y2 + reach,
+    );
+  const capH = FONT_SIZE.caption;
+  // Candidates along the label's own segment, from its preferred end leftwards in steps, above
+  // then below the line; the first clear one wins (the preferred spot when none is clear).
+  const placeAvg = (text: string, right: number, segLeft: number, lineY: number) => {
+    // Estimated width plus a fifth, so the box never undercuts the drawn (semibold) text.
+    const w = textWidth(text, FONT_SIZE.caption) * 1.2;
+    const above = lineY - 4;
+    const below = lineY + capH + 2;
+    const xs: number[] = [];
+    for (let x = right; x - w >= segLeft; x -= capH) xs.push(x);
+    if (!xs.length) xs.push(right);
+    // Nearest rows first (just above, just below), then one and two rows further out, all inside
+    // the plot.
+    const ys = [above, below, above - capH - 3, below + capH + 3, above - 2 * (capH + 3)].filter(
+      (y) => y - capH >= M.t && y <= M.t + innerH,
+    );
+    const spots = ys.flatMap((y) => xs.map((x) => ({ x, y })));
+    if (!spots.length) spots.push({ x: right, y: above });
+    // Glyph box: ascent above the baseline (about the font size) and the descent below it.
+    const spot = spots.find((sp) => !hits(sp.x - w, sp.x, sp.y - capH, sp.y + 3)) ?? spots[0];
+    return { x: spot.x, y: spot.y, x1: spot.x - w, w };
+  };
+  const beforeLabel =
+    patchXT !== null && before ? placeAvg(beforeText, patchXT - 4, M.l, beforeY) : null;
+  let afterLabel =
+    patchXT !== null && after ? placeAvg(afterText, TW - M.r, patchXT + 4, afterY) : null;
+  if (beforeLabel && afterLabel) {
+    const overlapX = beforeLabel.x > afterLabel.x1 && afterLabel.x > beforeLabel.x1;
+    if (overlapX && Math.abs(beforeLabel.y - afterLabel.y) < capH + 2) {
+      afterLabel = { ...afterLabel, y: beforeLabel.y + capH + 3 };
+    }
   }
-  const gutterX = TW - MR + GUTTER_PAD / 2;
-  const afterD = patchXT !== null && after ? `M${patchXT},${afterY} H${TW - MR}` : null;
+  const afterD = patchXT !== null && after ? `M${patchXT},${afterY} H${TW - M.r}` : null;
 
   return (
     <div className="flex flex-col" style={{ width: TW }}>
@@ -191,11 +231,11 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         }`}
         className="overflow-visible"
       >
-        {[0, yMax / 2, yMax].map((t) => (
+        {yTicks.map((t) => (
           <g key={t}>
             <line
               x1={M.l}
-              x2={TW - MR}
+              x2={TW - M.r}
               y1={yAt(t)}
               y2={yAt(t)}
               stroke="var(--chart-track)"
@@ -210,7 +250,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
               fill="var(--gray-1)"
               className="tabular-nums"
             >
-              {Number.isInteger(t) ? t : t.toFixed(1)}
+              {Number.isInteger(t) ? t : +t.toFixed(2)}
             </text>
           </g>
         ))}
@@ -253,8 +293,9 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         ) : null}
         {beforeD && before ? (
           <text
-            x={gutterX}
-            y={round2(beforeLY)}
+            x={beforeLabel?.x}
+            y={beforeLabel ? round2(beforeLabel.y) : undefined}
+            textAnchor="end"
             fontSize={FONT_SIZE.caption}
             fontWeight={600}
             fill="var(--chart-comparison)"
@@ -269,8 +310,9 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         ) : null}
         {afterD && after ? (
           <text
-            x={gutterX}
-            y={round2(afterLY)}
+            x={afterLabel?.x}
+            y={afterLabel ? round2(afterLabel.y) : undefined}
+            textAnchor="end"
             fontSize={FONT_SIZE.caption}
             fontWeight={600}
             fill="var(--chart-comparison)"
@@ -387,10 +429,15 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
   );
 }
 
+/** Space under the header before the trend, and under the trend (the panel's bottom padding). */
+const BODY_TOP = SPACE.patchBodyTop;
+const BODY_BOTTOM = SPACE.patchBodyBottom;
+/** Panel height taken by everything but the trend: top padding, header, the gaps around it. */
+const TREND_REST = SPACE.panelTop + SIZE.panelHeader + BODY_TOP + BODY_BOTTOM;
+
 // ---- Same-condition ratio (log axis) --------------------------------------------------------
 
-const RW = 330;
-const RH = 58;
+const RW = SIZE.ratioAxis.w;
 /** The log axis needs positive, finite ends: 0 or ∞ from the batch are pinned here. */
 const R_MIN = 0.01;
 const R_MAX = 100;
@@ -402,9 +449,11 @@ interface RatioAxisProps {
   or: number;
   lo: number;
   hi: number;
+  /** SVG height, size.ratio-axis.h-min … h-max (grows with a tall panel). */
+  height: number;
 }
 
-function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi }: RatioAxisProps) {
+function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi, height: RH }: RatioAxisProps) {
   const or = clampR(rawOr);
   const lo = clampR(Math.min(rawLo, rawOr));
   const hi = clampR(Math.max(rawHi, rawOr));
@@ -418,7 +467,17 @@ function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi }: RatioAxisProps) {
   const l = Math.log(dLo);
   const r = Math.log(dHi);
   const xAt = (v: number) => round2(6 + ((Math.log(v) - l) / (r - l)) * (RW - 12));
-  const y = 22;
+  // The axis line sits at the same share of the height at every size (22 of 58 at h-min), and
+  // the 1× reference spans most of the space above the tick labels.
+  const y = round2(RH * (22 / SIZE.ratioAxis.hMin));
+  const refHalf = Math.min(y - 4, RH - y - 16);
+  // An end label that would run past the SVG edge is anchored to its tick instead of centred.
+  const anchorOf = (t: number): 'start' | 'middle' | 'end' => {
+    const half = textWidth(`${t}배`, FONT_SIZE.caption) / 2;
+    if (xAt(t) - half < 0) return 'start';
+    if (xAt(t) + half > RW) return 'end';
+    return 'middle';
+  };
   return (
     <svg
       width={RW}
@@ -449,8 +508,8 @@ function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi }: RatioAxisProps) {
         <line
           x1={0}
           x2={0}
-          y1={y - 14}
-          y2={y + 14}
+          y1={y - refHalf}
+          y2={y + refHalf}
           stroke="var(--ink)"
           strokeWidth={STROKE.width.regular}
           strokeDasharray="3 2"
@@ -467,9 +526,9 @@ function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi }: RatioAxisProps) {
       {labels.map((t) => (
         <g key={t} className="board-mark" style={{ transform: `translateX(${xAt(t)}px)` }}>
           <text
-            x={0}
+            x={anchorOf(t) === 'start' ? -2 : 0}
             y={RH - 4}
-            textAnchor="middle"
+            textAnchor={anchorOf(t)}
             fontSize={FONT_SIZE.caption}
             fontWeight={t === 1 ? 600 : 500}
             fill={t === 1 ? 'var(--ink)' : 'var(--gray-1)'}
@@ -484,6 +543,8 @@ function RatioAxis({ or: rawOr, lo: rawLo, hi: rawHi }: RatioAxisProps) {
 }
 
 interface SidePanelProps {
+  /** Height the block has (the trend's): the ratio axis grows into it within its token range. */
+  height: number;
   patch: PatchInfo | undefined;
   h2: H2Patch | undefined;
   picked: boolean;
@@ -496,7 +557,14 @@ const HINT = '레벨·장비·던전 단계를 맞춘 뒤 패치 후 ÷ 패치 �
 const periodLine = (label: string, p: H2Period) =>
   `${label} ${num(p.events)}/${num(p.enc)}교전 (100교전당 ${p.risk100.toFixed(1)})`;
 
-function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
+/** The block's label is centred on the trend's top gridline (y = M.t in the trend). */
+const SIDE_TOP = M.t - 7;
+/** Fixed parts of the block besides the axis: label, ratio line, the gaps, one count line. */
+const SIDE_FIXED = SIDE_TOP + 14 + 8 + 24 + 8 + 18;
+const LINE_H = 18;
+const BADGE_ROW = 28;
+
+function SidePanel({ height, patch, h2, picked, show, hide }: SidePanelProps) {
   if (!patch) return <EmptyState>패치 기록 없음</EmptyState>;
   const sc = h2?.sameCondition ?? null;
   let stateText: string | null = null;
@@ -504,10 +572,23 @@ function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
   else if (!sc && h2.state === 'sample_short') stateText = '표본 부족';
   else if (!sc && h2.state === 'no_comparator') stateText = '비교군 없음';
   else if (!sc) stateText = '배수 계산 불가 (모형 수렴 실패)';
-
+  // The axis keeps h-min at the base panel height and grows by a fifth of the extra height a
+  // taller panel brings, up to h-max (never more than the block has room for).
+  const extraLines =
+    (picked ? 1 : 0) +
+    (h2?.netOfComparator !== null && h2?.netOfComparator !== undefined ? 1 : 0) +
+    (h2?.state === 'sample_short' && h2.groupReference !== null ? 1 : 0);
+  const badges = h2?.state === 'no_comparator' || h2?.intentCheck ? BADGE_ROW : 0;
+  const room = height - SIDE_FIXED - extraLines * LINE_H - badges;
+  const grown = SIZE.ratioAxis.hMin + (height - (SIZE.patchPanel - TREND_REST)) / 5;
+  const axisH = Math.round(
+    Math.max(SIZE.ratioAxis.hMin, Math.min(SIZE.ratioAxis.hMax, grown, room)),
+  );
   return (
-    // Centred in the trend's height, so a tall panel keeps the block balanced, not top-heavy.
-    <div className="flex flex-col justify-center" style={{ width: SIDE_W }}>
+    // Anchored to the top: its label lines up with the trend's top gridline, and the parts keep
+    // fixed gaps (mt-2). In a tall panel the ratio axis takes some of the extra height
+    // (size.ratio-axis.h-min … h-max) so the column reads as one designed block.
+    <div className="flex flex-col" style={{ width: SIDE_W, paddingTop: SIDE_TOP }}>
       {/* What the ratio means (HINT) is in the panel's ⓘ. */}
       <h3 className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1">
         같은 조건 위험 배수
@@ -545,7 +626,7 @@ function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
               )
             </span>
           </p>
-          <RatioAxis or={sc.or} lo={sc.lo} hi={sc.hi} />
+          <RatioAxis or={sc.or} lo={sc.lo} hi={sc.hi} height={axisH} />
         </div>
       ) : (
         <p className="mt-3 text-(length:--font-size-subtitle) leading-5 font-semibold text-gray-1">
@@ -590,12 +671,6 @@ function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
 }
 
 // ---- Panel ---------------------------------------------------------------------------------
-
-/** Space under the header before the trend, and under the trend (the panel's bottom padding). */
-const BODY_TOP = 12;
-const BODY_BOTTOM = 16;
-/** Panel height taken by everything but the trend: top padding, header, the gaps around it. */
-const TREND_REST = SPACE.panelTop + SIZE.panelHeader + BODY_TOP + BODY_BOTTOM;
 
 // Figma 38:448 / 38:595: title + patch select (150×30 at 138/9), patch label, trend + ratio.
 export function PatchRisk({
@@ -757,7 +832,14 @@ export function PatchRisk({
               />
             )}
           </div>
-          <SidePanel patch={patch} h2={h2} picked={picked} show={tip.show} hide={tip.hide} />
+          <SidePanel
+            height={TREND_H}
+            patch={patch}
+            h2={h2}
+            picked={picked}
+            show={tip.show}
+            hide={tip.hide}
+          />
         </div>
         <DetailMotion />
         {tip.node}
