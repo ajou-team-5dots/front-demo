@@ -14,6 +14,7 @@
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm tokens:check && pnpm tokens:contrast",
     "prepare": "husky",
     "test": "node --experimental-transform-types --import ./tests/register-server.mjs --test --test-isolation=none \"tests/**/*.test.ts\"",
+    "fixtures:record": "node --experimental-transform-types --import ./tests/register-server.mjs scripts/record-fixtures.mts",
     "tokens": "node scripts/build-tokens.mjs",
     "tokens:check": "node scripts/build-tokens.mjs --check",
     "tokens:contrast": "node scripts/check-contrast.mjs"

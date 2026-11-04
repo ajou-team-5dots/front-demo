@@ -11,7 +11,7 @@ import type {
   PentagonAxis,
 } from '@/types/monsters';
 
-/** Figma 25:114, titled "전투 양상"; in the detail column 340×380, 360×380 from a 1200 main area. */
+/** Figma 25:114, titled "전투 양상"; in the detail column 340 wide (360 from a 1200 main area) × size.detail-row. */
 export interface PentagonProps {
   axes: PentagonAxis[];
   /** Overall rank, null when not computed. */
@@ -22,7 +22,7 @@ export interface PentagonProps {
   note?: string;
 }
 
-/** Figma 38:463 "준비 조건별 비중" (rest of the row beside the pentagon, 380 tall) + "반격하지 못한 사망" + "한 번에 큰 피해를 받은 교전". */
+/** Figma 38:463 "준비 조건별 비중" (rest of the row beside the pentagon, size.detail-row tall) + "반격하지 못한 사망" + "한 번에 큰 피해를 받은 교전". */
 export interface ReadinessPanelProps {
   h1: H1Readiness[];
   aux1: Aux1Unanswered;
@@ -30,26 +30,22 @@ export interface ReadinessPanelProps {
 }
 
 /**
- * Figma 38:448 "패치 전후 위험" with the patch select, `width` wide (the detail column, measured) × 332. 240 tall when the selected patch
- * did not change this monster. Picked flow chips sit in PickedFlowRow; `picked` only marks the
- * trend as filtered.
+ * Figma 38:448 "패치 전후 위험" with the patch select, `width` wide (the detail column, measured) ×
+ * `height` (at least size.patch-panel, more when the board fills the window). The daily trend is
+ * always on all encounters: flow picks belong to the overview only.
  */
 export interface PatchRiskProps {
   monster: string;
   patches: H2Patch[];
   patchList: PatchInfo[];
   trend: DailyPoint[];
-  picked: boolean;
   /** Panel width in px; the daily trend takes what the ratio column leaves. */
   width?: number;
+  /** Panel height in px (at least size.patch-panel); the trend's height comes from it. */
+  height?: number;
 }
 
-/** Row at the top of the detail listing the picked flow cells (only rendered when there are picks). */
-export interface PickedFlowRowProps {
-  chips: { label: string; removeHref: string }[];
-}
-
-/** Figma 38:642 "보스 기술 직후 사망" (bosses only), full detail width × 365. */
+/** Figma 38:642 "보스 기술 직후 사망" (bosses only), full detail width, as tall as its skill rows. */
 export interface SkillWindowProps {
   skills: BossSkill[];
 }

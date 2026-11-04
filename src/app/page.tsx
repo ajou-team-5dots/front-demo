@@ -5,31 +5,42 @@ import { MainBoard } from '@/components/board/main/main-board';
 import { BoardFrame, DetailSkeleton, MainSkeleton } from '@/components/board/shell/board-frame';
 import { FilterBar } from '@/components/board/shell/filter-bar';
 import { parseFilters, parseMonster, parsePick } from '@/lib/board-filters';
-import { filterRows, shortDay, stagesOf } from '@/lib/board-rows';
+import { dayRange, filterRows, stagesOf } from '@/lib/board-rows';
 import { getDataRange, getFlow, getMonsterTrend, getPatches } from '@/server/data/board';
 import { getMonsterDetail, getMonsterList, getPatchRisk } from '@/server/data/monsters';
-import type { BoardFilters, FlowPick } from '@/types/board';
+import { isFixtureMissing } from '@/server/db/query';
+import type { BoardFilters } from '@/types/board';
 
 interface DetailContentProps {
   monster: string | null;
   filters: BoardFilters;
-  pick: FlowPick;
 }
 
 // The open monster's detail (Figma detail 38:423 / 38:570), in the board's left slot. Without
 // ?m= it renders nothing, so the slot's Suspense boundary is always mounted and already showing:
 // opening, switching and filtering then keep the current screen until the new detail is ready
 // (inside the navigation's transition) instead of falling back to the skeleton.
-async function DetailContent({ monster, filters, pick }: DetailContentProps) {
+async function DetailContent({ monster, filters }: DetailContentProps) {
   if (!monster) return null;
-  const [all, detail, patches, patchList, trend, range] = await Promise.all([
-    getMonsterList(filters.heavy, filters.period),
-    getMonsterDetail(monster, filters.heavy, filters.period),
-    getPatchRisk(monster, filters.heavy),
-    getPatches(),
-    getMonsterTrend(monster, filters.heavy, pick),
-    getDataRange(),
-  ]);
+  let loaded;
+  try {
+    loaded = await Promise.all([
+      getMonsterList(filters.heavy, filters.period),
+      getMonsterDetail(monster, filters.heavy, filters.period),
+      getPatchRisk(monster, filters.heavy),
+      getPatches(),
+      // Flow picks belong to the overview only: the detail trend is always on all encounters.
+      getMonsterTrend(monster, filters.heavy, {}),
+      getDataRange(),
+    ]);
+  } catch (error) {
+    // DATA_SOURCE=fixture records only some screens (e.g. no flow pick on most monsters).
+    if (isFixtureMissing(error)) {
+      return <MissingDetail monster={monster} message="디자인 예시 데이터에는 없는 화면입니다" />;
+    }
+    throw error;
+  }
+  const [all, detail, patches, patchList, trend, range] = loaded;
   const row = all.find((r) => r.monster === monster);
   if (!row || !detail) {
     return <MissingDetail monster={monster} />;
@@ -44,9 +55,8 @@ async function DetailContent({ monster, filters, pick }: DetailContentProps) {
       patches={patches}
       patchList={patchList}
       trend={trend}
-      rangeLabel={`${shortDay(range.from)} - ${shortDay(range.to)}`}
+      rangeLabel={dayRange(range)}
       filters={filters}
-      pick={pick}
       rankOf={Math.max(ranks.length, ...ranks)}
     />
   );
@@ -74,7 +84,6 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
         stages={stagesOf(all)}
         basePath="/"
         monster={monster}
-        variant="main"
       />
       <div className="mt-(--space-panel-gap)">
         <MainBoard
@@ -85,7 +94,7 @@ async function MainContent({ searchParams }: Pick<PageProps<'/'>, 'searchParams'
           monster={monster}
           detail={
             <Suspense fallback={<DetailSkeleton />}>
-              <DetailContent monster={monster} filters={filters} pick={pick} />
+              <DetailContent monster={monster} filters={filters} />
             </Suspense>
           }
         />

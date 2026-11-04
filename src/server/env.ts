@@ -37,15 +37,26 @@ export const isDevelopment = (): boolean => process.env.NODE_ENV === 'developmen
 /** Data lives in ap-northeast-2 (Seoul); fixed so Vercel's per-function AWS_REGION can't move it. */
 export const AWS_DATA_REGION = 'ap-northeast-2';
 
-export type DataSource = 'direct' | 'lambda';
+export type DataSource = 'direct' | 'lambda' | 'fixture';
 
-/** direct = @clickhouse/client from this machine (local dev), lambda = query Lambda over OIDC. */
+const DATA_SOURCES: readonly DataSource[] = ['direct', 'lambda', 'fixture'];
+
+/**
+ * direct = @clickhouse/client from this machine (local dev), lambda = query Lambda over OIDC,
+ * fixture = recorded results in data/fixtures (no DB or AWS variables needed). Each mode reads
+ * only its own variables, when its first query runs. fixture is refused on Vercel production so
+ * a stray env var can never serve recorded data as the live board.
+ */
 export const getDataSource = (): DataSource => {
   const value = process.env.DATA_SOURCE ?? 'direct';
-  if (value !== 'direct' && value !== 'lambda') {
-    throw new Error(`DATA_SOURCE는 direct 또는 lambda여야 합니다 (지금: ${value})`);
+  const source = DATA_SOURCES.find((s) => s === value);
+  if (!source) {
+    throw new Error(`DATA_SOURCE는 direct, lambda, fixture 중 하나여야 합니다 (지금: ${value})`);
   }
-  return value;
+  if (source === 'fixture' && process.env.VERCEL_ENV === 'production') {
+    throw new Error('DATA_SOURCE=fixture는 운영 배포에서 쓸 수 없습니다. lambda로 설정하세요.');
+  }
+  return source;
 };
 
 export interface LambdaConfig {

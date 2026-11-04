@@ -30,7 +30,9 @@ export function pickChips(pick: FlowPick, hrefWithout: (p: FlowPick) => string) 
   return FLOW_KEYS.filter((k) => pick[k]).map((k) => {
     const rest: FlowPick = { ...pick };
     delete rest[k];
-    return { label: `${FLOW_LABELS[k]} · ${pick[k]}`, removeHref: hrefWithout(rest) };
+    const column = FLOW_LABELS[k];
+    const value = pick[k] ?? '';
+    return { column, value, removeHref: hrefWithout(rest) };
   });
 }
 
@@ -42,3 +44,7 @@ export function roleLabel(role: string): string {
 
 /** "2026-10-12" → "10/12" */
 export const shortDay = (d: string) => d.slice(5).replace('-', '/');
+
+/** Data period as one label ("10/12–10/22"), for the detail subtitle. */
+export const dayRange = (r: { from: string; to: string }) =>
+  `${shortDay(r.from)}–${shortDay(r.to)}`;

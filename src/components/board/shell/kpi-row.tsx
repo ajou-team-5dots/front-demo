@@ -2,45 +2,47 @@ import { cn } from '@/lib/utils';
 
 interface Kpi {
   label: string;
+  /** The number only ("4,429", "4.74"), or a word when there is no number ("사망 0건"). */
   value: string;
+  /** Unit drawn small and gray after the number ("건", "배"). */
+  unit?: string;
   /** Full meaning for the hover title, e.g. "기대 대비 위험 (던전 단계 반영)". */
   title?: string;
 }
 
 interface KpiRowProps {
-  /** Up to three pairs, placed at the Figma x positions. */
+  /** Up to three, in equal columns. */
   items: Kpi[];
   className?: string;
 }
 
-/** Left edge of each label/value pair inside the box (Figma 25:169 / 38:623). */
-const PAIR_X = [12, 121, 263];
-
-// Figma 25:169 / 38:623: a white 380×66 box (radius 10) at the right end of the detail's title
-// row. Labels 12 SemiBold gray-1 at top 12, values 22 SemiBold ink at top 28. The values fade in
-// when they change (another monster).
+// A white box (size.kpi-box, radius 10, no border) at the right end of the detail's title row:
+// three equal columns of label (12 SemiBold gray-1) over value (32 Bold ink, tabular) with its
+// unit (16 gray-1) on the number's baseline. Both lines are trimmed to cap height and baseline
+// (text-box), so centring the group leaves equal space above the label and below the digits.
+// The values fade in when they change.
 export function KpiRow({ items, className }: KpiRowProps) {
   return (
     <dl
       className={cn(
-        'board-enter relative h-[66px] w-[380px] shrink-0 rounded-panel bg-panel tabular-nums',
+        'board-enter grid h-(--size-kpi-box-h) w-(--size-kpi-box-w) shrink-0 grid-cols-3 content-center gap-4 rounded-panel bg-panel px-4 tabular-nums',
         className,
       )}
     >
-      {items.slice(0, PAIR_X.length).map((k, i) => (
-        <div
-          key={k.label}
-          className="absolute top-3 whitespace-nowrap"
-          style={{ left: PAIR_X[i] }}
-          title={k.title}
-        >
-          <dt className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1">
+      {items.slice(0, 3).map((k) => (
+        <div key={k.label} className="flex min-w-0 flex-col whitespace-nowrap" title={k.title}>
+          <dt className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1 [text-box:trim-both_cap_alphabetic]">
             {k.label}
           </dt>
-          <dd className="mt-0.5 text-(length:--font-size-kpi) leading-[26px] font-semibold text-ink">
+          <dd className="mt-2 text-(length:--font-size-kpi) leading-9 font-bold text-ink [text-box:trim-both_cap_alphabetic]">
             <span key={k.value} className="board-swap inline-block">
               {k.value}
             </span>
+            {k.unit ? (
+              <span className="ml-0.5 text-(length:--font-size-kpi-unit) font-semibold text-gray-1">
+                {k.unit}
+              </span>
+            ) : null}
           </dd>
         </div>
       ))}

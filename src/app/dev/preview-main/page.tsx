@@ -25,7 +25,6 @@ async function PreviewContent({
         pick={pick}
         stages={stagesOf(PREVIEW_ROWS)}
         basePath="/dev/preview-main"
-        variant="main"
       />
       <div className="mt-(--space-panel-gap)">
         <MainBoard

@@ -21,7 +21,8 @@ export function BoardFrame({ children }: BoardFrameProps) {
   return (
     <div className="@container w-full overflow-x-auto bg-gray-3">
       <div
-        className="mx-auto w-full max-w-[1920px] min-w-[1440px] pb-7"
+        data-board-frame
+        className="mx-auto w-full max-w-[1920px] min-w-[1440px] pb-(--space-page-bottom)"
         style={{ paddingInline: FRAME_PAD }}
       >
         <BoardHeader />
@@ -51,7 +52,7 @@ function SkeletonPanel({ className, children }: SkeletonPanelProps) {
     <div
       className={`rounded-panel bg-panel px-(--space-panel-inset) pt-(--space-panel-top) ${className}`}
     >
-      <Block className="h-[22px] w-40" />
+      <Block className="h-(--size-panel-header) w-40" />
       {children}
     </div>
   );
@@ -72,8 +73,7 @@ function FilterSkeleton() {
 function SidebarSkeleton() {
   return (
     <SkeletonPanel className="h-[1132px] w-[320px] shrink-0">
-      <Block className="mt-1 h-[13px] w-48" />
-      <div className="mt-[22px] flex flex-col gap-2">
+      <div className="mt-[10px] flex flex-col gap-2">
         {Array.from({ length: 24 }, (_, i) => (
           <Block key={i} className="h-9 w-full" />
         ))}
@@ -94,10 +94,10 @@ export function MainSkeleton() {
         <SidebarSkeleton />
         <div className="flex min-w-0 flex-1 flex-col gap-(--space-panel-gap)">
           <SkeletonPanel className="h-[678px]">
-            <Block className="mt-[25px] h-[597px] w-full" />
+            <Block className="mt-[10px] h-[597px] w-full" />
           </SkeletonPanel>
           <SkeletonPanel className="h-[440px]">
-            <Block className="mt-[25px] h-[320px] w-full" />
+            <Block className="mt-[10px] h-[320px] w-full" />
           </SkeletonPanel>
         </div>
       </div>
@@ -117,11 +117,11 @@ export function DetailSkeleton() {
       aria-busy="true"
       aria-label="상세를 불러오는 중"
     >
-      <div className="flex h-[66px] items-center justify-between gap-6 pl-4">
+      <div className="flex h-(--size-kpi-box-h) items-center justify-between gap-6 pl-4">
         <Block className="h-[29px] w-56" />
-        <Block className="h-[66px] w-[380px] shrink-0 rounded-panel" />
+        <Block className="h-(--size-kpi-box-h) w-(--size-kpi-box-w) shrink-0 rounded-panel" />
       </div>
-      <div className="flex h-[380px] gap-(--space-panel-gap)">
+      <div className="flex h-(--size-detail-row) gap-(--space-panel-gap)">
         <SkeletonPanel className="h-full w-[340px] shrink-0 @min-[1200px]:w-[360px]" />
         <SkeletonPanel className="h-full min-w-0 flex-1" />
       </div>
