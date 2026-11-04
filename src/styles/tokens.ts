@@ -21,6 +21,7 @@ export const COLOR = {
     survival: 'var(--chart-survival)',
     track: 'var(--chart-track)',
     trackBar: 'var(--chart-track-bar)',
+    guide: 'var(--chart-guide)',
     accent: 'var(--chart-accent)',
     earth: 'var(--chart-earth)',
     violet: 'var(--chart-violet)',
@@ -107,6 +108,7 @@ export const SPACE = {
   panelInset: 16,
   panelTop: 12,
   segmentInset: 3,
+  pageBottom: 20,
 } as const;
 
 /** Font size, px. */
@@ -178,7 +180,7 @@ export const SIZE = {
     w: 420,
     h: 72,
   },
-  detailRow: 340,
+  detailRow: 352,
   patchPanel: 288,
 } as const;
 
@@ -344,6 +346,15 @@ export const TOKEN_LIST: TokenEntry[] = [
     value: '#e7ecf3',
     description:
       '비율·기술 막대의 빈 부분(트랙). track 보다 조금 옅게(패널 대비 약 1.15:1) 해서 빈 자리가 값 막대보다 눈에 띄지 않게. 제약: 패널 위에서 보일 만큼 (그래픽 대비 대상 아님)',
+  },
+  {
+    path: 'color.chart.guide',
+    type: 'color',
+    cssVar: '--chart-guide',
+    css: '#e4e9f0',
+    value: '#e4e9f0',
+    description:
+      '준비 조건별 비중 공유 눈금(0·25·50·75·100%)의 세로 격자선. 글자가 아닌 안내선이라 아주 옅게, 그래도 흰 패널 위에서 보이게. 제약: 패널 대비 1.15:1 이상(tokens:contrast), 점·연결선보다 훨씬 옅게',
   },
   {
     path: 'color.chart.accent',
@@ -866,6 +877,15 @@ export const TOKEN_LIST: TokenEntry[] = [
       '세그먼트 컨트롤(기간, 2초·5초) 안쪽 여백. 제약: 단추 높이 24px 와 바깥 30px 에 맞춘 값(30 = 24 + 2×3)',
   },
   {
+    path: 'space.page-bottom',
+    type: 'dimension',
+    cssVar: '--space-page-bottom',
+    css: '20px',
+    value: 20,
+    description:
+      '보드 아래 끝과 창 아래 끝 사이 여백(창보다 짧은 화면은 보드가 여기까지 늘어남). 페이지 위 여백(창 위 끝 → 머리글 글자, 약 20px)과 같은 값. 제약: 레이아웃 영향',
+  },
+  {
     path: 'font-size.micro',
     type: 'dimension',
     cssVar: '--font-size-micro',
@@ -1234,10 +1254,10 @@ export const TOKEN_LIST: TokenEntry[] = [
     path: 'size.detail-row',
     type: 'dimension',
     cssVar: '--size-detail-row',
-    css: '340px',
-    value: 340,
+    css: '352px',
+    value: 352,
     description:
-      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 준비 조건 패널 내용(머리 줄 + 네 조건 + 두 비율 막대)이 들어가야 함',
+      '상세 첫 줄(전투 양상 + 준비 조건별 비중) 높이. 제약: 레이아웃 영향, 준비 조건 패널 내용(머리 줄 + 눈금 줄 + 네 조건 + 두 비율 막대)과 전투 양상(오각형 + 중앙값 기준 거리 눈금자 줄)이 들어가야 함',
   },
   {
     path: 'size.patch-panel',
@@ -1246,7 +1266,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '288px',
     value: 288,
     description:
-      '상세 "패치 전후 위험" 패널 높이. 모든 몬스터·패치·기간에서 같은 값, 추이 차트 높이는 이 값에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함',
+      '상세 "패치 전후 위험" 패널의 최소 높이. 상세가 창보다 짧으면 이 패널이 남는 높이를 받아 늘어나고, 추이 차트 높이는 패널 높이에서 머리 줄과 여백을 뺀 값. 제약: 레이아웃 영향, 오른쪽 "같은 조건 위험 배수" 묶음(배수, 범위 축, 전후 한 줄, 배지)이 들어가야 함',
   },
   {
     path: 'motion.ease.board',

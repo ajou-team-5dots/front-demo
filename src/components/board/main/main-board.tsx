@@ -15,7 +15,11 @@ import { useBoardPending } from '@/components/board/shell/board-pending';
 import { FlowChips } from '@/components/board/shell/chip';
 import { EmptyState } from '@/components/board/shell/empty-state';
 import { Panel } from '@/components/board/shell/panel';
-import { MainWidthProvider, useMeasuredWidth } from '@/components/board/shell/main-width';
+import {
+  MainWidthProvider,
+  useMeasuredHeight,
+  useMeasuredWidth,
+} from '@/components/board/shell/main-width';
 import { boardHref, monsterOfHref, toggleHref } from '@/lib/board-filters';
 import { pickChips } from '@/lib/board-rows';
 import { cn } from '@/lib/utils';
@@ -55,6 +59,8 @@ interface SharedHover {
 //   side on a track inside a clipped viewport; opening slides the track left by one slot + gap.
 // A list row, a scatter mark or Enter opens a monster (?m=); the open one again, or Esc, closes.
 const SIDEBAR_W = 320;
+/** The overview's two panels at their base size: scatter (fixed) and flow (grows with the board). */
+const FLOW_H = 440;
 const GAP = SPACE.panelGap;
 // Board height: whichever slot is shown sets it (the overview's two panels, 678 + 14 + 440, or
 // the detail's own content), and the sidebar stretches to it, so the sidebar's bottom edge is
@@ -115,6 +121,27 @@ export function MainBoard({
   const detailRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const { width: mainW, settled } = useMeasuredWidth(mainRef);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const flowRef = useRef<HTMLDivElement>(null);
+  const flowH = useMeasuredHeight(flowRef, FLOW_H);
+  // The board reaches the viewport bottom (less the frame's bottom padding) when its content is
+  // shorter; the last panel of the shown slot takes the extra height (flow on the overview,
+  // 패치 전후 위험 in the detail). Longer content scrolls the page as before.
+  const [fillH, setFillH] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el) return undefined;
+    const frame = el.closest<HTMLElement>('[data-board-frame]');
+    const measure = () => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const pad = frame ? parseFloat(getComputedStyle(frame).paddingBottom) || 0 : 0;
+      setFillH(Math.max(0, Math.floor(window.innerHeight - top - pad)));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+  const fill = fillH === null ? undefined : fillH;
   const open = Boolean(monster);
 
   const withBase = useCallback(
@@ -264,9 +291,11 @@ export function MainBoard({
 
   const chips = pickChips(pick, overviewHref);
   const hasFlow = flow.rows.some((r) => r.enc > 0);
+  const sankeyH = SANKEY_H + Math.max(0, flowH - FLOW_H);
 
   return (
     <div
+      ref={rootRef}
       className="flex items-stretch"
       style={{ gap: GAP }}
       data-board-still={settled ? undefined : ''}
@@ -317,7 +346,7 @@ export function MainBoard({
           >
             <div
               className={cn('flex shrink-0 flex-col', open && 'absolute top-0 left-0')}
-              style={{ width: SLOT_W, gap: GAP }}
+              style={{ width: SLOT_W, gap: GAP, minHeight: open ? undefined : fill }}
               inert={open}
             >
               <Panel
@@ -347,65 +376,73 @@ export function MainBoard({
                   )}
                 </div>
               </Panel>
-              <Panel
-                title="전체 교전 흐름"
-                info={
-                  <>
-                    <p>칸을 차례로 눌러보세요.</p>
-                    <p>
-                      고른 칸이 패널 아래에 차례로 쌓이고, 몬스터 상세에도 같은 조건으로 이어집니다.
-                    </p>
-                  </>
-                }
-                className="h-[440px] shrink-0"
-                enter={2}
-              >
-                <div
-                  className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] left-4"
-                  style={{ right: SANKEY_REST - PANEL_X, height: SANKEY_H }}
+              {/* The overview's last panel: at least FLOW_H, and it takes the board's extra height;
+                  the sankey and the summary grow with it. */}
+              <div ref={flowRef} className="flex flex-1 flex-col" style={{ minHeight: FLOW_H }}>
+                <Panel
+                  title="전체 교전 흐름"
+                  info={
+                    <>
+                      <p>칸을 차례로 눌러보세요.</p>
+                      <p>
+                        고른 칸이 패널 아래에 차례로 쌓이고, 몬스터 상세에도 같은 조건으로
+                        이어집니다.
+                      </p>
+                    </>
+                  }
+                  className="flex-1"
+                  enter={2}
                 >
-                  {hasFlow ? (
-                    <Sankey
-                      width={mainW - SANKEY_REST}
-                      columns={flow.columns}
+                  <div
+                    className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] left-4"
+                    style={{ right: SANKEY_REST - PANEL_X, height: sankeyH }}
+                  >
+                    {hasFlow ? (
+                      <Sankey
+                        width={mainW - SANKEY_REST}
+                        height={sankeyH}
+                        columns={flow.columns}
+                        rows={flow.rows}
+                        pick={pick}
+                        onToggle={toggleCell}
+                      />
+                    ) : (
+                      <EmptyState>이 조건의 교전이 없습니다</EmptyState>
+                    )}
+                  </div>
+                  <div
+                    className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] right-3"
+                    style={{ width: SUMMARY_W, height: sankeyH }}
+                  >
+                    <FlowSummary
                       rows={flow.rows}
                       pick={pick}
-                      onToggle={toggleCell}
+                      excludedEnc={flow.excluded?.enc ?? 0}
+                      excludedDeaths={flow.excluded?.deaths ?? 0}
                     />
-                  ) : (
-                    <EmptyState>이 조건의 교전이 없습니다</EmptyState>
-                  )}
-                </div>
-                <div
-                  className="absolute top-[calc(var(--space-panel-top)+var(--size-panel-header)+10px)] right-3"
-                  style={{ width: SUMMARY_W, height: SANKEY_H }}
-                >
-                  <FlowSummary
-                    rows={flow.rows}
-                    pick={pick}
-                    excludedEnc={flow.excluded?.enc ?? 0}
-                    excludedDeaths={flow.excluded?.deaths ?? 0}
-                  />
-                </div>
-                <div className="absolute bottom-3 left-3">
-                  {chips.length ? (
-                    <FlowChips chips={chips} />
-                  ) : (
-                    <p className="flex h-7 items-center text-(length:--font-size-label) font-medium text-gray-1">
-                      칸을 누르면 여기에 조건이 쌓입니다
-                    </p>
-                  )}
-                </div>
-              </Panel>
+                  </div>
+                  <div className="absolute bottom-3 left-3">
+                    {chips.length ? (
+                      <FlowChips chips={chips} />
+                    ) : (
+                      <p className="flex h-7 items-center text-(length:--font-size-label) font-medium text-gray-1">
+                        칸을 누르면 여기에 조건이 쌓입니다
+                      </p>
+                    )}
+                  </div>
+                </Panel>
+              </div>
             </div>
             {/* A size container: the detail switches to its wide arrangement from 1200. */}
             <div
               ref={detailRef}
               role="region"
               aria-label={monster ? `${monster} 상세` : '몬스터 상세'}
-              className={cn('@container shrink-0', !open && 'absolute top-0')}
+              className={cn('@container flex shrink-0 flex-col', !open && 'absolute top-0')}
               style={
-                open ? { width: SLOT_W, marginLeft: DETAIL_X } : { width: SLOT_W, left: DETAIL_X }
+                open
+                  ? { width: SLOT_W, marginLeft: DETAIL_X, minHeight: fill }
+                  : { width: SLOT_W, left: DETAIL_X }
               }
               inert={!open}
             >

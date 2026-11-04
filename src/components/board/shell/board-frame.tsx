@@ -21,7 +21,8 @@ export function BoardFrame({ children }: BoardFrameProps) {
   return (
     <div className="@container w-full overflow-x-auto bg-gray-3">
       <div
-        className="mx-auto w-full max-w-[1920px] min-w-[1440px] pb-7"
+        data-board-frame
+        className="mx-auto w-full max-w-[1920px] min-w-[1440px] pb-(--space-page-bottom)"
         style={{ paddingInline: FRAME_PAD }}
       >
         <BoardHeader />

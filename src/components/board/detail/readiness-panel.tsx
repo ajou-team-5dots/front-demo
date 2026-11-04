@@ -21,6 +21,11 @@ const CONDITIONS: { key: H1Condition; label: string; meaning: string }[] = [
   { key: 'noArmor', label: '방어구 없음', meaning: '방어구 없이 교전' },
 ];
 
+/** Columns of a dumbbell row; the scale row and the gridlines use the same grid to line up. */
+const ROW_GRID = 'grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] gap-x-2';
+/** Shared x scale of the dumbbells (share of deaths / of kills, 0–100%). */
+const TICKS = [0, 0.25, 0.5, 0.75, 1];
+
 /** Values that change on a filter change slide instead of jumping. */
 const SLIDE = `left ${SLOW} ${EASE}, width ${SLOW} ${EASE}`;
 
@@ -73,7 +78,7 @@ function DumbbellRow({ label, meaning, row, totalDeaths, show, hide }: DumbbellR
   return (
     <div
       role="listitem"
-      className="grid grid-cols-[72px_minmax(0,1fr)_140px_40px_68px] items-center gap-x-2"
+      className={cn(ROW_GRID, 'items-center')}
       onPointerMove={(e) => show(e, tipBody)}
       onPointerLeave={hide}
     >
@@ -259,22 +264,50 @@ export function ReadinessPanel({ h1, aux1, aux2 }: ReadinessPanelProps) {
       }
     >
       <DetailMotion />
-      <div
-        role="list"
-        aria-label="준비 조건별 사망자와 처치 교전 비중"
-        className="mt-5 grid h-[139px] w-full grid-rows-4"
-      >
-        {CONDITIONS.map((c) => (
-          <DumbbellRow
-            key={c.key}
-            label={c.label}
-            meaning={c.meaning}
-            row={byKey.get(c.key)}
-            totalDeaths={totalDeaths}
-            show={tip.show}
-            hide={tip.hide}
-          />
-        ))}
+      {/* One x scale for every dumbbell row: tick labels on top, light gridlines through all
+          rows, both in the same column of the same grid as the dots, so they line up exactly. */}
+      <div aria-hidden className={cn(ROW_GRID, 'mt-3 h-[14px]')}>
+        <div className="relative col-start-2">
+          {TICKS.map((t) => (
+            <span
+              key={t}
+              className="absolute top-0 -translate-x-1/2 text-(length:--font-size-caption) leading-[14px] font-medium text-gray-1 tabular-nums"
+              style={{ left: `${t * 100}%` }}
+            >
+              {pct(t)}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="relative mt-1">
+        <div aria-hidden className={cn(ROW_GRID, 'pointer-events-none absolute inset-0')}>
+          <div className="relative col-start-2">
+            {TICKS.map((t) => (
+              <span
+                key={t}
+                className="absolute inset-y-0 w-px -translate-x-1/2 bg-chart-guide"
+                style={{ left: `${t * 100}%` }}
+              />
+            ))}
+          </div>
+        </div>
+        <div
+          role="list"
+          aria-label="준비 조건별 사망자와 처치 교전 비중"
+          className="relative grid h-[139px] w-full grid-rows-4"
+        >
+          {CONDITIONS.map((c) => (
+            <DumbbellRow
+              key={c.key}
+              label={c.label}
+              meaning={c.meaning}
+              row={byKey.get(c.key)}
+              totalDeaths={totalDeaths}
+              show={tip.show}
+              hide={tip.hide}
+            />
+          ))}
+        </div>
       </div>
       <ShareBar
         className="mt-[17px]"

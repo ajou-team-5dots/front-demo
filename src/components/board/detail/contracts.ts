@@ -31,7 +31,7 @@ export interface ReadinessPanelProps {
 
 /**
  * Figma 38:448 "패치 전후 위험" with the patch select, `width` wide (the detail column, measured) ×
- * size.patch-panel, the same height for every monster and patch. Picked flow chips sit in
+ * `height` (at least size.patch-panel, more when the board fills the window). Picked flow chips sit in
  * PickedFlowRow; `picked` only marks the trend as filtered.
  */
 export interface PatchRiskProps {
@@ -42,6 +42,8 @@ export interface PatchRiskProps {
   picked: boolean;
   /** Panel width in px; the daily trend takes what the ratio column leaves. */
   width?: number;
+  /** Panel height in px (at least size.patch-panel); the trend's height comes from it. */
+  height?: number;
 }
 
 /** Row at the top of the detail listing the picked flow cells (only rendered when there are picks). */

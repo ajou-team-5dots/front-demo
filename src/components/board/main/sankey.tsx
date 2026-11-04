@@ -28,7 +28,6 @@ import { nodeHue } from './sankey-palette';
 // flows that pass every picked cell in their own gradient and steps everything else back; picked
 // nodes keep their hue and widen.
 export const SANKEY_H = 320;
-const H = SANKEY_H;
 const TOP = 26;
 const NODE_W = SIZE.sankey.nodeWidth;
 const GAP = 10;
@@ -112,15 +111,24 @@ const translate = (x: number, y: number): CSSProperties => ({
 });
 
 interface SankeyProps {
-  /** Drawing width in px; the height is fixed at SANKEY_H. */
+  /** Drawing width in px. */
   width: number;
+  /** Drawing height in px (SANKEY_H at the base panel height; the panel can grow it). */
+  height?: number;
   columns: FlowColumn[];
   rows: FlowRow[];
   pick: FlowPick;
   onToggle: (key: FlowKey, value: string) => void;
 }
 
-export function Sankey({ width: W, columns, rows, pick, onToggle }: SankeyProps) {
+export function Sankey({
+  width: W,
+  height: H = SANKEY_H,
+  columns,
+  rows,
+  pick,
+  onToggle,
+}: SankeyProps) {
   const tip = useChartTooltip();
   // SVG ids must be plain: drop the punctuation React puts around useId values.
   const gid = `sk${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;

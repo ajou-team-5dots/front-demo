@@ -41,6 +41,8 @@ const PANEL_PAD = 32;
 const COL_GAP = 28;
 const SIDE_W = 340;
 const M = { l: 36, r: 14, t: 18, b: 22 };
+/** Space around an average label in the right gutter (half on each side). */
+const GUTTER_PAD = 12;
 /** Days with fewer encounters than this are drawn faint (hollow point, light line). */
 const THIN_ENC = 10;
 
@@ -100,20 +102,28 @@ function summarize(trend: DailyPoint[], patch: PatchInfo | undefined, h2: H2Patc
 const avgText = (b: Avg, a: Avg) =>
   `평균 패치 전 ${b.value.toFixed(1)} (${num(b.events)}/${num(b.enc)}) → 패치 후 ${a.value.toFixed(1)} (${num(a.events)}/${num(a.enc)})`;
 
-/** Where an average label is drawn. */
-interface Spot {
-  x: number;
-  y: number;
-  anchor: 'start' | 'end';
-}
-
 function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: TrendProps) {
   // Series key, thin-day key and the average key are in the panel header legend; the averages'
   // values are direct labels on their lines.
   const days = [...trend].sort((a, b) => a.day.localeCompare(b.day));
   const first = days[0].day;
   const span = Math.max(1, dayIndex(days[days.length - 1].day, first) + 1);
-  const innerW = TW - M.l - M.r;
+  // The two average values are labels in a right gutter outside the plot, at their line's height
+  // (the after line runs into it), so they can never sit on a point or the trend line. The
+  // gutter is as wide as the longer label.
+  const { before, after } = summarize(trend, patch, h2);
+  const beforeText = before ? `패치 전 ${before.value.toFixed(1)}` : '';
+  const afterText = after ? `패치 후 ${after.value.toFixed(1)}` : '';
+  const MR =
+    before && after
+      ? Math.ceil(
+          Math.max(
+            textWidth(beforeText, FONT_SIZE.caption),
+            textWidth(afterText, FONT_SIZE.caption),
+          ),
+        ) + GUTTER_PAD
+      : M.r;
+  const innerW = TW - M.l - MR;
   const innerH = TH - M.t - M.b;
   const xAt = (idx: number) => round2(M.l + (idx / span) * innerW);
   const xDay = (day: string) => xAt(dayIndex(day, first) + 0.5);
@@ -121,8 +131,6 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
   const patchIdx = patch ? dayIndex(kstDay(patch.ts), first) + kstDayFraction(patch.ts) : null;
   const patchInRange = patchIdx !== null && patchIdx >= 0 && patchIdx <= span;
   const patchX = patchInRange && patchIdx !== null ? xAt(patchIdx) : null;
-
-  const { before, after } = summarize(trend, patch, h2);
 
   const maxV = Math.max(...days.map(risk), before?.value ?? 0, after?.value ?? 0);
   const yMax = niceCeil(maxV * 1.1);
@@ -156,47 +164,18 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
     .join(' ');
   const labelEvery = Math.ceil(days.length / 11);
   const beforeD = patchXT !== null && before ? `M${M.l},${beforeY} H${patchXT}` : null;
-  // Average labels go at an end of their own segment, above or below the dashed line: the first
-  // of right-above, right-below, left-above, left-below whose box clears every point and the
-  // trend line (sampled along each segment), so a label never sits on the data.
-  const beforeText = before ? `패치 전 평균 ${before.value.toFixed(1)}` : '';
-  const afterText = after ? `패치 후 평균 ${after.value.toFixed(1)}` : '';
-  const pad = STROKE.point.trend + 2;
-  const samples = pts.flatMap((d, i) => {
-    const x = xDay(d.day);
-    const y = yDay(d);
-    const next = pts[i + 1];
-    if (!next) return [[x, y]];
-    const nx = xDay(next.day);
-    const ny = yDay(next);
-    const n = Math.max(1, Math.ceil(Math.hypot(nx - x, ny - y) / 3));
-    return Array.from({ length: n }, (_, k) => [x + ((nx - x) * k) / n, y + ((ny - y) * k) / n]);
-  });
-  const clear = (x1: number, x2: number, y1: number, y2: number) =>
-    !samples.some(([px, py]) => px + pad > x1 && px - pad < x2 && py + pad > y1 && py - pad < y2);
-  const place = (text: string, lineY: number, left: number, right: number): Spot => {
-    const w = textWidth(text, FONT_SIZE.caption);
-    const top = M.t + FONT_SIZE.caption;
-    const bottom = M.t + innerH - 2;
-    // Nearest first: just above or below the line, then a row further out each way.
-    const ys = [-5, FONT_SIZE.caption + 3, -5 - 14, FONT_SIZE.caption + 3 + 14, -5 - 28]
-      .map((dy) => lineY + dy)
-      .filter((y) => y >= top && y <= bottom);
-    const spots: Spot[] = ys.flatMap((y) => [
-      { x: right, y, anchor: 'end' as const },
-      { x: left, y, anchor: 'start' as const },
-    ]);
-    const box = (sp: Spot) => {
-      const x1 = sp.anchor === 'end' ? sp.x - w : sp.x;
-      return [x1, x1 + w, sp.y - FONT_SIZE.caption, sp.y + 2] as const;
-    };
-    return (
-      spots.find((sp) => clear(...box(sp))) ?? spots[0] ?? { x: right, y: lineY - 5, anchor: 'end' }
-    );
-  };
-  const beforeSpot = patchXT === null ? null : place(beforeText, beforeY, M.l + 4, patchXT - 6);
-  const afterSpot = patchXT === null ? null : place(afterText, afterY, patchXT + 6, TW - M.r - 4);
-  const afterD = patchXT !== null && after ? `M${patchXT},${afterY} H${TW - M.r}` : null;
+  // Gutter label heights: centred on their line, pushed apart when the two lines are close.
+  const LABEL_GAP = FONT_SIZE.caption + 3;
+  let beforeLY = beforeY + FONT_SIZE.caption / 3;
+  let afterLY = afterY + FONT_SIZE.caption / 3;
+  if (Math.abs(beforeLY - afterLY) < LABEL_GAP) {
+    const mid = (beforeLY + afterLY) / 2;
+    const upFirst = beforeY <= afterY;
+    beforeLY = mid + (upFirst ? -LABEL_GAP / 2 : LABEL_GAP / 2);
+    afterLY = mid + (upFirst ? LABEL_GAP / 2 : -LABEL_GAP / 2);
+  }
+  const gutterX = TW - MR + GUTTER_PAD / 2;
+  const afterD = patchXT !== null && after ? `M${patchXT},${afterY} H${TW - MR}` : null;
 
   return (
     <div className="flex flex-col" style={{ width: TW }}>
@@ -216,7 +195,7 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
           <g key={t}>
             <line
               x1={M.l}
-              x2={TW - M.r}
+              x2={TW - MR}
               y1={yAt(t)}
               y2={yAt(t)}
               stroke="var(--chart-track)"
@@ -274,9 +253,8 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         ) : null}
         {beforeD && before ? (
           <text
-            x={beforeSpot?.x}
-            y={beforeSpot?.y}
-            textAnchor={beforeSpot?.anchor}
+            x={gutterX}
+            y={round2(beforeLY)}
             fontSize={FONT_SIZE.caption}
             fontWeight={600}
             fill="var(--chart-comparison)"
@@ -291,9 +269,8 @@ function Trend({ trend, patch, h2, picked, width: TW, height: TH, show, hide }: 
         ) : null}
         {afterD && after ? (
           <text
-            x={afterSpot?.x}
-            y={afterSpot?.y}
-            textAnchor={afterSpot?.anchor}
+            x={gutterX}
+            y={round2(afterLY)}
             fontSize={FONT_SIZE.caption}
             fontWeight={600}
             fill="var(--chart-comparison)"
@@ -529,7 +506,8 @@ function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
   else if (!sc) stateText = '배수 계산 불가 (모형 수렴 실패)';
 
   return (
-    <div className="flex flex-col" style={{ width: SIDE_W }}>
+    // Centred in the trend's height, so a tall panel keeps the block balanced, not top-heavy.
+    <div className="flex flex-col justify-center" style={{ width: SIDE_W }}>
       {/* What the ratio means (HINT) is in the panel's ⓘ. */}
       <h3 className="text-(length:--font-size-label) leading-[14px] font-semibold text-gray-1">
         같은 조건 위험 배수
@@ -616,12 +594,8 @@ function SidePanel({ patch, h2, picked, show, hide }: SidePanelProps) {
 /** Space under the header before the trend, and under the trend (the panel's bottom padding). */
 const BODY_TOP = 12;
 const BODY_BOTTOM = 16;
-/**
- * One panel height for every monster, patch and period (size.patch-panel); the trend takes what
- * the header and paddings leave, so the chart always fills the panel and empty states centre in
- * the same box.
- */
-const TREND_H = SIZE.patchPanel - SPACE.panelTop - SIZE.panelHeader - BODY_TOP - BODY_BOTTOM;
+/** Panel height taken by everything but the trend: top padding, header, the gaps around it. */
+const TREND_REST = SPACE.panelTop + SIZE.panelHeader + BODY_TOP + BODY_BOTTOM;
 
 // Figma 38:448 / 38:595: title + patch select (150×30 at 138/9), patch label, trend + ratio.
 export function PatchRisk({
@@ -631,7 +605,12 @@ export function PatchRisk({
   trend,
   picked,
   width = 1066,
+  height = SIZE.patchPanel,
 }: PatchRiskProps) {
+  // The panel is at least size.patch-panel and the trend fills whatever it is given, so the
+  // chart always fills the panel and empty states centre in the same box.
+  const panelH = Math.max(SIZE.patchPanel, height);
+  const TREND_H = panelH - TREND_REST;
   const trendW = width - PANEL_PAD - COL_GAP - SIDE_W;
   const tip = useChartTooltip();
   const fallback =
@@ -647,7 +626,7 @@ export function PatchRisk({
   const sum = summarize(trend, patch, picked ? undefined : h2);
 
   return (
-    <div className="h-(--size-patch-panel) shrink-0">
+    <div className="shrink-0" style={{ height: panelH }}>
       <Panel
         title="패치 전후 위험"
         className="h-full overflow-hidden"

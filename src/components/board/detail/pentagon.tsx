@@ -53,7 +53,7 @@ const ORDER = ['race_med', 'hits_med', 'hpcost_mean', 'escape_rate', 'avoid_rate
 // Figma 38:462 / 38:606, now titled "전투 양상"; 340×360 in the detail column, chart slot 302 wide.
 // The legend sits under the header (PanelLegend), so the drawing starts at the top label.
 const W = 302;
-const H = 244;
+const H = 240;
 const CX = W / 2;
 const CY = 132;
 const R = 90;
@@ -80,13 +80,14 @@ const isNum = (v: number | null | undefined): v is number =>
 const isOut = (z: number | null | undefined) => isNum(z) && Math.abs(z) > Z_MAX;
 
 /**
- * The ring scale is a small ruler outside the drawing, centered under the shape between the two
- * bottom axis labels (where no line ever runs): one radius long, center (−3) on the left, spoke
- * end (+3) on the right. Tick labels on the rings themselves would always cross the outline or a
- * ring edge somewhere.
+ * The ring scale is a ruler on its own row under the drawing ("중앙값 기준 거리"): center (−3) on
+ * the left, spoke end (+3) on the right, ticks at every ring. Tick labels on the rings themselves
+ * would always cross the outline or a ring edge somewhere.
  */
-const SCALE_Y = 228;
-const SCALE_X0 = CX - R / 2;
+const SCALE_STEP = 24;
+const SCALE_W = SCALE_STEP * 2 * Z_MAX + 16;
+const SCALE_H = 26;
+const SCALE_LINE_Y = 7;
 const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / 5;
 const pointAt = (i: number, r: number): [number, number] => [
   round2(CX + r * Math.cos(angle(i))),
@@ -145,7 +146,9 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
       info={
         <>
           <p>{CAPTION}</p>
-          <p className="mt-1">아래 눈금자 = 가운데 −3 → 바큇살 끝 +3, 0 = 중앙값(점선 고리)</p>
+          <p className="mt-1">
+            중앙값 기준 거리 눈금자 = 가운데 −3 → 바큇살 끝 +3, 0 = 중앙값(점선 고리)
+          </p>
           <p className="mt-1">바깥쪽 = 비교 집단보다 높음 · 모양만으로 원인을 판단하지 않음</p>
           {note ? <p className="mt-1">{note}</p> : null}
         </>
@@ -164,7 +167,7 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
           같은 역할·등급 중앙값
         </LegendItem>
       </PanelLegend>
-      <div className="mx-auto mt-2 h-[244px] w-[302px] shrink-0">
+      <div className="mx-auto mt-2 h-[240px] w-[302px] shrink-0">
         <svg
           width={W}
           height={H}
@@ -270,51 +273,6 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
             })}
           </g>
 
-          {/* Ring scale ruler (see SCALE_Y). The 0 tick is the dashed median ring's color. */}
-          <g data-ring-scale aria-hidden>
-            <line
-              x1={SCALE_X0}
-              x2={SCALE_X0 + R}
-              y1={SCALE_Y}
-              y2={SCALE_Y}
-              stroke="var(--gray-2)"
-              strokeWidth={STROKE.width.thin}
-            />
-            {SCALE_TICKS.map((z) => {
-              const x = round2(SCALE_X0 + radiusOf(z));
-              // The ends (±3) get a tick only: their labels would crowd the bottom axis labels.
-              const labelled = Math.abs(z) < Z_MAX;
-              return (
-                <g key={z}>
-                  <line
-                    x1={x}
-                    x2={x}
-                    y1={SCALE_Y - 3}
-                    y2={SCALE_Y + 3}
-                    stroke={z === 0 ? 'var(--chart-comparison)' : 'var(--gray-2)'}
-                    strokeWidth={z === 0 ? STROKE.width.regular : STROKE.width.thin}
-                  />
-                  {labelled ? (
-                    <text
-                      x={x}
-                      y={SCALE_Y + 13}
-                      textAnchor="middle"
-                      fontSize={FONT_SIZE.micro}
-                      fontWeight={z === 0 ? 600 : 500}
-                      fill={z === 0 ? 'var(--ink)' : 'var(--gray-1)'}
-                      paintOrder="stroke"
-                      stroke="var(--panel)"
-                      strokeWidth={STROKE.width.halo}
-                      strokeLinejoin="round"
-                      className="tabular-nums"
-                    >
-                      {tickLabel(z)}
-                    </text>
-                  ) : null}
-                </g>
-              );
-            })}
-          </g>
           {/* Axis labels */}
           {rows.map((r) => {
             const [x, y] = pointAt(r.i, R + 12);
@@ -397,6 +355,48 @@ export function Pentagon({ axes, rank, rankOf, note }: PentagonProps) {
               onPointerLeave={tip.hide}
             />
           ))}
+        </svg>
+      </div>
+      <div
+        data-ring-scale
+        className="mx-auto mt-1 flex items-center gap-2 text-(length:--font-size-caption) font-medium text-gray-1"
+      >
+        <span>중앙값 기준 거리</span>
+        <svg aria-hidden width={SCALE_W} height={SCALE_H} className="shrink-0">
+          <line
+            x1={8}
+            x2={SCALE_W - 8}
+            y1={SCALE_LINE_Y}
+            y2={SCALE_LINE_Y}
+            stroke="var(--gray-2)"
+            strokeWidth={STROKE.width.regular}
+          />
+          {SCALE_TICKS.map((z) => {
+            const x = 8 + (z + Z_MAX) * SCALE_STEP;
+            return (
+              <g key={z}>
+                <line
+                  x1={x}
+                  x2={x}
+                  y1={SCALE_LINE_Y - 4}
+                  y2={SCALE_LINE_Y + 4}
+                  stroke={z === 0 ? 'var(--chart-comparison)' : 'var(--gray-1)'}
+                  strokeWidth={z === 0 ? STROKE.width.bold : STROKE.width.regular}
+                />
+                <text
+                  x={x}
+                  y={SCALE_H - 2}
+                  textAnchor="middle"
+                  fontSize={FONT_SIZE.caption}
+                  fontWeight={z === 0 ? 600 : 500}
+                  fill={z === 0 ? 'var(--ink)' : 'var(--gray-1)'}
+                  className="tabular-nums"
+                >
+                  {tickLabel(z)}
+                </text>
+              </g>
+            );
+          })}
         </svg>
       </div>
       {tip.node}

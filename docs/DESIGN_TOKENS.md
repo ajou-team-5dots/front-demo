@@ -91,6 +91,7 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 | `color.chart.survival`                            | `--chart-survival`   | 생존 막대, 처치 점                                        |
 | `color.chart.track`                               | `--chart-track`      | 격자, 기준선                                              |
 | `color.chart.track-bar`                           | `--chart-track-bar`  | 비율·기술 막대의 빈 부분 (track 80%, 조금 옅게)           |
+| `color.chart.guide`                               | `--chart-guide`      | 준비 조건 공유 눈금의 세로 격자선 (패널 대비 1.15:1 이상) |
 | `color.chart.accent/earth/violet`                 | `--chart-accent` 등  | 흐름도 칸 색의 재료                                       |
 | `color.chart.neutral`                             | `--chart-neutral`    | 산점도 1배 미만 점, 흐름도 순서 밖 칸                     |
 | `color.status.*`                                  | `--status-*`         | 배지 글자 (점검 신호, 표본 부족, 가설 지지)               |
@@ -169,34 +170,35 @@ AI 에이전트(Claude, Codex)로 고칠 때의 작업 지침은 `design-tokens/
 
 ### 크기, 모서리, 간격
 
-| 토큰                     | 값  | 화면 위치                                               |
-| ------------------------ | --- | ------------------------------------------------------- |
-| `size.bar.skill`         | 15  | 보스 기술 막대 높이                                     |
-| `size.bar.share`         | 16  | 준비 패널 비율 막대 높이                                |
-| `size.bar.interval`      | 6   | 같은 조건 위험 배수 범위 막대 높이                      |
-| `size.bar.zero-stub`     | 3   | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)           |
-| `size.dumbbell.line`     | 3   | 준비 조건 처치자→사망자 선                              |
-| `size.dumbbell.dot`      | 14  | 준비 조건 점 지름                                       |
-| `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                                 |
-| `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                                |
-| `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                         |
-| `size.icon.search`       | 14  | 필터 바 몬스터 검색 돋보기 아이콘                       |
-| `size.panel-header`      | 30  | 모든 패널 머리 줄 높이                                  |
-| `size.kpi-box.w`         | 420 | 상세 KPI 상자 너비                                      |
-| `size.kpi-box.h`         | 72  | 상세 KPI 상자 높이 = 제목 줄 높이                       |
-| `size.detail-row`        | 340 | 상세 첫 줄(전투 양상 + 준비 조건) 높이                  |
-| `size.patch-panel`       | 288 | 패치 전후 위험 패널 높이 (모든 몬스터 같은 값)          |
-| `size.sankey.node-width` | 14  | 흐름도 칸 너비                                          |
-| `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                                     |
-| `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                                   |
-| `radius.panel`           | 10  | 패널, 사이드바, KPI 상자 (`rounded-panel`)              |
-| `radius.control`         | 6   | 입력·조작 요소, 목록 행, 툴팁 (`rounded-control`)       |
-| `radius.pill`            | 4   | 칩, 배지 (`rounded-pill`)                               |
-| `radius.mark`            | 2   | 모든 막대·트랙, 흐름도 칸, 산점도 네모 (`rounded-mark`) |
-| `space.panel-gap`        | 14  | 패널 사이                                               |
-| `space.panel-inset`      | 16  | 패널 안쪽 좌우                                          |
-| `space.panel-top`        | 12  | 패널 위 (제목 위)                                       |
-| `space.segment-inset`    | 3   | 기간, 2초·5초 세그먼트 안쪽                             |
+| 토큰                     | 값  | 화면 위치                                                      |
+| ------------------------ | --- | -------------------------------------------------------------- |
+| `size.bar.skill`         | 15  | 보스 기술 막대 높이                                            |
+| `size.bar.share`         | 16  | 준비 패널 비율 막대 높이                                       |
+| `size.bar.interval`      | 6   | 같은 조건 위험 배수 범위 막대 높이                             |
+| `size.bar.zero-stub`     | 3   | 값이 0인 막대 자리의 짧은 표시 (빈 트랙 대신)                  |
+| `size.dumbbell.line`     | 3   | 준비 조건 처치자→사망자 선                                     |
+| `size.dumbbell.dot`      | 14  | 준비 조건 점 지름                                              |
+| `size.legend.dot`        | 10  | 준비 패널 범례 동그라미                                        |
+| `size.legend.swatch-w`   | 16  | 보스 기술 범례 견본 너비                                       |
+| `size.icon.info`         | 15  | 패널 제목 줄 ⓘ 설명 단추 아이콘                                |
+| `size.icon.search`       | 14  | 필터 바 몬스터 검색 돋보기 아이콘                              |
+| `size.panel-header`      | 30  | 모든 패널 머리 줄 높이                                         |
+| `size.kpi-box.w`         | 420 | 상세 KPI 상자 너비                                             |
+| `size.kpi-box.h`         | 72  | 상세 KPI 상자 높이 = 제목 줄 높이                              |
+| `size.detail-row`        | 352 | 상세 첫 줄(전투 양상 + 준비 조건) 높이                         |
+| `size.patch-panel`       | 288 | 패치 전후 위험 패널 최소 높이 (창이 남으면 늘어남)             |
+| `size.sankey.node-width` | 14  | 흐름도 칸 너비                                                 |
+| `size.sankey.node-min`   | 18  | 흐름도 칸 최소 높이                                            |
+| `size.sankey.pick-grow`  | 4   | 고른 칸이 넓어지는 양                                          |
+| `radius.panel`           | 10  | 패널, 사이드바, KPI 상자 (`rounded-panel`)                     |
+| `radius.control`         | 6   | 입력·조작 요소, 목록 행, 툴팁 (`rounded-control`)              |
+| `radius.pill`            | 4   | 칩, 배지 (`rounded-pill`)                                      |
+| `radius.mark`            | 2   | 모든 막대·트랙, 흐름도 칸, 산점도 네모 (`rounded-mark`)        |
+| `space.panel-gap`        | 14  | 패널 사이                                                      |
+| `space.panel-inset`      | 16  | 패널 안쪽 좌우                                                 |
+| `space.panel-top`        | 12  | 패널 위 (제목 위)                                              |
+| `space.segment-inset`    | 3   | 기간, 2초·5초 세그먼트 안쪽                                    |
+| `space.page-bottom`      | 20  | 보드 아래 끝 ↔ 창 아래 끝 (짧은 화면은 보드가 여기까지 늘어남) |
 
 ### 모서리 규칙 (요소 종류 → 토큰)
 

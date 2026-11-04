@@ -86,3 +86,24 @@ export function useMeasuredWidth(
 
   return { width, settled };
 }
+
+/**
+ * Border-box height of `ref`, kept current with a ResizeObserver. Starts at `fallback` (the
+ * server render) and measures before the first client paint.
+ */
+export function useMeasuredHeight(ref: RefObject<HTMLElement | null>, fallback: number): number {
+  const [height, setHeight] = useState(fallback);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const measure = () => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      if (h > 0) setHeight(h);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return height;
+}

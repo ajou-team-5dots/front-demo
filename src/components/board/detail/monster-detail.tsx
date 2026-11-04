@@ -119,7 +119,7 @@ export function MonsterDetail({
   return (
     // Another monster swaps in place: the same charts stay mounted, so marks glide to the new
     // values while the panels come back from the pending dim, and title / KPI text fade in.
-    <div data-detail={monster} className="flex w-full flex-col gap-(--space-panel-gap)">
+    <div data-detail={monster} className="flex w-full flex-1 flex-col gap-(--space-panel-gap)">
       <PickedFlowRow chips={chips} />
       <TitleRow
         monster={monster}
