@@ -114,10 +114,12 @@ const desc = (t) => t.node.$description ?? '';
 const css = [
   `/* ${HEADER} */`,
   ':root {',
-  ...tokens.map((t) => {
-    const note = desc(t) ? ` /* ${desc(t).replaceAll('*/', '')} */` : '';
-    return `  ${cssName(t.path)}: ${cssValue(t)};${note}`;
-  }),
+  // The description goes on its own line above the variable, so long notes never make Prettier
+  // split the value across lines.
+  ...tokens.flatMap((t) => [
+    ...(desc(t) ? [`  /* ${desc(t).replaceAll('*/', '')} */`] : []),
+    `  ${cssName(t.path)}: ${cssValue(t)};`,
+  ]),
   '}',
   '',
 ].join('\n');

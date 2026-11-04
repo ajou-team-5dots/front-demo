@@ -331,7 +331,7 @@ export const TOKEN_LIST: TokenEntry[] = [
     css: '#c0850f',
     value: '#c0850f',
     description:
-      '흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에는 쓰지 않음(2.73:1), 칸마다 이름 글자가 붙음',
+      '흐름도 칸 색 재료(호박색). 제약: 패널(흰) 바탕 그래픽 대비 3:1 이상 (tokens:contrast 검사). gray-3 위에서는 3:1 미만이라 그 위에 쓰지 않음, 칸마다 이름 글자가 붙음',
   },
   {
     path: 'color.chart.earth',

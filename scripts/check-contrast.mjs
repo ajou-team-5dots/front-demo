@@ -73,7 +73,8 @@ const resolve = (path) => {
   const mix = node.$extensions?.[MIX];
   if (!mix || base === null) return base;
   if (mix.with === 'transparent') return null;
-  const other = resolve(mix.with.match(ALIAS)[1]);
+  const withAlias = mix.with.match(ALIAS);
+  const other = withAlias ? resolve(withAlias[1]) : hexToRgb(mix.with);
   if (other === null) return null;
   const [p, q] = [rgbToOklab(base), rgbToOklab(other)];
   return oklabToRgb(p.map((v, i) => v * mix.amount + q[i] * (1 - mix.amount)));
@@ -143,7 +144,15 @@ nodes
     const fg = resolve(name);
     node.$extensions[CONTRAST].forEach(({ on, min }) => {
       const bgName = on.match(ALIAS)[1];
-      const ratio = contrast(fg, resolve(bgName));
+      const bg = resolve(bgName);
+      // A see-through color has no single painted value, so its contrast cannot be checked.
+      // Fail loudly instead of passing: a ruled color must stay opaque.
+      if (fg === null || bg === null) {
+        const which = fg === null ? name : bgName;
+        record(false, `${name} on ${bgName}: ${which} is see-through (mixed with transparent)`);
+        return;
+      }
+      const ratio = contrast(fg, bg);
       record(
         ratio >= min,
         `${name} ${rgbToHex(fg)} on ${bgName}: ${ratio.toFixed(2)}:1 (min ${min}:1)`,
@@ -158,9 +167,14 @@ nodes
     Object.entries(node)
       .filter(([k, v]) => !k.startsWith('$') && typeof v === 'object' && !('$value' in v))
       .forEach(([column, group]) => {
-        const colors = Object.keys(group)
+        const all = Object.keys(group)
           .filter((k) => !k.startsWith('$'))
           .map((k) => ({ key: k, rgb: resolve([...path, column, k].join('.')) }));
+        const name = [...path, column].join('.');
+        all
+          .filter((c) => c.rgb === null)
+          .forEach((c) => record(false, `${name}.${c.key}: see-through (mixed with transparent)`));
+        const colors = all.filter((c) => c.rgb !== null);
         Object.entries(CVD).forEach(([vision, matrix]) => {
           let worst = { d: Infinity, pair: '' };
           colors.forEach((a, i) =>
@@ -169,7 +183,6 @@ nodes
               if (d < worst.d) worst = { d, pair: `${a.key}·${b.key}` };
             }),
           );
-          const name = [...path, column].join('.');
           const floor = matrix ? cvdMin : min;
           record(
             worst.d >= floor,
@@ -181,7 +194,9 @@ nodes
 
 process.stdout.write(`${rows.join('\n')}\n`);
 if (failed) {
-  process.stderr.write(`tokens:contrast: ${failed} rule(s) failed. See docs/DESIGN_TOKENS.md\n`);
+  process.stderr.write(
+    `tokens:contrast: ${failed} rule(s) failed. Fix the color, not the rule: design-tokens/AGENTS.md 6장\n`,
+  );
   process.exitCode = 1;
 } else {
   process.stdout.write(`tokens:contrast: ${rows.length} rules passed\n`);
