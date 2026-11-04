@@ -21,7 +21,7 @@ import {
 const badRequest = (message: string) => Response.json({ error: message }, { status: 400 });
 
 const HELP = {
-  usage: '/api/dev/<fn>[?id=<monsterId>&heavy=include|exclude]',
+  usage: '/api/dev/<fn>[?id=<monsterId>&heavy=include|exclude&period=current|all]',
   fn: {
     'raw-range': 'game_events 행 수와 기간',
     'raw-monsters': '몬스터별 스폰·제거·처치·플레이어 사망',
@@ -47,17 +47,21 @@ export async function GET(request: Request, { params }: RouteContext<'/api/dev/[
   if (heavy !== 'include' && heavy !== 'exclude') {
     return badRequest('heavy는 include 또는 exclude여야 합니다');
   }
+  const period = searchParams.get('period') ?? 'current';
+  if (period !== 'current' && period !== 'all') {
+    return badRequest('period는 current 또는 all이어야 합니다');
+  }
 
   try {
     switch (fn) {
       case 'monsters':
-        return Response.json(await getMonsterList(heavy));
+        return Response.json(await getMonsterList(heavy, period));
       case 'monster-detail':
         if (!id) return badRequest('id가 필요합니다');
-        return Response.json(await getMonsterDetail(id, heavy));
+        return Response.json(await getMonsterDetail(id, heavy, period));
       case 'boss-skills':
         if (!id) return badRequest('id가 필요합니다');
-        return Response.json(await getBossSkills(id, heavy));
+        return Response.json(await getBossSkills(id, heavy, period));
       case 'patch-risk':
         if (!id) return badRequest('id가 필요합니다');
         return Response.json(await getPatchRisk(id, heavy));

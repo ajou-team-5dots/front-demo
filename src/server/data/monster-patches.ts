@@ -174,6 +174,10 @@ export async function getMonsterPatches(heavy: Heavy): Promise<MonsterPatchRisk[
         else if (changed && !hasComparator) state = 'no_comparator';
         else if (changed) state = 'changed_ok';
         const model = enough ? (models[heavy][patch.id]?.[current.monster] ?? null) : null;
+        const sameCondition =
+          model && model.or !== null && model.lo !== null && model.hi !== null
+            ? { or: model.or, lo: model.lo, hi: model.hi }
+            : null;
         return {
           monster: current.monster,
           patch: {
@@ -182,10 +186,10 @@ export async function getMonsterPatches(heavy: Heavy): Promise<MonsterPatchRisk[
             after: current.after,
             daily: current.daily.sort((a, b) => a.date.localeCompare(b.date)),
             sampleOk: enough,
-            sameCondition: model ? { or: model.or, lo: model.lo, hi: model.hi } : null,
+            sameCondition,
             netOfComparator: hasComparator ? (model?.netOfComparator ?? null) : null,
             state,
-            intentCheck: changed && model !== null && model.lo > 1,
+            intentCheck: changed && sameCondition !== null && sameCondition.lo > 1,
             // The supplied spec and JSON do not define a group model or its aggregation.
             // Keep unavailable rather than inventing a statistically different ratio.
             groupReference: null,

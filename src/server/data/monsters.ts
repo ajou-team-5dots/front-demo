@@ -3,7 +3,14 @@ import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 
 import { AUX2_MIN_HIT_ENC, MIN_DEATHS, MIN_ENC_MAIN } from '@/server/config/criteria';
-import type { BossSkill, H2Patch, Heavy, MonsterDetail, MonsterMainRow } from '@/types/monsters';
+import type {
+  BossSkill,
+  H2Patch,
+  Heavy,
+  MonsterDetail,
+  MonsterMainRow,
+  Period,
+} from '@/types/monsters';
 
 import { GAME_EVENTS_TAG } from './game-events';
 import { getMonsterCounts, getMonsterReadiness } from './monster-counts';
@@ -12,21 +19,27 @@ import type { HeavyResults, PentagonResult } from './monster-precomputed';
 import { getBossState, getMonsterSkills } from './monster-skills';
 import { PRECOMPUTED_TAG, readPrecomputed } from './precomputed';
 
-/** Current entities only. Cheap counts come from base tables; models come from batch JSON. */
-export async function getMonsterList(heavy: Heavy): Promise<MonsterMainRow[]> {
+/** Monster ids are lowercase snake case. Anything else is unknown before any lookup. */
+const isMonsterId = (id: string): boolean => /^[a-z0-9_]{1,60}$/.test(id);
+
+/** Cheap counts come from base tables; models come from batch JSON. H2 ignores `period`. */
+export async function getMonsterList(
+  heavy: Heavy,
+  period: Period = 'current',
+): Promise<MonsterMainRow[]> {
   'use cache';
 
   cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
   cacheLife('hours');
 
-  const counts = await getMonsterCounts(heavy);
+  const counts = await getMonsterCounts(heavy, period);
   const [risk, pentagon] = await Promise.all([
     readPrecomputed<HeavyResults<number | null>>('expected-risk'),
     readPrecomputed<HeavyResults<PentagonResult>>('pentagon'),
   ]);
   // Each query already covers every monster. Bound the DB fan-out on the small EC2 instance.
   const patches = await getMonsterPatches(heavy);
-  const skills = await getMonsterSkills(heavy);
+  const skills = await getMonsterSkills(heavy, period);
   return counts
     .filter((row) => row.enc >= MIN_ENC_MAIN)
     .map((row) => {
@@ -58,13 +71,19 @@ export async function getMonsterList(heavy: Heavy): Promise<MonsterMainRow[]> {
 }
 
 /** Both time windows in one response; no model fitting and no raw event reads. */
-export async function getBossSkills(monster: string, heavy: Heavy): Promise<BossSkill[]> {
+export async function getBossSkills(
+  monster: string,
+  heavy: Heavy,
+  period: Period = 'current',
+): Promise<BossSkill[]> {
   'use cache';
+
+  if (!isMonsterId(monster)) return [];
 
   cacheTag(GAME_EVENTS_TAG);
   cacheLife('hours');
 
-  return (await getMonsterSkills(heavy))
+  return (await getMonsterSkills(heavy, period))
     .filter((row) => row.monster === monster)
     .map((row) => ({
       abilityId: row.abilityId,
@@ -80,6 +99,8 @@ export async function getBossSkills(monster: string, heavy: Heavy): Promise<Boss
 export async function getPatchRisk(monster: string, heavy: Heavy): Promise<H2Patch[]> {
   'use cache';
 
+  if (!isMonsterId(monster)) return [];
+
   cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
   cacheLife('hours');
 
@@ -92,17 +113,20 @@ export async function getPatchRisk(monster: string, heavy: Heavy): Promise<H2Pat
 export async function getMonsterDetail(
   monster: string,
   heavy: Heavy,
+  period: Period = 'current',
 ): Promise<MonsterDetail | null> {
   'use cache';
+
+  if (!isMonsterId(monster)) return null;
 
   cacheTag(GAME_EVENTS_TAG, PRECOMPUTED_TAG);
   cacheLife('hours');
 
-  const counts = (await getMonsterCounts(heavy)).find((row) => row.monster === monster);
+  const counts = (await getMonsterCounts(heavy, period)).find((row) => row.monster === monster);
   if (!counts) return null;
-  const readiness = await getMonsterReadiness(monster, heavy);
+  const readiness = await getMonsterReadiness(monster, heavy, period);
   const patches = await getPatchRisk(monster, heavy);
-  const skills = counts.role === 'boss' ? await getBossSkills(monster, heavy) : null;
+  const skills = counts.role === 'boss' ? await getBossSkills(monster, heavy, period) : null;
   const [pentagon, risk] = await Promise.all([
     readPrecomputed<HeavyResults<PentagonResult>>('pentagon'),
     readPrecomputed<HeavyResults<number | null>>('expected-risk'),

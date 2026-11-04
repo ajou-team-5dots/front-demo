@@ -4,6 +4,9 @@
 /** High-activity accounts included (default) or excluded. */
 export type Heavy = 'include' | 'exclude';
 
+/** "현재 수치" drops pre-patch entities of changed monsters (DATA_SPEC 2장); "전체" keeps them. */
+export type Period = 'current' | 'all';
+
 export type MonsterRole = 'boss' | 'midboss' | 'mob';
 
 /** 3-1: deaths above the Poisson 95% point → signal, above 99.8% → strong. */
@@ -63,9 +66,11 @@ export interface H1Readiness {
   ratio: number | null;
   encN: number;
   deadN: number;
-  deathsTotal: number;
-  winN: number;
-  winsTotal: number;
+  /** Denominator of `dead` (all deaths to this monster). Optional for older callers. */
+  deadTotal?: number;
+  /** Numerator and denominator of `win`. Optional for older callers. */
+  winN?: number;
+  winTotal?: number;
   otherEncN: number;
   encDeadN: number;
   otherDeadN: number;

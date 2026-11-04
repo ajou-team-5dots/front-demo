@@ -137,7 +137,7 @@ pnpm dev            # http://localhost:3000
 curl 'http://localhost:3000/api/dev/raw-monsters'                        # 예시 함수 (동작함)
 curl 'http://localhost:3000/api/dev/raw-abilities?id=elderroot_stage_1'
 curl 'http://localhost:3000/api/dev/help'                                # 사용법
-curl 'http://localhost:3000/api/dev/monsters?heavy=include'
+curl 'http://localhost:3000/api/dev/monsters?heavy=include&period=all'   # period: current(기본)|all
 curl 'http://localhost:3000/api/dev/monster-detail?id=small_zombie'
 curl 'http://localhost:3000/api/dev/boss-skills?id=elderroot_stage_1&heavy=exclude'
 curl 'http://localhost:3000/api/dev/patch-risk?id=rift_stalker_strong'

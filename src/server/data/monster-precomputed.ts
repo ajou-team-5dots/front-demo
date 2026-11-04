@@ -13,13 +13,11 @@ export interface PentagonResult {
   axes: PentagonAxis[];
 }
 
-export interface SameCondition {
-  or: number;
-  lo: number;
-  hi: number;
-}
-
-export interface PatchModel extends SameCondition {
+/** The batch writes null fields when the fit fails to converge or SE > 5 (DATA_SPEC 4장). */
+export interface PatchModel {
+  or: number | null;
+  lo: number | null;
+  hi: number | null;
   netOfComparator: number | null;
 }
 

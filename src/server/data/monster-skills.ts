@@ -11,9 +11,10 @@ import {
   MIN_DEATHS,
 } from '@/server/config/criteria';
 import { query } from '@/server/db/query';
-import type { BossSkill, H3State, H3Window, Heavy } from '@/types/monsters';
+import type { BossSkill, H3State, H3Window, Heavy, Period } from '@/types/monsters';
 
 import { GAME_EVENTS_TAG } from './game-events';
+import { SCOPE_FILTER, scopeParams } from './monster-counts';
 
 interface SkillCounts {
   monster: string;
@@ -58,7 +59,10 @@ const toWindow = (row: SkillCounts): H3Window => {
 };
 
 /** Aggregate every boss in one query so the main list does not query each boss separately. */
-export async function getMonsterSkills(heavy: Heavy): Promise<MonsterSkill[]> {
+export async function getMonsterSkills(
+  heavy: Heavy,
+  period: Period = 'current',
+): Promise<MonsterSkill[]> {
   'use cache';
 
   cacheTag(GAME_EVENTS_TAG);
@@ -76,13 +80,11 @@ export async function getMonsterSkills(heavy: Heavy): Promise<MonsterSkill[]> {
       ),
       subjects AS (
         SELECT monster_id, entity_id, ts AS reference_ts, true AS is_death
-        FROM player_deaths
-        WHERE NOT pre_patch_entity AND ({heavy:String} = 'include' OR NOT heavy_account)
+        FROM player_deaths WHERE ${SCOPE_FILTER}
         UNION ALL
         SELECT monster_id, entity_id, max_hit_ts AS reference_ts, false AS is_death
         FROM encounters
-        WHERE n_taken > 0 AND NOT died AND NOT pre_patch_entity
-          AND ({heavy:String} = 'include' OR NOT heavy_account)
+        WHERE n_taken > 0 AND NOT died AND ${SCOPE_FILTER}
       )
       SELECT a.boss_id AS monster, a.ability AS abilityId, w.seconds AS window,
         toUInt32(countIf(s.is_death)) AS deathsTotal,
@@ -99,7 +101,7 @@ export async function getMonsterSkills(heavy: Heavy): Promise<MonsterSkill[]> {
       CROSS JOIN (SELECT arrayJoin({windows:Array(UInt32)}) AS seconds) AS w
       GROUP BY a.boss_id, a.ability, w.seconds
       ORDER BY monster, abilityId, window DESC`,
-    { heavy, windows: [...H3_WINDOWS] },
+    { ...scopeParams(heavy, period), windows: [...H3_WINDOWS] },
   );
   const firstWindow = rows.filter((row) => row.window === H3_WINDOWS[0]);
   return firstWindow.map((row) => {

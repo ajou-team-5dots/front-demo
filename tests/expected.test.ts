@@ -122,15 +122,19 @@ describe('계산 명세 6장 기대값', () => {
   });
   it('small_zombie H1 4조건 상태와 비율 (getMonsterDetail)', () => {
     assert.ok(zombie);
-    assert.equal(zombie.H1_readiness.length, 4);
+    assert.deepEqual(
+      zombie.H1_readiness.map((row) => row.condition),
+      ['lowLevel', 'noWeapon', 'woodenWeapon', 'noArmor'],
+    );
     zombie.H1_readiness.forEach((row) => {
       const expected = EXPECTED.smallZombie.h1[row.condition];
       assert.equal(row.state, expected.state, row.condition);
       // The spec publishes percentages rounded to whole percentage points.
       assert.ok(Math.abs(row.dead - expected.dead) <= 0.01, `${row.condition} dead`);
       assert.ok(Math.abs(row.win - expected.win) <= 0.01, `${row.condition} win`);
-      assert.equal(row.dead, row.deadN / row.deathsTotal);
-      assert.equal(row.win, row.winN / row.winsTotal);
+      assert.ok(row.deadTotal !== undefined && row.winN !== undefined && row.winTotal);
+      assert.equal(row.dead, row.deadN / row.deadTotal);
+      assert.equal(row.win, row.winN / row.winTotal);
     });
   });
   it('elderroot_stage_1 bloom 5초 10/28 대 5/106 signal, 2초 4/28 대 3/106 none (getBossSkills)', async () => {
@@ -239,5 +243,28 @@ describe('계산 명세 6장 기대값', () => {
     assert.equal(await getMonsterDetail(unknown, 'include'), null);
     assert.deepEqual(await getBossSkills(unknown, 'include'), []);
     assert.deepEqual(await getPatchRisk(unknown, 'include'), []);
+  });
+
+  it('기간 전체(period=all)는 패치 전 개체까지 기초 표 행 수와 같다', async () => {
+    const monsters = ['small_zombie', 'rift_stalker_strong'];
+    const all = await getMonsterList('include', 'all');
+    const raw = await query<{ monster: string; enc: number; deaths: number }>(
+      `SELECT e.monster_id AS monster, e.enc AS enc, d.deaths AS deaths
+       FROM (SELECT monster_id, toUInt32(count()) AS enc FROM encounters
+             WHERE monster_id IN {monsters:Array(String)} GROUP BY monster_id) AS e
+       LEFT JOIN (SELECT monster_id, toUInt32(count()) AS deaths FROM player_deaths
+             WHERE monster_id IN {monsters:Array(String)} GROUP BY monster_id) AS d
+       USING (monster_id)`,
+      { monsters },
+    );
+    raw.forEach((expected) => {
+      const row = all.find((item) => item.monster === expected.monster);
+      assert.ok(row, expected.monster);
+      assert.equal(row.enc, expected.enc, `${expected.monster} enc`);
+      assert.equal(row.deaths, expected.deaths, `${expected.monster} deaths`);
+    });
+    const current = included.find((row) => row.monster === 'rift_stalker_strong');
+    const whole = all.find((row) => row.monster === 'rift_stalker_strong');
+    assert.ok(current && whole && whole.enc > current.enc, '패치 전 개체가 더해져야 함');
   });
 });
