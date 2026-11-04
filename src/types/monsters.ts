@@ -41,6 +41,7 @@ export interface MonsterMainRow {
   /** Bosses only. */
   h3State: H3State | null;
   h3State2: H3State | null;
+  /** Boss level: h3State and h3State2 disagree on signal. Per-ability: BossSkill.criterionEffect. */
   h3CriterionEffect: boolean;
 }
 
