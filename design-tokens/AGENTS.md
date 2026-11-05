@@ -42,7 +42,7 @@ pnpm tokens:contrast   # 대비·구분 규칙 검사. 실패한 규칙을 FAIL 
 pnpm check             # lint + format + typecheck + 위 두 검사. 반드시 통과
 ```
 
-Node 24.22.2(`fnm use 24.22.2`), pnpm만 씁니다.
+Node 26.13.0(`fnm use 26.13.0`), pnpm만 씁니다.
 
 ## 3. 값 형식
 
