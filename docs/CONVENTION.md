@@ -2,15 +2,16 @@
 
 이 저장소는 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)와 [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)를 기준으로 한다. 사람이 외우지 않아도 되도록 대부분은 도구가 강제한다.
 
-| 도구                                     | 역할                                                         | 설정 파일                    |
-| ---------------------------------------- | ------------------------------------------------------------ | ---------------------------- |
-| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`          |
-| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`           |
-| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`          |
-| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`      |
-| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs`   |
-| `pnpm tokens:contrast`                   | 토큰 색 대비(글자 4.5:1, 그래픽 3:1)와 흐름도 열 안 색 구분  | `scripts/check-contrast.mjs` |
-| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml`   |
+| 도구                                     | 역할                                                         | 설정 파일                     |
+| ---------------------------------------- | ------------------------------------------------------------ | ----------------------------- |
+| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`           |
+| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`            |
+| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`           |
+| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`       |
+| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs`    |
+| `pnpm tokens:contrast`                   | 토큰 색 대비(글자 4.5:1, 그래픽 3:1)와 흐름도 열 안 색 구분  | `scripts/check-contrast.mjs`  |
+| `pnpm tokens:doc`                        | `docs/COLOR_RATIONALE.md`의 hex가 토큰 값과 같은지           | `scripts/check-color-doc.mjs` |
+| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml`    |
 
 PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 

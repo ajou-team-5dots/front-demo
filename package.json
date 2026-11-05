@@ -11,13 +11,14 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "typecheck": "next typegen && tsc --noEmit",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm tokens:check && pnpm tokens:contrast",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm tokens:check && pnpm tokens:contrast && pnpm tokens:doc",
     "prepare": "husky",
     "test": "node --experimental-transform-types --import ./tests/register-server.mjs --test --test-isolation=none \"tests/**/*.test.ts\"",
     "fixtures:record": "node --experimental-transform-types --import ./tests/register-server.mjs scripts/record-fixtures.mts",
     "tokens": "node scripts/build-tokens.mjs",
     "tokens:check": "node scripts/build-tokens.mjs --check",
-    "tokens:contrast": "node scripts/check-contrast.mjs"
+    "tokens:contrast": "node scripts/check-contrast.mjs",
+    "tokens:doc": "node scripts/check-color-doc.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.1161.0",

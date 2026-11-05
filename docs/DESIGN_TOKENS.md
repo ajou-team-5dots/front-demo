@@ -5,6 +5,7 @@
 - 원본: `design-tokens/tokens.json` (W3C Design Tokens, DTCG 형식)
 - 생성물: `src/styles/tokens.css` (CSS 변수), `src/styles/tokens.ts` (차트 코드용 숫자와 `var()` 문자열). 직접 고치지 않습니다
 - 미리보기: `pnpm dev` 후 `/dev/tokens`. 모든 토큰 견본, 실제로 칠해진 색의 대비, 작은 차트 예시가 있습니다 (개발 서버에서만 열림)
+- 색을 고른 이유: [`COLOR_RATIONALE.md`](./COLOR_RATIONALE.md) (차트별 색과 그 색을 쓴 이유). 안의 hex는 `pnpm tokens:doc`가 토큰 값과 맞는지 검사합니다
 
 ## 바꾸는 방법
 
