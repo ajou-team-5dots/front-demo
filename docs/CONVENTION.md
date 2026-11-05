@@ -102,6 +102,7 @@ type RunSummary = Pick<RunEvent, 'blueprintId'>; // 유틸리티: type
 5. **zod 같은 런타임 검증은 기본으로 쓰지 않는다.** 데이터는 우리가 만든 집계 파일이라 타입만으로 충분하다. 단, 외부 입력이 들어오는 곳이 생기면 그 입구에서만 검증한다
    - Server Action의 폼 입력, Route Handler의 요청 본문/쿼리
    - 그때 zod를 추가하고 이 항목을 갱신한다
+6. **`enum`, 생성자 매개변수 속성(`constructor(readonly x: T)`), `namespace`를 쓰지 않는다** (`src` 포함, 테스트·스크립트가 직접 읽는 모든 `.ts`). `pnpm test`와 `scripts/*.mts`는 Node 26이 타입만 지우고 바로 실행하는데(strip-only), 이 세 문법은 지우는 것만으로 JS가 되지 않아 `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`로 멈춘다. Next 빌드는 통과하므로 테스트를 돌려야 드러난다. 대신 문자열 유니온, 클래스 필드 + 생성자 대입, 모듈을 쓴다
 
 ## 8. 데이터 가져오기와 쓰기
 
