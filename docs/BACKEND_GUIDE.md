@@ -6,7 +6,7 @@
 `monster-counts.ts`는 집계·H1, `monster-skills.ts`는 H3,
 `monster-patches.ts`는 H2를 기초 표에서 계산한다. Materialized View는 사용하지 않는다.
 
-`pnpm test`는 `.env.local`의 실제 DB와 JSON으로 기대값을 검증한다(Node 24 필요).
+`pnpm test`는 `.env.local`의 실제 DB와 JSON으로 기대값을 검증한다(Node 26 필요).
 Node 테스트에서만 Next의 서버 경계·캐시 메타데이터 호출을 대체하며, DB 조회와 JSON 읽기는 대체하지 않는다.
 통합 테스트는 한 프로세스에서 실행해 `.env.local`과 DB 연결을 공유한다.
 상세 오각형의 순위는 몬스터 단위 `pentagonRank`이며, 축의 결측 값은 JSON 그대로 `null`이다.
@@ -54,7 +54,7 @@ Next.js를 처음 쓰는 백엔드 개발자가 로컬에서 EC2 ClickHouse에 �
 ## 2. 설치와 접속 정보
 
 ```bash
-fnm install         # .nvmrc의 Node 24 LTS(24.22.2). Windows·nvm은 README "Node 버전" 참고
+fnm install         # .nvmrc의 Node 26 LTS(26.13.0). Windows·nvm은 README "Node 버전" 참고
 pnpm install
 cp .env.example .env.local
 ```

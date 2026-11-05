@@ -2,15 +2,16 @@
 
 이 저장소는 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)와 [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)를 기준으로 한다. 사람이 외우지 않아도 되도록 대부분은 도구가 강제한다.
 
-| 도구                                     | 역할                                                         | 설정 파일                    |
-| ---------------------------------------- | ------------------------------------------------------------ | ---------------------------- |
-| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`          |
-| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`           |
-| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`          |
-| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`      |
-| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs`   |
-| `pnpm tokens:contrast`                   | 토큰 색 대비(글자 4.5:1, 그래픽 3:1)와 흐름도 열 안 색 구분  | `scripts/check-contrast.mjs` |
-| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml`   |
+| 도구                                     | 역할                                                         | 설정 파일                     |
+| ---------------------------------------- | ------------------------------------------------------------ | ----------------------------- |
+| ESLint + `eslint-config-airbnb-extended` | Airbnb 규칙 (JS, React, Next.js, TypeScript)                 | `eslint.config.mjs`           |
+| Prettier                                 | 포맷 (따옴표, 줄바꿈, Tailwind 클래스 정렬)                  | `.prettierrc.json`            |
+| husky + lint-staged                      | 커밋 전 변경 파일 자동 lint/format                           | `.husky/pre-commit`           |
+| commitlint                               | 커밋 메시지 형식 검사                                        | `commitlint.config.mjs`       |
+| `pnpm tokens:check`                      | 디자인 토큰 생성 파일이 `design-tokens/tokens.json`과 같은지 | `scripts/build-tokens.mjs`    |
+| `pnpm tokens:contrast`                   | 토큰 색 대비(글자 4.5:1, 그래픽 3:1)와 흐름도 열 안 색 구분  | `scripts/check-contrast.mjs`  |
+| `pnpm tokens:doc`                        | `docs/COLOR_RATIONALE.md`의 hex가 토큰 값과 같은지           | `scripts/check-color-doc.mjs` |
+| GitHub Actions                           | PR마다 `pnpm check` + `pnpm build`                           | `.github/workflows/ci.yml`    |
 
 PR 올리기 전에 `pnpm check` 하나만 통과시키면 된다.
 
@@ -101,6 +102,7 @@ type RunSummary = Pick<RunEvent, 'blueprintId'>; // 유틸리티: type
 5. **zod 같은 런타임 검증은 기본으로 쓰지 않는다.** 데이터는 우리가 만든 집계 파일이라 타입만으로 충분하다. 단, 외부 입력이 들어오는 곳이 생기면 그 입구에서만 검증한다
    - Server Action의 폼 입력, Route Handler의 요청 본문/쿼리
    - 그때 zod를 추가하고 이 항목을 갱신한다
+6. **`enum`, 생성자 매개변수 속성(`constructor(readonly x: T)`), `namespace`를 쓰지 않는다** (`src` 포함, 테스트·스크립트가 직접 읽는 모든 `.ts`). `pnpm test`와 `scripts/*.mts`는 Node 26이 타입만 지우고 바로 실행하는데(strip-only), 이 세 문법은 지우는 것만으로 JS가 되지 않아 `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`로 멈춘다. Next 빌드는 통과하므로 테스트를 돌려야 드러난다. 대신 문자열 유니온, 클래스 필드 + 생성자 대입, 모듈을 쓴다
 
 ## 8. 데이터 가져오기와 쓰기
 

@@ -8,3 +8,5 @@ next-env.d.ts
 data/precomputed/
 # Recorded query results (pnpm fixtures:record), kept as written.
 data/fixtures/
+# The color rationale is the user's own writing (tables aligned by hand); kept as written.
+docs/COLOR_RATIONALE.md
